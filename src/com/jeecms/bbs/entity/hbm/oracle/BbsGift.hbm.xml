@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.jeecms.bbs.entity">
+	<class
+		name="BbsGift"
+		table="bbs_gift"
+	>
+		<meta attribute="sync-DAO">false</meta>
+		<cache usage="read-write"/>
+		<id
+			name="id"
+			type="integer"
+			column="gift_id"
+		>
+			<generator class="sequence"><param name="sequence">S_BBS_GIFT</param></generator>
+		</id>
+
+		<property
+			name="name"
+			column="name"
+			type="string"
+			not-null="true"
+			length="50"
+		/>
+		<property
+			name="picPath"
+			column="pic_path"
+			type="string"
+			not-null="true"
+			length="255"
+		/>
+		<property
+			name="price"
+			column="price"
+			type="java.lang.Double"
+			not-null="true"
+			length="11"
+		/>
+		<property
+			name="priority"
+			column="priority"
+			type="integer"
+			not-null="true"
+			length="10"
+		/>
+		<property
+			name="disabled"
+			column="is_disabled"
+			type="java.lang.Boolean"
+			not-null="true"
+		/>
+		<property
+			name="giftType"
+			column="gift_type"
+			type="java.lang.Short"
+			not-null="true"
+		/>
+		<property
+			name="totalAmount"
+			column="total_amount"
+			type="java.lang.Double"
+			not-null="true"
+			length="11"
+		/>
+		<property
+			name="yearAmount"
+			column="year_amount"
+			type="java.lang.Double"
+			not-null="true"
+			length="11"
+		/>
+		<property
+			name="monthAmount"
+			column="month_amount"
+			type="java.lang.Double"
+			not-null="true"
+			length="11"
+		/>
+		<property
+			name="dayAmount"
+			column="day_amount"
+			type="java.lang.Double"
+			not-null="true"
+			length="11"
+		/>
+		<property
+			name="lastBuyTime"
+			column="last_buy_time"
+			type="timestamp"
+			not-null="false"
+			length="19"
+		/>
+
+	</class>	
+</hibernate-mapping>

@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>jeecms-left</title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+$(function(){
+	Cms.lmenu('lmenu');
+});
+</script>
+</head>
+<body class="lbody">
+<ul id="lmenu">
+<li><a href="config_right.do" target="rightFrame"><@s.m "global.admin.index"/></a></li>
+<@cms_perm url="/site_config/v_system_edit.do">
+<li><a href="../site_config/v_system_edit.do" target="rightFrame"><@s.m "cmsConfig.function"/></a></li>
+</@cms_perm>
+<@cms_perm url="/site_config/v_base_edit.do">
+<li><a href="../site_config/v_base_edit.do" target="rightFrame"><@s.m "cmsSiteConfig.function"/></a></li>
+</@cms_perm>
+<@cms_perm url="/bbs_config/v_edit.do">
+<li><a href="../bbs_config/v_edit.do" target="rightFrame">论坛配置</a></li>
+</@cms_perm>
+<li><a href="../bbs_config/v_login_edit.do" target="rightFrame">登录设置</a></li>
+<li><a href="../bbs_config/v_creditExchangeEdit.do" target="rightFrame">积分设置</a></li>
+<li><a href="../bbs_config/v_charge.do" target="rightFrame">打赏设置</a></li>
+<li><a href="../bbs_config/v_message_edit.do" target="rightFrame"><@s.m "cmsConfig.message.function"/></a></li>
+<li><a href="../bbs_config/v_api_edit.do" target="rightFrame">第三方登录设置</a></li>
+<li><a href="../bbs_config/v_sso_edit.do" target="rightFrame"><@s.m "cmsConfig.function.sso"/></a></li>
+<li><a href="../bbs_config/item_list.do" target="rightFrame">模型配置</a></li>
+<li><a href="../bbs_config/v_ad_edit.do" target="rightFrame">广告设置</a></li>
+<li><a href="../webservice/v_list.do" target="rightFrame"><@s.m "bbsWebservice.function"/></a></li>
+<li><a href="../webserviceAuth/v_list.do" target="rightFrame"><@s.m "bbsWebserviceAuth.function"/></a></li>
+<li><a href="../webserviceCallRecord/v_list.do" target="rightFrame"><@s.m "bbsWebserviceCallRecord.function"/></a></li>
+<li><a href="../bbslimit/v_list.do" target="rightFrame"><@s.m "bbsLimit.function"/></a></li>
+<li><a href="../apiInfo/v_list.do" target="rightFrame"><@s.m "apiInfo.function"/></a></li>
+<li><a href="../apiAccount/v_list.do" target="rightFrame"><@s.m "apiAccount.function"/></a></li>
+<li><a href="../apiRecord/v_list.do" target="rightFrame"><@s.m "apiRecord.function"/></a></li>
+</ul>
+</body>
+</html>

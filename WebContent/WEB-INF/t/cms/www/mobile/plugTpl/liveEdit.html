@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<link href="${base}/res/common/css/jquery.validate.css" rel="stylesheet" type="text/css"/>
+<link href="${base}/res/common/css/jquery.treeview.css" rel="stylesheet" type="text/css"/>
+<script src="${base}/res/common/js/jquery.js" type="text/javascript"></script>
+<script src="${base}/thirdparty/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+<script src="${base}/res/common/js/jquery.ext.js" type="text/javascript"></script>
+<script src="${base}/res/common/js/pony.js" type="text/javascript"></script>
+<script src="${base}/res/jeecms/js/admin.js" type="text/javascript"></script>
+<script type="text/javascript">
+$.validator.methods.leafChapter = function(value, element, param) {
+	var i = element.selectedIndex;
+	return $(element.options[i]).attr("class")!="sel-disabled";
+}
+$(function() {
+	$("#jvForm").validate({
+		rules: {
+			chapterId: {
+				required: true,
+				leafChapter: true
+			}
+		},
+		messages:{
+			chapterId: {
+				leafChapter: "<@s.m "live.error.notLeafChapter"/>"
+			}
+		}
+	});
+});
+function getRate(){
+	var num=$("#limitUserNum").val();
+	$.post("getLiveRate.jspx", {
+		userNum:num
+	}, function(data) {
+		$("#commissionRate").html(data.rate);
+	}, "json");
+}
+function sendToCheck(){
+	$("#jvForm").prop("action","updateToApply.jspx");
+	$("#jvForm").submit();
+}
+</script>
+<style type="text/css">
+.sel-disabled{background-color:#ccc}
+</style>
+</head>
+<body>
+<div class="page-positon ove">
+  <div class="position-div"><@s.m "global.position"/>: <@s.m "live.function"/> > <@s.m "global.edit"/></div>
+</div>
+<div class="box-positon ck">
+	<form class="ropt">
+&nbsp;	<input type="button" value="<@s.m "global.backToList"/>" onclick="history.go(-1)" class="return-button"/>
+	</form>
+	<div class="clear"></div>
+</div>
+<div class="body-box">
+<@p.form id="jvForm" action="update.jspx" labelWidth="10" class="formDefStyle">
+<@p.td colspan="2" width="100" label="live.chapter">
+<select id="chapterId" name="chapterId" style="float:left;">
+<#if !chapter??>
+	<option value="" class="sel-disabled"><@s.m "global.pleaseSelect"/></option>
+</#if>
+<#if chapterList?size gt 0>
+<#assign origDeep=chapterList[0].deep+1/>
+<#list chapterList as c>
+	<option value="${c.id}"<#if c.id == live.chapter.id> selected="selected"</#if> <#if c.child?size gt 0> class="sel-disabled"</#if>><#if c.deep gte origDeep><#list origDeep..c.deep as i>&nbsp;&nbsp;</#list>></#if>${c.name}</option>
+</#list>
+</#if>
+</select> 
+</@p.td><@p.tr/>
+<@p.text label="live.title" name="title" value=live.title required="true" class="required" maxlength="100" size="15"  colspan="2" width="100"/><@p.tr/>
+<@p.text label="live.beginTime" name="beginTime" id="b1" value=live.beginTime!?string("yyyy-MM-dd HH:mm")  style="width:140px" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',minDate:'%y-%M-{%d}'})" class="Wdate" required="true" class="required"  maxlength="30" size="10" colspan="1" width="50"/>
+<@p.text label="live.endTime" name="endTime" value=live.endTime!?string("yyyy-MM-dd HH:mm")  style="width:140px" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',minDate:'#F{$dp.$D(\\'b1\\',{d:0});}'})" class="Wdate" required="true" class="required"  maxlength="30" size="10" colspan="1" width="50"/><@p.tr/>
+<@p.textarea label="live.description" name="description" value=live.description  cols="70" rows="3" maxlength="1000" vld="{maxlength:1000}"    colspan="2" width="100"/><@p.tr/>
+
+<@p.text label="价格" name="beginPrice" value=live.beginPrice required="true" class="required number" maxlength="10" size="10"  colspan="1" width="50"/>
+<@p.tr/>
+<@p.text label="live.limitUserNum" name="limitUserNum" value=live.limitUserNum id="limitUserNum" onchange="getRate()" required="true" class="required digits" maxlength="10" size="10"  colspan="1" width="50"/>
+<@p.td colspan="1" width="50" label="live.commissionRate">
+	<span id="commissionRate">${live.commissionRate!}</span>
+</@p.td>
+<@p.tr/>
+<@p.td colspan="2" width="100" label="live.liveLogo">
+<table id="picTable0" border="0" cellpadding="0" cellspacing="0" class="fbgj-tab">
+<tr>
+	<td style="line-height:1;">
+	<div><input type="text" id="uploadImgPath0" name="liveLogo" value="${live.liveLogo!}" class="member-change" /></div>
+	<div style="margin-top:4px;">
+	<span id="ufc0" style="position:relative;">
+	<input type='text' id='uploadFileText0' size="10" class="member-change" style="width:115px;height:22px;"/>  
+	<input onchange="$('#uploadFileText0').val(this.value)" size="10" type="file" id="uploadFile0" style="width:72px;height:22px;"/>
+	</span>
+	<input type="button" value="上传" onclick="upload(0);" style="width:50px;height:22px;cursor:pointer;background:#3694d7;color:#fff;font-size:12px;"/>
+	</div>
+	<div><textarea style="width:300px;height:60px;margin-bottom:0;" name="picDescs" maxlength="255"></textarea></div>
+</td>
+<td><img id="preImg0" src="${live.liveLogo!}" alt="预览" noResize="true" style="width:110px;height:110px;background-color:#ccc;border:1px solid #c7c7c7;"/></td>
+</tr>
+</table>
+</div>
+</@p.td><@p.tr/>
+<@p.td colspan="2">
+	<@p.hidden name="id" value=live.id/>
+	<input type="hidden" name="cid" value="${cid!}"/>
+	<input type="hidden" name="pageNo" value="${pageNo!}"/>
+	<input type="hidden" name="qtitle" value="${qtitle!}"/>
+	<input type="hidden" name="qusername" value="${qusername!}"/>
+	<input type="hidden" name="qstatus" value="${qstatus!}"/>
+	<input type="hidden" name="qtimeBegin" value="${qtimeBegin!}"/>
+	<input type="hidden" name="qtimeEnd" value="${qtimeEnd!}"/>
+	<@p.submit code="global.submit" /> 
+	<@p.button value="保存并提交" onclick="sendToCheck()" />
+	&nbsp; <@p.reset code="global.reset"/>
+</@p.td>
+</@p.form>
+</div>
+</body>
+</html>

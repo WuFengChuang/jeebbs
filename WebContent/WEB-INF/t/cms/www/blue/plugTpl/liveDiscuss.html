@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>${live.title!}-JEECMS官方论坛|开源java cms,jsp cms,jsp bbs</title>
+    <meta content="${live.title!},java,cms,jsp,cms,jsp bbs,开源网站内容管理系统,网站群,站群,多站点,jeecms" name="keywords" />
+    <meta content="${live.title!},讨论jsp cms、jsp bbs相关资讯，struts,hibernate,spring,freemarker最新技术研究" name="description" />
+	<link href="${resSys}/front.css" rel="stylesheet" type="text/css"/>
+    <script src="${resSys}/jquery.js" type="text/javascript"></script>
+    <script src="${resSys}/front.js" type="text/javascript"></script>
+    <link href="/${res}/bbs_forum/css/whole.css" type="text/css" rel="stylesheet" />
+    <link href="/${res}/bbs_forum/css/layout.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript">
+	$(function() {
+		$("#jvForm").validate($.validator.AlertError);
+	});
+    </script>
+  </head>
+  <body>
+    <!--header-->[#include "../include/页头.html"/]<!--/header-->
+    <!--main-->
+    <div class="main-wrap">
+	
+    <div id="main">
+	
+    <!--登录统计栏_Begin-->[#include "../include/登录统计.html"/]<!--登录统计栏_End-->
+	
+    <div class="c"></div>
+    <div id="breadCrumb"><img align="absMiddle" src="/${res}/bbs_forum/img/home.gif"/> <a href="${base}/">${site.name}</a> &raquo;  &raquo; </div>
+    <div class="c"></div>
+    <div class="t3">
+    [#if user??]
+    	<!-- 非主持人且未购买 -->
+	    [#if user.id!=live.user.id&&!live.joinUserIds?seq_contains("${user.id}")]
+		<div>
+			<a href="${base}/live/front/buy.jspx?liveId=${live.id}&self=1">购买</a>
+			<a href="${base}/live/front/buy.jspx?liveId=${live.id}&self=2">赠送</a>
+		</div> 
+		[/#if]
+		<!-- 主持人或已购买 -->
+		[#if user.id==live.user.id|live.joinUserIds?seq_contains("${user.id}")]
+		<a href="${base}/live/front/discuss.jspx?id=${live.id}">讨论</a>
+		[/#if]
+	[/#if]
+    </div>
+	
+    <div class="c"></div>
+    
+    
+	<!--live_Begin-->
+	${live.title!}<br/>
+	主讲人:${live.user.username!} 参与人数-${live.joinUserNum!}人<br/>   
+	简介:${live.description!}<br/>
+	开始时间 :${live.beginTime!?string("yyyy-MM-dd HH:mm")}
+	结束时间 :${live.endTime!?string("yyyy-MM-dd HH:mm")}<br/>
+	<!--live_End-->
+    <div class="c"></div>
+    </div>
+    <!-- 已开始直播且未结束则   直播播放区 -->
+    <div id="playercontainer"></div>
+    [#if live.hasBegin&&!live.hasOver]
+	<script type="text/javascript" src="${resSys}/cyberplayer.js"></script>
+	<script type="text/javascript">
+	    var player = cyberplayer("playercontainer").setup({
+	        width: 680,
+	        height: 448,
+	        file: "${live.liveUrl!}", // <—rtmp直播地址
+	        fallbackfile: "${live.liveMobileUrl!}", // <— 备用播放地址，为了电脑上用rtmp流播放，手机上播放设置hls流
+	        autostart: true,
+	        stretching: "uniform",
+	        volume: 100,
+	        controls: true,
+	        ak: '${live.livePlatKey!}' // 公有云平台注册即可获得accessKey
+	    });
+	</script>
+	[/#if]
+	<!--直播结束则 点播 -->
+	[#if live.hasOver]
+	<script type="text/javascript" src="${resSys}/cyberplayer.js"></script>
+	<script type="text/javascript">
+	    var player = cyberplayer("playercontainer").setup({
+	        width: 640,
+	        height: 480,
+	        file: "${live.demandUrl!}",
+	        image: "${live.demandImageUrl!}",
+	        autostart: false,
+	        stretching: "uniform",
+	        repeat: false,
+	        volume: 100,
+	        controls: true,
+	        ak: '${live.livePlatKey!}'
+	    });
+	</script>
+	[/#if]
+	
+	<!-- 在线聊天区开始 -->
+    <script>
+		var path = '${site.domain}:${site.port}';
+		[#if site.contextPath??]
+			path+="${base}";
+		[/#if]
+		var uid="${user.id!}";
+		var websocket;
+		if ('WebSocket' in window) {
+			websocket = new WebSocket("ws://" + path + "/ws?uid="+uid);
+		} else if ('MozWebSocket' in window) {
+			websocket = new MozWebSocket("ws://" + path + "/ws"+uid);
+		} else {
+			websocket = new SockJS("http://" + path + "/ws/sockjs"+uid);
+		}
+		websocket.onopen = function(event) {
+			console.log("WebSocket:已连接");
+			console.log(event);
+		};
+		websocket.onmessage = function(event) {
+			var data=JSON.parse(event.data);
+			console.log("WebSocket:收到一条消息",data);
+			var textCss=data.from==-1?"sfmsg_text":"fmsg_text";
+			$("#msgTpl #msgUserName").html(data.fromName);
+			$("#msgTpl #msgTime").html(data.date);
+			$("#msgTpl #msgText").html(data.text);
+			if(data.fromName=="${user.username!}"){
+				$("#msgTpl .fmsg").css("text-align","right");
+			}else{
+				$("#msgTpl .fmsg").css("text-align","left");
+			}
+			$("#content").append($("#msgTpl").html());
+			scrollToBottom();
+		};
+		websocket.onerror = function(event) {
+			console.log("WebSocket:发生错误 ");
+			console.log(event);
+		};
+		websocket.onclose = function(event) {
+			console.log("WebSocket:已关闭");
+			console.log(event);
+		}
+		function sendMsg(){
+			var text=$("#msg").val();
+			if(text==""){
+				return;
+			}else{
+				$.ajax({
+					url:'${base}/live/message/sayToAll.jspx',
+					type:"post",
+					data:{
+						liveId:"${live.id}",
+						text:$("#msg").val()
+					},
+					dataType:"json",
+					success:function(data){
+						//alert("发送成功");
+					}
+				});
+				scrollToBottom();
+				$("#msg").val("");
+			}
+		}
+		
+		function scrollToBottom(){
+			var div = document.getElementById('content');
+			div.scrollTop = div.scrollHeight;
+		}
+		
+		Date.prototype.Format = function (fmt) { //author: meizz 
+		    var o = {
+		        "M+": this.getMonth() + 1, //月份 
+		        "d+": this.getDate(), //日 
+		        "h+": this.getHours(), //小时 
+		        "m+": this.getMinutes(), //分 
+		        "s+": this.getSeconds(), //秒 
+		        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+		        "S": this.getMilliseconds() //毫秒 
+		    };
+		    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+		    for (var k in o)
+		    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+		    return fmt;
+		}
+		
+		function send(event){
+			var code;
+			 if(window.event){
+				 code = window.event.keyCode; // IE
+			 }else{
+				 code = e.which; // Firefox
+			 }
+			if(code==13){ 
+				sendMsg();            
+			}
+		}
+		
+		function clearAll(){
+			$("#content").empty();
+		}
+	</script>
+	
+    <div id="content"></div>
+	<input type="text" placeholder="请输入要发送的信息" id="msg" class="msg" onkeydown="send(event)">
+	<input type="button" value="发送" class="send" onclick="sendMsg()" >
+	<input type="button" value="清空" class="clear" onclick="clearAll()">
+	<div id="msgTpl" style="display: none">
+		<div class='fmsg' >
+			<label class='name'><span id="msgUserName"></span>&nbsp;<span id="msgTime"></span></label>
+			<div class='"+textCss+"' id="msgText"></div>
+		</div>
+	</div>
+	<!-- 在线聊天区结束 -->
+	
+	<!-- 礼物赠送区开始 -->
+	<div>
+		[#list gifts as g]
+		<img src="${g.picPath!}" alt="${g.name!}" ><span>${g.name!}</span></img>
+		<span>${g.price!}</span>
+		<input name="giftId" value="${g.id}" type="radio" />
+		[/#list]
+		数量:<input name="num" value="1" id="giftNum"/>
+		<input type="button" value="赠送" onclick="sendGiftToHost()"/>
+		<script type="text/javascript">
+			function sendGiftToHost(){
+				var giftId=$("input[name='giftId']:checked").val();
+				var num=$("#giftNum").val();
+				$.ajax({
+					url:'${base}/live/front/sendGiftToHost.jspx',
+					type:"post",
+					data:{
+						liveId:"${live.id}",
+						giftId:giftId,
+						num:num
+					},
+					dataType:"json",
+					success:function(data){
+						if(data.status==2){
+							alert("您不是live参与者");
+						}else if(data.status==3){
+							alert("您没有该礼物!");
+							$("#giftShowDiv").show();
+						}
+					}
+				});
+			}
+		</script>
+	</div>
+	<div id="giftShowDiv" style="display: none;">
+		礼物充值弹窗
+	</div>
+	<!-- 礼物赠送区结束-->
+	
+	
+    <!--/main-->
+    <!--footer-->[#include "../include/页脚.html"/]<!--footer-->
+  </body>
+</html>

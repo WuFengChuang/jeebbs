@@ -1,0 +1,59 @@
+@charset "UTF-8";
+*{
+	margin: 0;
+	padding: 0;
+}
+a{
+	text-decoration: none;
+}
+.stop_img{
+	width: 100%;
+	margin-top: 100px;
+	text-align: center;
+}
+.stop_txt{
+  margin-top:20px;
+  margin-bottom: 100px;
+}
+.stop_txtbox{
+	width: 500px;
+	margin: 0 auto;
+	text-align: center;
+}
+.stop_txtbox p{
+	font-size: 24px;
+	line-height: 40px;
+        color:#999;
+}
+.stop_txtbox a{
+	width: 125px;
+	margin-top: 30px;
+	display: inline-block;
+	background: url("../images/return.png") no-repeat left center;
+	color: #999;
+	line-height: 30px;
+        cursor:pointer;
+}
+
+
+.wxBox{
+	width:1000px;
+	height:390px;
+	margin: 100px auto;
+	background: #fff;
+    box-shadow: 1px 0 1px rgba(0, 0, 0, 0.07);
+    border-radius: 4px;
+}
+.wxBox .wxTxt{
+	width:450px;
+	float: left;
+	margin: 100px 0 0 80px;
+}
+.wxBox .wxTxt_t{font-size: 18px; color: #68b641; line-height: 40px; padding-left: 40px; background: url(../images/wxicon.png) left center no-repeat;}
+.wxBox .wxTxt_m{font-size: 36px; color: #68b641; margin: 20px 0 50px;}
+.wxBox .wxTxt_b{font-size: 16px; color: #656565;}
+.wxBox .wxImg{width:370px; height: 310px; margin: 80px 80px 0 0; float: left; background: url(../images/wxsys.png) left bottom no-repeat;}
+.wxBox .wxImg .wxImg_con{width: 180px; height: 180px; padding: 82px 0 0 51px;}
+.wxBox .wxImg .wxImg_con img{width: 180px; height: 180px;}
+
+#noPerm{background: #fff;margin-left:0 !important;margin-top:0 !important;width: 100% !important;height: 100% !important;left: 0 !important;top: 0 !important;}

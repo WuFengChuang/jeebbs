@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+</script>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos"><@s.m "global.position"/>: <@s.m "bbsLiveUserAccount.function"/> - <@s.m "global.list"/></div>
+	<form action="v_user_account_list.do" method="post">
+	<div style="padding-top:5px; padding-bottom:5px; text-indent:10px; border-bottom:1px solid #fff; border-top:1px solid #fff;">
+	<@s.m "cmsUser.username"/>:<input name="username" value="${username!}" type="text"/>
+	<@s.m "global.priority"/>:<@p.select name="orderBy" value=orderBy list={"1":"contentAuthor.orderBy.1","2":"contentAuthor.orderBy.2","3":"contentAuthor.orderBy.3","4":"contentAuthor.orderBy.4","5":"contentAuthor.orderBy.5","6":"contentAuthor.orderBy.6","7":"contentAuthor.orderBy.7","8":"contentAuthor.orderBy.8","9":"contentAuthor.orderBy.9","10":"contentAuthor.orderBy.10","11":"contentAuthor.orderBy.11","12":"contentAuthor.orderBy.12"}/>
+	<input class="query" type="submit" value="<@s.m "global.query"/>"/>
+	</div>
+	</form>
+	<a href="commissionStatic.do"><@s.m "bbsLivePlatAccount.function"/></a>
+	<div class="clear"></div>
+</div>
+<form id="tableForm" method="post">
+<input type="hidden" name="pageNo" value="${pageNo!}"/>
+<input type="hidden" name="qusername" value="${qusername!}"/>
+<input type="hidden" name="qorderBy" value="${qorderBy!}"/>
+<@p.table value=pagination listAction="v_user_account_list.do";userAccount,i,has_next><#rt/>
+	<@p.column code="userAccount.user">${userAccount.user.realname!userAccount.user.username}</@p.column><#t/>
+	<@p.column code="userAccount.totalAmount">${userAccount.totalAmount!}</@p.column><#t/>
+	<@p.column code="userAccount.yearAmount">${userAccount.yearAmount!}</@p.column><#t/>
+	<@p.column code="userAccount.monthAmount">${userAccount.monthAmount!}</@p.column><#t/>
+	<@p.column code="userAccount.dayAmount">${userAccount.dayAmount!}</@p.column><#t/>
+	<@p.column code="userAccount.orderCount">${userAccount.buyCount!}</@p.column><#t/>
+	<@p.column code="userAccount.drawCount">${userAccount.drawCount!}</@p.column><#t/>
+	<@p.column code="userAccount.noPayAmount">${userAccount.noPayAmount!}</@p.column><#t/>
+</@p.table>
+<div><input type="button" value="<@s.m "global.delete"/>" onclick="optDelete();"/></div>
+</form>
+</div>
+<#include "/common/alert_message.html"/>
+</body>
+</html>

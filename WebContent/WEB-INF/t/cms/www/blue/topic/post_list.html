@@ -1,0 +1,215 @@
+
+[@post_page topicId=topicId option=option  pageNo=pageNo orderBy=orderBy count='2' ]
+[#list tag_pagination.list as post]
+[#if !post.first]
+<li>
+	<div class="user-header clearfix">
+		<img src="${post.creater.avatar!'/${res}/bbs_member/img/face/none.gif'}" class="user-img" />
+		<div class="user-info ask-info">
+			<p>
+				<span class="user-name ask-user">[#if post.anonymous]匿名[#else]${post.creater.username!}[/#if]</span>
+				<img src="${post.creater.group.imgPath!}" class="level"/>
+			</p>
+		</div>
+		<div class="time-box ask-time">
+			<span>${post.createTimeHtml!}</span>
+		</div>
+		<div class="friend-bar ask-friend">
+			 <!--通讯录-->
+			[#if user??&&user.id!=post.creater.id]
+			[#if !user.myFriendIds?seq_contains('${post.creater.id}')]
+			<a id="u${post.creater.id}_${post.id}" onclick="apply('${base}','${post.creater.id}','${post.creater.username}','${post.id}')"  class="iconfont  icon-tongxunlu1 green" title="添加好友"></a>
+			[#else]
+			<a id="u${post.creater.id}_${post.id}" onclick="applyDel('${base}','${post.creater.id}','${post.creater.id}','${post.id}')"  class="iconfont  icon-tongxunlu green" title="取消好友"></a>
+			[/#if]
+			[/#if]
+			
+			<!--关注-->
+			[#if user??&&user.id!=post.creater.id]
+			[#if !user.myAttentionIds?seq_contains('${post.creater.id}')]
+			<a id="a${post.creater.id}_${post.id}" onclick="attent('${base}','${post.creater.id}',0)" class="iconfont icon-guanzhu yellow" title="添加关注"></a>
+			[#else]
+			<a id="a${post.creater.id}_${post.id}" onclick="attent('${base}','${post.creater.id}',1)" class="iconfont icon-yiguanzhu yellow" title="取消关注"></a>
+			[/#if]
+			[/#if]
+	
+		</div>
+		<div class="floor-info">
+			<p class="floor-num">${post.indexCount}#</p>
+<p class="floor-opts">
+				[#if user??]
+				[#if user.moderator&&!post.creater.moderator]
+					<a id="forbiddenLink_${post.creater.id}_${post.id}" onclick="forBidden('${base}','${post.creater.id}','${post.topic.forum.id}')"  title="禁用">
+					[#if post.creater.disabled]解除禁用[#else]禁用[/#if]
+					</a>
+				[/#if]
+				[/#if]
+				[#if createrId??]
+				<a href="${topic.url}">显示全部</a>
+				[#else]
+				<a href="${base}/topic/postListByAuthor.jspx?topicId=${post.topic.id}&createrId=${post.creater.id}">只看该作者</a>
+				[/#if]
+			</p>
+		</div>
+	</div>
+	<p class="theme-desc">
+		<!--正文-->
+		 [#if post.shield]
+		  [#if user??&&user.moderator]
+		  该贴已经被屏蔽，仅版主可见<p class="theme-desc">${post.contentHtml!}</p>
+		  [#else]
+		  该帖子已被屏蔽，仅版主可见
+		  [/#if]
+		  [#else]
+		  [#if post.hidden]
+		  [#if user??]
+		  [#if post.creater.id==user.id||user.moderator]
+		  <p class="theme-desc">${post.contentHtml}</p>
+		  [#else]
+		  [#if !post.topic.haveReply?contains(','+user.id+',')]
+		  <p class="theme-desc">${post.hideContent}</p>
+		  [#else]
+		  <p class="theme-desc">${post.contentHtml}</p>
+		  [/#if]
+		  [/#if]
+		  [#else]
+		  <p class="theme-desc">${post.hideContent}</p>
+		  [/#if]
+		  [#else]
+		  <p class="theme-desc">${post.contentHtml}</p>
+		  [/#if]
+		 [/#if]
+	</p>
+	<div class="theme-bottom-bar clearfix">
+		<div class="theme-operation">
+			<a class="operation-btn" title="赞" id="uppost${post.id}" onclick="postUp('${base}','${post.id}',0)"><i class="icon-zan"></i>
+				<span id="pupcount${post.id}">${post.ups!}</span>
+			</a>
+			<a class="operation-btn on" title="赞" id="cuppost${post.id}" onclick="postUp('${base}','${post.id}',3)"><i class="icon-zan"></i>
+				<span id="cuppost${post.id}">${post.ups!}</span>
+			</a>
+			<script type="text/javascript">
+			[#if user??&&user.upPostIds?seq_contains('${post.id}')]
+				$("#uppost${post.id}").hide();
+				$("#cuppost${post.id}").show();
+			[#else]
+				$("#uppost${post.id}").show();
+				$("#cuppost${post.id}").hide();
+			[/#if]
+			</script>
+			<a  id="replyMore${post.id}" onclick="getPostChildPage('${base}',${post.id})" class="operation-btn" title="回复数"><i class="icon-mes"></i>
+				<span>${post.replys!}</span>
+			</a>
+		</div>
+		<!--操作等-->
+		<div class="more-contorl">
+			[#if user??]
+			<div class="theme-operation">
+			<div href="javascript:void(0);" class="hover-blue magic-tool-box">使用道具
+			<div class="tooltip">
+				<ul>
+			[#if magicPostList??]
+				[#list magicPostList as magic]
+					[#if magic.identifier=="namepost"]
+						<li><a id="magica_${post.id!}_${post.id!}_namepost">${magic.name!}</a></li>
+					[#elseif magic.identifier=="anonymouspost"]
+						[#if post.creater.id==user.id]
+						<li><a id="magica_${post.id!}_${post.id!}_anonymouspost">${magic.name!}</a></li>
+						[/#if]
+					[#else]
+						[#if post.creater.id==user.id]
+						<li><a id="magica_${post.id!}_${post.id!}_${magic.identifier!}">${magic.name!}</a></li>
+						[/#if]
+					[/#if]	
+				[/#list]
+			[/#if]
+			[#if magicUserList??]
+				[#list magicUserList as magic]
+					[#if magic.identifier=="checkonline"]
+						[#if user??]
+							[#if post.creater.id!=user.id]
+								<li><a id="magica_${post.id!}_${post.id!}_checkonline_${post.creater.username!}">${magic.name!}</a></li>
+							[/#if]
+						[#else]
+							<li><a id="magica_${post.id!}_${post.id!}_checkonline_${post.creater.username!}">${magic.name!}</a></li>
+						[/#if]
+					[#elseif magic.identifier=="showip"]
+							<li><a id="magica_${post.id!}_${post.id!}_showip_${post.creater.username!}">${magic.name!}</a></li>
+					[/#if]
+				[/#list]
+			[/#if]
+			</ul>
+			</div>
+			</div>
+			  [#if user.moderator||user.id==post.creater.id]
+				<a href="${base}/post/v_edit${post.id!}.jspx" class="hover-blue" title="编辑">
+					<span>编辑</span>
+				</a>
+			  [/#if]
+				<a href="${base}/post/v_quote${post.id!}.jspx" class="hover-blue" title="引用">
+					<span>引用</span>
+				</a>
+			  [#if user.moderator]
+			  [#if !post.shield]
+			  <a href="${base}/post/v_shield${post.id!}_${-1}.jspx" class="hover-blue" title="屏蔽">
+				<span>屏蔽</span>
+			  </a>
+			  [#else]
+			   <a href="${base}/post/v_shield${post.id!}_${0}.jspx" class="hover-blue" title="取消屏蔽">
+				<span>取消屏蔽</span>
+			  </a>
+			  [/#if]
+			  [/#if]
+				<a  onclick="report('${base}','${post.wholeUrl!}')" class="hover-blue" title="举报">
+					<span>举报</span>
+				</a>
+			  [#if user.moderator]
+				<a href="${base}/post/o_delete.jspx?ids=${post.id!}" class="hover-blue" title="删除">
+					<span>删除</span>
+				</a>
+				[#elseif user.id==post.creater.id]
+					[#if post.replys == 0]
+						<a href="${base}/post/o_delete.jspx?ids=${post.id!}" class="hover-blue" title="删除">
+							<span>删除</span>
+						</a>
+					[/#if]
+				[/#if]
+			</div>
+			[/#if]
+		</div>
+		<!--关注-->
+		<div class="floor-info">
+			
+		</div>
+	</div>
+	<!--回复区域-->
+	<div id="postChildPage${post.id}"></div>
+</li>
+[/#if]
+[/#list]
+[/@post_page]
+<!--弹窗-->
+	<div class="model-panel buy-panel" id="useMagic">
+	<div class="edit-topic-header">
+	<a href="javascript:void(0)" class="iconfont icon-Delete pull-right" title="关闭"  onclick="closeModel()"></a>
+	</div>
+		</div>
+<script type="text/javascript">
+var id;
+var strs = new Array();
+$("a[id^='magica']").each(function(){
+	$(this).click(function(){
+		id=$(this).attr('id');
+		strs = id.split("_");
+		if(strs.length>=5){
+			$("#useMagic").load("${base}/magic/getmagicpage.jspx?pid="+strs[1]+"&ppid="+strs[2]+"&mid="+strs[3]+"&username="+strs[4],function (){
+				showModel('#useMagic');
+			});
+		}else{
+			$("#useMagic").load("${base}/magic/getmagicpage.jspx?pid="+strs[1]+"&ppid="+strs[2]+"&mid="+strs[3],function (){
+				showModel('#useMagic');
+			})
+		}
+	})
+})
+</script>

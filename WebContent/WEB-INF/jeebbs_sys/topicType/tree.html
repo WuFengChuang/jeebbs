@@ -1,0 +1,30 @@
+<#if isRoot>
+[{
+	"text": "<a href='v_list.do' target='listRightFrame'><@s.m "bbsTopicType.root"/></a>",
+	"classes": "folder"
+	<#if list?size gt 0>,
+	"expanded": true,
+	"children": [
+	<#list list as type>
+		{
+		"id": "${type.id}",
+		"text": "<a href='<#if type.child?size gt 0>v_list.do?root=${type.id}<#else>v_edit.do?id=${type.id}</#if>' target='listRightFrame'>${type.name}</a>",
+		"classes": "<#if type.child?size gt 0>folder<#else>file</#if>",
+		"hasChildren": <#if type.child?size gt 0>true<#else>false</#if>
+		}<#if type_has_next>,</#if>
+	</#list>
+	]
+	</#if>
+}]
+<#else>
+	[
+	<#list list as type>
+		{
+		"id": "${type.id}",
+		"text": "<a href='<#if type.child?size gt 0>v_list.do?root=${type.id}<#else>v_edit.do?id=${type.id}</#if>' target='listRightFrame'>${type.name}</a>",
+		"classes": "<#if type.child?size gt 0>folder<#else>file</#if>",
+		"hasChildren": <#if type.child?size gt 0>true<#else>false</#if>
+		}<#if type_has_next>,</#if>
+	</#list>
+	]
+</#if>

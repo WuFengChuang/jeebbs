@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.jeecms.plug.live.entity">
+	<class
+		name="BbsLiveMessage"
+		table="bbs_live_message"
+	>
+		<meta attribute="sync-DAO">false</meta>
+		<cache usage="read-write"/>
+		<id
+			name="id"
+			type="java.lang.Long"
+			column="msg_id"
+		>
+			<generator class="sequence"><param name="sequence">S_BBS_LIVE_MESSAGE</param></generator>
+		</id>
+		<property
+			name="msgTime"
+			column="msg_time"
+			type="timestamp"
+			not-null="true"
+			length="19"
+		/>
+		<property
+			name="content"
+			column="content"
+			type="string"
+			not-null="false"
+			length="1000"
+		/>
+		<property
+			name="imageUrl"
+			column="image_url"
+			type="string"
+			not-null="false"
+			length="255"
+		/>
+		<property
+			name="msgType"
+			column="msg_type"
+			type="java.lang.Short"
+			not-null="true"
+		/>
+		<many-to-one
+			name="live"
+			column="live_id"
+			class="BbsLive"
+			not-null="true"
+		>
+		</many-to-one>
+		<many-to-one
+			name="user"
+			column="user_id"
+			class="com.jeecms.bbs.entity.BbsUser"
+			not-null="true"
+		>
+		</many-to-one>
+		<many-to-one
+			name="toUser"
+			column="to_user"
+			class="com.jeecms.bbs.entity.BbsUser"
+			not-null="false"
+		>
+		</many-to-one>
+
+
+	</class>	
+</hibernate-mapping>

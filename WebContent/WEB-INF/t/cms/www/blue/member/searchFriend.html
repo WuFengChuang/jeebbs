@@ -1,0 +1,82 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript">
+	function applyFriend(username){
+		$.post("${base}/member/applyJson.jhtml",{
+			u:username
+		},function(data){
+			alert(data.message);
+			location.reload();
+		})
+	}
+	function accept(id){
+		$.post("${base}/member/acceptAjax.jhtml",{
+			id:id
+		},function(data){
+			alert(data.status);
+			location.reload();
+		})
+	}
+	function refuse(id){
+		alert(id);
+		$.post("${base}/member/refuseAjax.jhtml",{
+			id:id
+		},function(data){
+			alert(data.status);
+			location.reload();
+		})
+	}
+</script>
+[#list list as friend]
+<li class="clearfix">
+	<div class="imgbox">
+		<img src="${base!}${friend.avatar!}"/>
+	</div>
+	<div class="namebox">
+		<p><img src="images/level.png"/></p>
+		<p class="name">${friend.username!}</p>
+	</div>
+	<div class="control">
+	[#if user.id!=friend.id]
+	[@friendship userId=user.id friendId=friend.id]
+	[#if tag_bean??]
+		[#if tag_bean.status??]
+			[#if tag_bean.status==0]
+				[#if tag_bean.user.id==user.id]
+					<span>已申请</span>
+				[#else]
+					<div class="yes">
+						<span><a href="" onclick="accept(${tag_bean.id!})">同意</a></span>
+						<span><a href="" onclick="refuse(${tag_bean.id!})">拒绝</a></span>
+					</div>
+				[/#if]
+			[#elseif tag_bean.status==1]
+				<div class="no">
+					已为好友
+				</div>
+			[#elseif tag_bean.status==2]
+				[#if tag_bean.user.id==user.id]
+					<span>已拒绝</span>
+				[#else]
+					<div class="duifangNo">
+						<p>对方已拒绝</p>
+						<p class="sencondAdd"><a href="" onclick="applyFriend('${tag_bean.user.username!}')">加好友</a></p> 
+					</div>
+				[/#if]
+			[/#if]
+		[#else]
+		<div class="shenqing" style="">
+			<img src="images/shenqing.png"/>
+			<span><a href="" onclick="applyFriend('${tag_bean.user.username!}')">申请好友</a></span>
+		</div>
+		[/#if]
+	[#else]
+		<div class="shenqing" style="">
+			<img src="images/shenqing.png"/>
+			<span><a href="" onclick="applyFriend('${friend.username!}')">申请好友</a></span>
+		</div>
+    	[/#if]
+	[/@friendship]
+    [/#if]
+	</div>
+</li>
+[/#list]

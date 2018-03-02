@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+function getTableForm() {
+	return document.getElementById('tableForm');
+}
+function optDelete() {
+	if(Pn.checkedCount('ids')<=0) {
+		$.alert("<@s.m 'global.prompt'/>","<@s.m 'error.checkRecord'/>");
+		return;
+	}
+	if(!confirm("<@s.m 'global.confirm.delete'/>")) {
+		return;
+	}
+	doDelete();
+}
+function doDelete(){
+	var f = getTableForm();
+	f.action="o_delete.do";
+	f.submit();
+}
+</script>
+</head>
+<body>
+<div class="page-positon ove">
+  <div class="position-div"><@s.m "global.position"/>: <@s.m "cmsAdminLocal.function"/> > <@s.m "global.list"/></div>
+</div>
+<div class="box-positon">
+	<form class="ropt">
+		<input class="add" type="submit" value="<@s.m "global.add"/>" onclick="this.form.action='v_add.do';"/>
+	</form>
+	<div class="clear"></div>
+</div>
+<div class="body-box">
+<form action="v_list.do" method="post">
+<div style="padding-bottom:10px; text-indent:6px;">
+<div>
+<@s.m "cmsUser.username"/>: <input type="text" name="queryUsername" value="${queryUsername!}" style="width:100px"/>
+<@s.m "cmsUser.email"/>: <input type="text" name="queryEmail" value="${queryEmail!}" style="width:70px"/>
+<label style="display:inline-block; margin-left:6px;"><input class="m-checkbox" type="checkbox" name="queryDisabled" value="true"<#if queryDisabled?? && queryDisabled> checked="checked"</#if>/><@s.m "cmsUser.disabled"/></label>
+<input class="query" type="submit" value="<@s.m "global.query"/>"/>
+</div>
+</div>
+</form>
+<form id="tableForm" method="post">
+<input type="hidden" name="pageNo" value="${pageNo!}"/>
+<@p.table value=pagination;bbsUser,i,has_next><#rt/>
+	<@p.column title="<input type='checkbox' onclick='Pn.checkbox(\"ids\",this.checked)'/>" width="25" align="center">
+		<input type='checkbox' name='ids' value='${bbsUser.id}' onclick="Pn.selectCheckBox('${bbsUser.id}',this.checked)"/><#t/>
+	</@p.column><#t/>
+	<@p.column title="ID" align="center">${bbsUser.id}</@p.column><#t/>
+	<@p.column code="cmsUser.username" align="center">
+		<div >${bbsUser.username}<#if bbsUser.realname??> (${bbsUser.realname})</#if></div>
+	</@p.column><#t/>
+	<@p.column code="cmsUser.role" align="center"><#list bbsUser.roles as r><div style="float:left;padding-right:3px">${r.name}</div></#list><div style="clear:both"></div></@p.column><#t/>
+	
+	<@p.column code="cmsUser.rank" align="center">${bbsUser.rank}</@p.column><#t/>
+	<@p.column code="cmsUser.lastLogin" align="center"><#if bbsUser.lastLoginTime??>${bbsUser.lastLoginTime?string('yyyy-MM-dd HH:mm:ss')}<br/></#if>${bbsUser.lastLoginIp!}</@p.column><#t/>
+	<@p.column code="cmsUser.loginCountForList" align="center">${bbsUser.loginCount!}</@p.column><#t/>
+	<@p.column code="cmsUser.disabled" align="center"><#if bbsUser.disabled><span style="color:red"><@s.m "global.true"/></span><#else><@s.m "global.false"/></#if></@p.column><#t/>
+	<@p.column code="global.operate" align="center">
+		<#assign params>&pageNo=${pageNo!}&queryUsername=${queryUsername!}&queryEmail=${queryEmail!}&queryGroupId=${queryGroupId!}&queryDisabled=${(queryDisabled!false)?string}</#assign>
+		<a href="v_edit.do?id=${bbsUser.id}${params}" class="pn-opt"><@s.m "global.edit"/></a> | <#rt/>
+		<a href="o_delete.do?ids=${bbsUser.id}${params}" onclick="if(!confirm('<@s.m "global.confirm.delete"/>')) {return false;}" class="pn-opt"><@s.m "global.delete"/></a><#t/>
+	</@p.column><#t/>
+</@p.table>
+<div>
+<input class="del-button" type="button" value="<@s.m "global.delete"/>" onclick="optDelete();"/ style="float:left;"></div>
+</form>
+</div>
+<#include "/common/alert_message.html"/>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+$(function() {
+	$("#jvForm").validate();
+});
+</script>
+</head>
+<body>
+<#include "/common/image_upload.html"/>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos"><@s.m "global.position"/>:  <@s.m "bbsGift.function"/> - <@s.m "global.edit"/></div>
+	<form class="ropt">
+		<input type="button" value="<@s.m "global.backToList"/>" onclick="history.back();"/>
+	</form>
+	<div class="clear"></div>
+</div>
+<@p.form id="jvForm" action="o_update.do">
+<@p.text label="bbsGift.name" name="name" value=bbsGift.name  colspan="2" width="100" required="true" class="required" maxlength="100"/><@p.tr/>
+<@p.td id="picPath" label="bbsGift.picUpload" colspan="1" width="50" noHeight="true">
+<@p.text id="uploadImgPath0" name="picPath"  value=bbsGift.picPath style="width:180px"/> <input type="button" value="<@s.m "imageupload.preview"/>" onclick="previewImg(0);"/><br/>
+<span id="ufc0">
+<input type="file" id="uploadFile0"/>
+</span>
+<input type="hidden" id="mark0" value="false"/> <input type="button" value="<@s.m "imageupload.upload"/>" onclick="upload(0);"/><br/>
+</@p.td>
+<@p.td colspan="1" width="50">
+<img id="preImg0" src="${bbsGift.picPath!}" noResize='true'  alt="<@s.m "imageupload.preview"/>" style="width:100px;height:70px;background-color:#ccc;border:1px solid #333"/>
+</@p.td><@p.tr/>
+<@p.text label="bbsGift.price" name="price" value=bbsGift.price required="true"  colspan="1" width="50" class="required number" maxlength="10"/>
+<@p.text label="bbsGift.priority" name="priority" value=bbsGift.priority value="10"  colspan="1" width="50"  required="true" class="required digits" maxlength="10"/><@p.tr/>
+<@p.radio width="50" colspan="1" label="bbsGift.disabled" name="disabled" value=bbsGift.disabled  list={"true":"global.true","false":"global.false"}/>
+<@p.radio width="50" colspan="1" label="bbsGift.giftType" name="giftType" value=bbsGift.giftType list={"0":"bbsGift.giftType.0","1":"bbsGift.giftType.1"}/><@p.tr/>
+
+<@p.td width="100" colspan="2"><@p.hidden name="id" value=bbsGift.id/><@p.submit code="global.submit"/> &nbsp; <@p.reset code="global.reset"/></@p.td>
+</@p.form>
+</div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>jeecms-left</title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+$(function(){
+	Cms.lmenu('lmenu');
+});
+</script>
+</head>
+<body class="lbody">
+<ul id="lmenu">
+<@cms_perm url="/group/v_list.do">
+<li><a href="../group/v_list.do" target="rightFrame">会员组列表</a></li>
+</@cms_perm>
+<@cms_perm url="/role/v_list.do">
+<li><a href="../role/v_list.do" target="rightFrame">角色管理</a></li>
+</@cms_perm>
+<@cms_perm url="/admin/v_list.do">
+<li><a href="../admin/v_list.do" target="rightFrame">管理员管理</a></li>
+</@cms_perm>
+<@cms_perm url="/user/v_list.do">
+<li><a href="../user/v_list.do" target="rightFrame">会员列表</a></li>
+</@cms_perm>
+<@cms_perm url="/user/v_officialuser_list.do">
+<li><a href="../user/v_officialuser_list.do" target="rightFrame"><@s.m "bbsUser.officialUser.function"/></a></li>
+</@cms_perm>
+<@cms_perm url="/account/v_list.do">
+<li><a href="../account/v_list.do" target="rightFrame"><@s.m "cms.account.function"/></a></li>
+</@cms_perm>
+<@cms_perm url="/message/v_list.do">
+<li><a href="../message/v_list.do" target="rightFrame"><@s.m "bbsMessage.function"/></a></li>
+</@cms_perm>
+<@cms_perm url="/message/v_sys_list.do">
+<li><a href="../message/v_sys_list.do?sys=true" target="rightFrame"><@s.m "bbsMessage.sys.function"/></a></li>
+</@cms_perm>
+<@cms_perm url="/activelevel/v_list.do">
+<li><a href="../activelevel/v_list.do" target="rightFrame"><@s.m "bbsUserActiveLevel.function"/></a></li>
+</@cms_perm>
+</ul>
+</body>
+</html>

@@ -1,0 +1,166 @@
+[@post_page topicId=topicId  pageNo=pageNo orderBy=orderBy count='5' ]
+     	<div class="revert-box">
+			<!--楼层的回复区-->
+			[#if user??]
+			[#if topic.allayReply]	
+			<div class="item-revert">
+				<textarea placeholder="我来说两句" class="item-revert-area" id="topicReplyContent${topicId!}" ></textarea>
+				<div class="pull-right revert-btn-box">
+					<a  id="tcancel${topicId!}" onclick="cancelTopicContent('${topicId!}')" class="revert-cancel">清空</a>
+					<a  id="topicReply${topicId!}" class="btn-primary" onclick="replyTopicContent('${base}','${topicId}')">评论</a>
+				</div>
+			</div>
+			[/#if]
+			[/#if]
+			<!--楼层评论列表-->
+			<ul class="revert-inner-box">
+				<!--循环体-->
+				[#list tag_pagination.list as post]
+				[#if !post.first]
+					<li class="revert-inner-item">
+						<div class="revert-inner-header">
+							<span class="inner-time">${post.createTimeHtml!}</span>
+							<div class="inner-revert-name">
+								<span class="inner-name">${post.creater.username!}</span> 评论
+								<span class="inner-name">[#if post.parent??]${post.parent.creater.username!}[#else]${post.topic.creater.username!}[/#if]</span>
+							</div>
+						</div>
+						<h4 class="inner-title">${post.contentHtml!}</h4>
+						<div class="revert-inner-bottom">
+							
+							<!--点赞-->
+							<a  id="upposta${post.id}" class="inner-ups">
+								<span id="uppost${post.id}" onclick="postUp('${base}','${post.id}',0)">赞</span>
+								<span id="cuppost${post.id}" onclick="postUp('${base}','${post.id}',3)">赞</span>
+								<script type="text/javascript">
+								[#if user??&&user.upPostIds?seq_contains('${post.id}')]
+									$("#uppost${post.id}").hide();
+									$("#cuppost${post.id}").show();
+								[#else]
+									$("#uppost${post.id}").show();
+									$("#cuppost${post.id}").hide();
+								[/#if]
+								</script>
+								<span id="pupcount${post.id}">${post.ups!}</span>
+							</a>
+							<!--版主和其他用户操作等-->
+							[#if user??]
+								<a  id="adreply${post.id}" onclick="displayPostReplayDive('${post.id}')" class="inner-revert-click on">评论</a>
+								<div class="more-contorl">
+									<div href="javascript:void(0);" class="hover-blue magic-tool-box">使用道具
+									<div class="tooltip">
+										<ul>
+							[#if magicPostList??]
+								[#list magicPostList as magic]
+									[#if magic.identifier=="namepost"]
+										<li><a id="magica_${post.id!}_${post.id!}_namepost">${magic.name!}</a></li>
+									[#elseif magic.identifier=="anonymouspost"]
+										[#if post.creater.id==user.id]
+										<li><a id="magica_${post.id!}_${post.id!}_anonymouspost">${magic.name!}</a></li>
+										[/#if]
+									[#else]
+										[#if post.creater.id==user.id]
+										<li><a id="magica_${post.id!}_${post.id!}_${magic.identifier!}">${magic.name!}</a></li>
+										[/#if]
+									[/#if]	
+								[/#list]
+							[/#if]
+							[#if magicUserList??]
+								[#list magicUserList as magic]
+									[#if magic.identifier=="checkonline"]
+										[#if user??]
+											[#if post.creater.id!=user.id]
+												<li><a id="magica_${post.id!}_${post.id!}_checkonline_${post.creater.username!}">${magic.name!}</a></li>
+											[/#if]
+										[#else]
+											<li><a id="magica_${post.id!}_${post.id!}_checkonline_${post.creater.username!}">${magic.name!}</a></li>
+										[/#if]
+									[#elseif magic.identifier=="showip"]
+											<li><a id="magica_${post.id!}_${post.id!}_showip_${post.creater.username!}">${magic.name!}</a></li>
+									[/#if]
+								[/#list]
+							[/#if]
+									</ul>
+									</div>				
+									</div>
+							  [#if user.moderator||user.id==post.creater.id]
+								<a href="${base}/post/v_edit${post.id!}.jspx" class="hover-blue" title="编辑">
+									<span>编辑</span>
+								</a>
+							  [/#if]
+								<a  onclick="report('${base}','${post.wholeUrl!}')" class="hover-blue" title="举报">
+									<span>举报</span>
+								</a>
+							  [#if user.moderator]
+								  [#if !post.shield]
+								  <a href="${base}/post/v_shield${post.id!}_${-1}.jspx" class="hover-blue" title="屏蔽">
+									<span>屏蔽</span>
+								  </a>
+								  [#else]
+								   <a href="${base}/post/v_shield${post.id!}_${0}.jspx" class="hover-blue" title="取消屏蔽">
+									<span>取消屏蔽</span>
+								  </a>
+								  [/#if]
+								  [#if !post.creater.moderator]
+										<a id="forbiddenLink_${post.creater.id}_${post.id}" class="hover-blue" onclick="forBidden('${base}','${post.creater.id}','${topic.forum.id}')"  title="禁用">
+										[#if post.creater.disabled]解除禁用[#else]禁用[/#if]
+									</a>
+								  [/#if]
+							  [/#if]
+							 [#if user.moderator]
+									<a href="${base}/post/o_delete.jspx?ids=${post.id!}" class="hover-blue" title="删除">
+										<span>删除</span>
+									</a>
+									[#elseif user.id==post.creater.id]
+										[#if post.replys == 0]
+											<a href="${base}/post/o_delete.jspx?ids=${post.id!}" class="hover-blue" title="删除">
+												<span>删除</span>
+											</a>
+										[/#if]
+									[/#if]
+								</div>
+							[/#if]
+						</div>
+						<!--评论内的回复区域-->
+						
+						<div class="inner-item-revert" id="innerPost${post.id}" style="display:none">
+							<textarea placeholder="我来说两句" class="item-revert-area" name="content" id="postReplyContent${post.id}"></textarea>
+							<div class="pull-right revert-btn-box">
+								<a  id="acancel${post.id}" onclick="cancelContent('${post.id}')" class="revert-cancel">取消</a>
+								<a  id="postReplyA${post.id}" onclick="replyPostContent('${base}','${post.topic.id}','${post.id}')" class="btn-primary">评论</a>
+							</div>
+						</div>
+						
+					</li>
+				[/#if]
+				[/#list]
+			</ul>
+			<!--分页-->
+			[#include "../tag/topic_post_page.html"/] 
+		</div>
+[/@post_page]
+<!--弹窗-->
+	<div class="model-panel buy-panel" id="useMagic">
+	<div class="edit-topic-header">
+	<a href="javascript:void(0)" class="iconfont icon-Delete pull-right" title="关闭"  onclick="closeModel()"></a>
+	</div>
+		</div>
+<script type="text/javascript">
+var id;
+var strs = new Array();
+$("a[id^='magica']").each(function(){
+	$(this).click(function(){
+		id=$(this).attr('id');
+		strs = id.split("_");
+		if(strs.length>=5){
+			$("#useMagic").load("${base}/magic/getmagicpage.jspx?pid="+strs[1]+"&ppid="+strs[2]+"&mid="+strs[3]+"&username="+strs[4],function (){
+				showModel('#useMagic');
+			});
+		}else{
+			$("#useMagic").load("${base}/magic/getmagicpage.jspx?pid="+strs[1]+"&ppid="+strs[2]+"&mid="+strs[3],function (){
+				showModel('#useMagic');
+			})
+		}
+	})
+})
+</script>

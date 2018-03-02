@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+$(function() {
+	$("#jvForm").validate();
+});
+</script>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos"><@s.m "global.position"/>: <@s.m "bbsWebservice.function"/> - <@s.m "global.add"/></div>
+	<form class="ropt">
+		<input type="submit" value="<@s.m "global.backToList"/>" onclick="this.form.action='v_list.do';"/>
+	</form>
+	<div class="clear"></div>
+</div>
+<@p.form id="jvForm" action="o_save.do">
+<@p.text label="bbsWebservice.address" name="address"  required="true" class="required" maxlength="100"/><@p.tr/>
+<@p.text label="bbsWebservice.targetNamespace" name="targetNamespace"  maxlength="100"/><@p.tr/>
+
+<@p.text label="bbsWebservice.operate" name="operate" maxlength="100"/><@p.tr/>
+<@p.select  label="bbsWebservice.type" name="type"  list={"addUser":"bbsWebservice.type.addUser","updateUser":"bbsWebservice.type.updateUser","deleteUser":"bbsWebservice.type.deleteUser"} required="true"/><@p.tr/>
+
+<@p.text label="bbsWebservice.successResult" name="successResult"  maxlength="100"/><@p.tr/>
+<@p.td  label="bbsWebservice.param.list">
+<@p.button code="bbsWebservice.param.add" onclick="addParamLine()"/> 
+<table border="0" >
+<tr>
+	<td>
+		<div>
+		<span style="width:100px"><@s.m "bbsWebservice.param.name"/></span>
+		<span style="width:100px"><@s.m "bbsWebservice.param.default"/></span>
+		</div>
+	</td>
+</tr>
+</table>
+<div id="paramBefore" style="clear:both"></div>
+<textarea id="paramTable" style="display:none;">
+<table id="paramTable{0}" border="0" >
+<tr >
+	<td>
+		<div>
+		<input type="text"  name="paramName" style="width:100px"/> 
+		<input type="text"  name="defaultValue" style="width:100px"/>
+		<a href="javascript:void(0);" onclick="$('#paramTable{0}').remove();" class="pn-opt"><@s.m "global.delete"/></a></div>
+	</td>
+</tr>
+</table>
+</textarea>
+<script type="text/javascript">
+var paramIndex = 1;
+var paramTpl = $.format($("#paramTable").val());
+function addParamLine() {
+	$('#paramBefore').before(paramTpl(paramIndex++));
+}
+</script>
+</@p.td><@p.tr/>
+<@p.td><@p.submit code="global.submit"/> &nbsp; <@p.reset code="global.reset"/></@p.td>
+</@p.form>
+</div>
+</body>
+</html>

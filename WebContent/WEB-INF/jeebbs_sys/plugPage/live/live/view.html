@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos"><@s.m "global.position"/>:  <@s.m "bbsLive.function"/> - <@s.m "global.edit"/></div>
+	<form class="ropt">
+		<input type="button" value="<@s.m "global.backToList"/>" onclick="history.back();"/>
+	</form>
+	<div class="clear"></div>
+</div>
+<@p.form>
+<@p.td colspan="2" label="live.title">
+	${live.title!}
+</@p.td><@p.tr/>
+<@p.td colspan="2" label="主播">
+	${live.user.realname!live.user.username}
+</@p.td><@p.tr/>
+<@p.td colspan="2" label="live.description">
+${live.description!}
+</@p.td><@p.tr/>
+<@p.td colspan="2" label="live.beginPrice">
+${live.beginPrice!}
+</@p.td><@p.tr/>
+<@p.td colspan="2" label="live.beginTime">
+	${live.beginTime?string("yyyy-MM-dd HH:mm")}
+</@p.td><@p.tr/>
+<@p.td colspan="2" label="live.endTime">
+	${live.endTime?string("yyyy-MM-dd HH:mm")}
+</@p.td><@p.tr/>
+<@p.td colspan="2" label="拒绝原因">
+	${live.reason!}
+</@p.td><@p.tr/>
+<@p.td colspan="2">
+	<@p.button value="返回" onclick="history.go(-1)"/>
+</@p.td>
+</@p.form>
+</div>
+</body>
+</html>

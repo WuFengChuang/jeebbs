@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+function getTableForm() {
+	return document.getElementById('tableForm');
+}
+</script>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos"><@s.m "global.position"/>: <@s.m "topic.order.static.function"/>  > <@s.m "global.list"/></div>
+	<div class="clear"></div>
+</div>
+<form action="charge_list.do" method="post">
+<div style="padding-top:5px; padding-bottom:5px; text-indent:10px; border-bottom:1px solid #fff; border-top:1px solid #fff;">
+<@s.m "topic.order.title"/>:<input name="title" value="${title!}" type="text" style="width:140px"/>
+<@s.m "cmsUser.username"/>:<input name="author" value="${author!}" type="text" style="width:80px"/>
+<@s.m "topic.lastBuyTime"/>:
+<input name="buyTimeBegin" value="${buyTimeBegin!}" style="width:140px"  type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate" />
+-<input name="buyTimeEnd" value="${buyTimeEnd!}" style="width:140px"  type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate" />
+<@s.m "global.priority"/>:<@p.select name="orderBy" value=orderBy list={"1":"topic.orderBy.1","2":"topic.orderBy.2","3":"topic.orderBy.3","4":"topic.orderBy.4","5":"topic.orderBy.5","6":"topic.orderBy.6","7":"topic.orderBy.7","8":"topic.orderBy.8","9":"topic.orderBy.9","10":"topic.orderBy.10"}/>
+<input class="query" type="submit" value="<@s.m "global.query"/>"/>
+<a href="commissionStatic.do"><@s.m "order.plat.static.function"/></a>
+</div>
+</form>
+<form id="tableForm" method="post">
+<input type="hidden" name="pageNo" value="${pageNo!}"/>
+<input type="hidden" name="title" value="${title!}"/>
+<input type="hidden" name="author" value="${author!}"/>
+<input type="hidden" name="buyTimeBegin" value="${buyTimeBegin!}"/>
+<input type="hidden" name="buyTimeEnd" value="${buyTimeEnd!}"/>
+<@p.table value=pagination listAction="charge_list.do";topic,i,has_next><#rt/>
+	<@p.column code="topic.order.topic"><a href="${topic.topic.url!}" target="_blank"><@text_cut s=topic.topic.title?html len=25 append="..."/></a></@p.column><#t/>
+	<@p.column code="topic.chargeAmount">${topic.chargeAmount!}</@p.column><#t/>
+	<@p.column code="topic.totalAmount">${topic.totalAmount!}</@p.column><#t/>
+	<@p.column code="topic.yearAmount">${topic.yearAmount!}</@p.column><#t/>
+	<@p.column code="topic.monthAmount">${topic.monthAmount!}</@p.column><#t/>
+	<@p.column code="topic.dayAmount">${topic.dayAmount!}</@p.column><#t/>
+	<@p.column code="topic.lastBuyTime"><#if topic.lastBuyTime??>${topic.lastBuyTime?string("yyyy-MM-dd HH:mm:ss")}</#if></@p.column><#t/>
+</@p.table>
+</form>
+</div>
+<#include "/common/alert_message.html"/>
+</body>
+</html>

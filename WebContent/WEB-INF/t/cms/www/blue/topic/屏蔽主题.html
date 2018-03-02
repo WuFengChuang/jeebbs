@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>屏蔽/打开主题 - ${site.name} - powered by jeebbs</title>
+<link href="${resSys}/front.css" rel="stylesheet" type="text/css"/>
+<script src="${resSys}/jquery.js" type="text/javascript"></script>
+<script src="${base}/thirdparty/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/whole.css" />
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/layout.css" />
+<script type="text/javascript">
+	$("#jvForm").validate($.validator.AlertError);
+	$(function() {
+		$("#jvForm").validate();
+	});
+</script>
+<style>
+	.prime{
+		background: #fff;
+		width: 300px; 
+		height: 130px;
+	}
+	.check-label{
+		position: relative;
+		top:2px;
+left:8px;
+	}
+</style>
+</head>
+<body>
+<div class="prime">
+<form method="post" action="${base}/topic/o_shieldSubmit.jspx" id="jvForm">
+  <div class="clearfix" style="padding: 36px 48px 28px 48px;">
+		<div style="float: left;font-size: 16px;color: #353535;">
+	   <input type="radio" id="unshield" name="shield" value="false" checked="checked" /><label for="unshield" class="check-label">打开主题</label>
+	    </div>
+	   	<div style="float: right; font-size: 16px;color: #353535;">
+	   <input type="radio" id="shield" name="shield" value="true" /><label for="shield" class="check-label">屏蔽主题</label>
+	    </div>
+	   </div>
+	
+	  <div  style="text-align: center;">
+	  <input type="hidden" name="ids" value="${ids!}"/>
+		<input type="hidden" name="url" value="../indexModerator.jhtml"/>
+	    <!--<input type="hidden" name="forumId" value="${forumId!}" />-->
+		<input type="submit"  class="blue-btn "  value="确定" style="width: 64px; height: 32px;line-height: 32px;"/>
+		<input type="button" class="blue-btn"  value="取消" style="width: 64px; background: #999999;height: 32px;line-height: 32px;" onclick="closeModel()"/>
+	</div>
+
+</form>
+

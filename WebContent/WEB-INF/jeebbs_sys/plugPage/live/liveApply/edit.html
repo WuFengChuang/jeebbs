@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script src="${base}/thirdparty/swfupload/swfupload.js" type="text/javascript"></script>
+<script src="${base}/thirdparty/swfupload/swfupload.queue.js" type="text/javascript"></script>
+<script src="${base}/thirdparty/swfupload/fileprogress.js" type="text/javascript"></script>
+<script src="${base}/thirdparty/swfupload/handlers.js" type="text/javascript"></script>
+<link href="${base}/thirdparty/swfupload/process.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript">
+$(function() {
+	$("#jvForm").validate();
+});
+var swfu;
+window.onload=function() {
+	var uploadPicsUrl = "${base}/member/o_swfPicsUpload.jspx";
+	//在firefox、chrome下，上传不能保留登录信息，所以必须加上jsessionid。
+	var jsessionid = "${sessionId!}";
+	if(jsessionid) {
+		uploadPicsUrl += ";jsessionid="+jsessionid;
+		uploadAttachsUrl += ";jsessionid="+jsessionid;
+	}
+	swfu=new SWFUpload({
+		upload_url : uploadPicsUrl,
+		flash_url : "${base}/thirdparty/swfupload/swfupload.swf",
+		file_size_limit : "20 MB",
+		file_types : "*.jpg;*.gif;*.png;*.bmp",
+		file_types_description : "<@s.m 'bbsLiveApply.pictures'/>",
+		file_queue_limit : 0,
+		custom_settings : {
+			progressTarget : "fsUploadProgress",
+			cancelButtonId : "btnCancel"
+		},
+		debug: false,
+		
+		button_image_url : "${base}/res/common/img/theme/menu_search.jpg",
+		button_placeholder_id : "spanButtonPlaceHolder",
+		button_text: "<span class='btnText'><@s.m "global.batchUpload"/></span>",
+		button_width: 52,
+		button_height: 19,
+		button_text_top_padding: 2,
+		button_text_left_padding: 0,
+		button_text_style: '.btnText{color:#666666;}',
+		
+		file_queued_handler : fileQueued,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_progress_handler : uploadProgress,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadPicsSuccess,
+		upload_complete_handler : uploadComplete,
+		queue_complete_handler : queueComplete
+	});
+};
+function uploadPicsSuccess(file,data) {
+	var jsonData=eval("("+data+")");//转换为json对象 
+	if(jsonData.error!=null){
+		$.alert("<@s.m 'global.prompt'/>",jsonData.error);
+	}else{
+		addPicLine();
+		var index = picIndex - 1;
+		imgUrl=jsonData.imgUrl;
+		$("#preImg"+index).attr("src",""+imgUrl);
+		var imgSrc = parent.document.getElementById("preImg"+index);
+		if(!$(imgSrc).attr("noResize")) {
+			$(imgSrc).css("width","auto");
+			$(imgSrc).css("height","auto");
+		}
+		$("#uploadImgPath"+index).val(imgUrl);
+		previewImg(index);
+	}
+}
+</script>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos"><@s.m "global.position"/>:  <@s.m "bbsLiveApply.function"/> - <@s.m "global.edit"/></div>
+	<form class="ropt">
+		<input type="button" value="<@s.m "global.backToList"/>" onclick="history.back();"/>
+	</form>
+	<div class="clear"></div>
+</div>
+<#include "/common/image_upload.html"/>
+<@p.form id="jvForm" action="o_update.do">
+<@p.textarea value=bbsLiveApply.intro cols="70" rows="3"  maxlength="500" vld="{maxlength:500}" label="bbsLiveApply.intro" name="intro" colspan="2" width="100"/><@p.tr/>
+<@p.textarea value=bbsLiveApply.brief cols="70" rows="3"  maxlength="500" vld="{maxlength:500}" label="bbsLiveApply.brief" name="brief" colspan="2" width="100"/><@p.tr/>
+<@p.textarea value=bbsLiveApply.experience cols="70" rows="5"  maxlength="2000" vld="{maxlength:2000}" label="bbsLiveApply.experience" name="experience" colspan="2" width="100"/><@p.tr/>
+<@p.text value=bbsLiveApply.mobile  maxlength="15" vld="{maxlength:15}" label="bbsLiveApply.mobile" name="mobile" colspan="2" width="100"/><@p.tr/>
+<@p.text value=bbsLiveApply.address    label="bbsLiveApply.address" name="address" colspan="2" width="100"/><@p.tr/>
+<@p.td label="bbsLiveApply.pictures" colspan="2" noHeight="true">
+<div>
+<span id="spanButtonPlaceHolder"></span>
+<span style="display: none;"><input class="cancel" id="btnCancel" type="button" value="<@s.m "global.cancel"/>" onclick="swfu.cancelQueue();" disabled="disabled" /></span>
+<div id="fsUploadProgress" style="display: none;"></div>
+</div>
+<#list bbsLiveApply.pictures as p>
+<table id="picTable${p_index+5}" border="0" style="float:left;">
+<tr>
+	<td>
+		<div><input type="text" id="uploadImgPath${p_index+5}" name="picPaths" value="${p.imgPath}" style="width:170px"/> <a href="javascript:void(0);" onclick="$('#picTable${p_index+5}').remove();" class="pn-opt"><@s.m "global.delete"/></a></div>
+		<div>
+		<span id="ufc${p_index+5}" style="position:relative">
+		<input type='text' id='uploadFileText${p_index+5}' size="10"/>  
+		<input class="browse" type='button' value='<@s.m "global.browse"/>'/>
+		<input onchange="$('#uploadFileText${p_index+5}').val(this.value)" size="10" type="file" id="uploadFile${p_index+5}" class="file-button"/>
+		</span> 
+		<input type="button" value="<@s.m "global.upload"/>" onclick="upload(${p_index+5});" class="upload-button"/>
+		</div>
+		<div><textarea style="width:200px;height:60px;" name="picDescs" maxlength="255">${p.description!}</textarea></div>
+	</td>
+	<td><img id="preImg${p_index+5}" src="${p.imgPath}" alt="<@s.m "imageupload.preview"/>" noResize="true" style="width:110px;height:110px;background-color:#ccc;border:1px solid #333"/></td>
+</tr>
+</table>
+<input type="hidden" name="oldpicPaths" value="${p.imgPath!}"/>
+</#list>
+<div id="picBefore" style="clear:both"></div>
+<textarea id="picTable" style="display:none;">
+<table id="picTable{0}" border="0" style="float:left;">
+<tr>
+	<td>
+		<div><input type="text" id="uploadImgPath{0}" name="picPaths" style="width:160px"/> <a href="javascript:void(0);" onclick="$('#picTable{0}').remove();" class="pn-opt"><@s.m "global.delete"/></a></div>
+		<div>
+		<span id="ufc{0}" style="position:relative">
+		<input type='text' id='uploadFileText{0}' size="10"/>  
+		<input class="browse" type='button' value='<@s.m "global.browse"/>'/>
+		<input onchange="$('#uploadFileText{0}').val(this.value)" size="10" type="file" id="uploadFile{0}" class="file-button"/>
+		</span> 
+		<input type="button" value="<@s.m "global.upload"/>" onclick="upload({0});" class="upload-button"/>
+		</div>
+		<div>&lt;textarea style="width:200px;height:60px;" name="picDescs" maxlength="255"&gt;&lt;/textarea&gt;</div>
+	</td>
+	<td><img id="preImg{0}" alt="<@s.m "imageupload.preview"/>" noResize="true" style="width:110px;height:110px;background-color:#ccc;border:1px solid #333"/></td>
+</tr>
+</table>
+</textarea>
+<script type="text/javascript">
+var picIndex = ${bbsLiveApply.pictures?size} + 5;
+var picTpl = $.format($("#picTable").val());
+function addPicLine() {
+	$('#picBefore').before(picTpl(picIndex++));
+}
+</script>
+</@p.td><@p.tr/>
+<input type="hidden" name="pageNo" value="${pageNo!}"/>
+<input type="hidden" name="mobile" value="${mobile!}"/>
+<input type="hidden" name="status" value="${status!}"/>
+<input type="hidden" name="username" value="${username!}"/>
+<@p.td colspan="2" width="100"><@p.hidden name="id" value=bbsLiveApply.id/><@p.submit code="global.submit"/> &nbsp; <@p.reset code="global.reset"/></@p.td>
+</@p.form>
+</div>
+</body>
+</html>

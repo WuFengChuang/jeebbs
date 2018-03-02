@@ -1,0 +1,30 @@
+<div id="statisticDiv" class="memberstatistic">
+<div class="memberstatisticinner">
+论坛动态：在线人数总共&nbsp;<span id="usertotal">0</span>&nbsp;-会员&nbsp;<span id="membertotal">0</span>&nbsp;-游客&nbsp;<span id="visitortotal">0</span>&nbsp;
+-最高纪录是 &nbsp;${site.config.userOnlineTopNum!}&nbsp;于&nbsp;${site.config.userOnlineTopDay!}
+</div>
+</div>
+<script type="text/javascript">
+	var memberTotal=$.cookie('membertotal'); 
+	var visitorTotal=$.cookie('visitortotal');
+	var total=$.cookie('usertotal');
+	var date=new Date();
+	var cookieExpireMinute=5;
+	date.setTime(date.getTime() + (cookieExpireMinute * 60 * 1000));
+	if(memberTotal!=null){
+		$("#membertotal").html(memberTotal);
+		$("#visitortotal").html(visitorTotal);
+		$("#usertotal").html(total);
+	}else{
+		 $.post("${base}/session/statistic.jspx", {
+			 	member:true
+			}, function(data) {
+				$("#membertotal").html(data.membtertotal);
+				$("#visitortotal").html(data.visitortotal);
+				$("#usertotal").html(data.usertotal);
+				$.cookie('membertotal',data.membtertotal,{expires:date,path:'/'});
+				$.cookie('visitortotal',data.visitortotal,{expires:date,path:'/'});
+				$.cookie('usertotal',data.usertotal,{expires:date,path:'/'});
+		  }, "json");
+	}
+</script>

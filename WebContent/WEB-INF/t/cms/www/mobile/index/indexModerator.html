@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>${site.name} - JEECMS官方论坛|开源java cms,jsp cms,jsp bbs</title>
+    <meta name="keywords" content="java,cms,jsp,cms,jsp bbs,开源网站内容管理系统,网站群,站群,多站点,jeecms" />
+    <meta name="description" content="讨论jsp cms、jsp bbs相关资讯，struts,hibernate,spring,freemarker最新技术研究" /> 
+<meta property="qc:admins" content="26435257006110776654" />
+	<link href="${resSys}/front.css" rel="stylesheet" type="text/css"/>
+
+    <script src="${resSys}/jquery.js" type="text/javascript"></script>
+    <script src="${resSys}/front.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/whole.css" />
+    <link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/layout.css" />
+    <script type="text/javascript">
+	function editTitle(id) {
+		$('#title'+id).show();
+		$('#link'+id).hide();
+		$('#title'+id).select();
+	}
+	function updateTitle(id) {
+		var title = $('#title'+id).val();
+		if($('#link'+id).text() == title) {
+			//do nothing
+		} else if($.trim(title).length<2) {
+			alert("标题不能小于2个字符");
+		} else  {
+			$.postJson('${base}/jeebbs/TopicTitleUpdate.do', {
+				'topicId' : id,
+				'title' : title
+			}, function(data) {
+				if (!data.success) {
+					alert(date.msg);
+				}
+			});
+		}
+		$('#title'+id).hide();
+		$('#link'+id).text(title).show();
+	}
+	function manageTopic(url) {
+		var batchChecks = document.getElementsByName('topicIds');
+		var hasChecked = false;
+		for(var i=0; i<batchChecks.length; i++) {
+			if(batchChecks[i].checked) {
+				hasChecked = true;
+				break;
+			}
+		}
+		if(!hasChecked) {
+			alert('请选择要操作的数据！');
+			return;
+		}
+		if(!confirm("确认操作吗?")) {
+			return;
+		}
+		var form = document.getElementById('jvForm');
+		form.action=url;
+		form.submit();
+   }
+
+	function checkall(){
+        var batchChecks = $("input[name='topicIds']");
+        var onCheck = $('#checkAll');
+        if(onCheck.prop("checked")){
+			batchChecks.each(function(){
+				$(this).prop("checked","checked");
+			});
+		}else{
+			batchChecks.each(function(){
+				$(this).prop("checked","");
+			});
+		}
+	}
+	function showChild(typeId){
+		$("#childType_"+typeId).toggle();
+	}
+	</script>
+  </head>
+  <body>
+  <div style="width:1000px; margin:auto;">
+    <!--header--> 
+	[#include "../include/页头.html"/]
+	<!--/header-->
+	<!--20条信息_Begin--> [#include "../include/信息.html"/]<!--/End--> 
+    <!--登录统计栏_Begin-->[#include "../include/登录统计.html"/]<!--登录统计栏_End-->
+	<div style="line-height:28px;">
+	<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="30"><img src="/r/cms/www/blue/bbs_forum/img/top/icon001.gif" /></td>
+    <td>
+    [@config_count]
+	<span style="color:#838383;">今日:</span>${configcache.postToday!} <span style="color:#838383;">| </span>
+	<span style="color:#838383;">昨日:</span> ${configcache.postYestoday!} <span style="color:#838383;">| </span>
+	<span style="color:#838383;">最高日:</span>${configcache.postMax!} 于 ${configcache.postMaxDate?string("yyyy-MM-dd")!} <span style="color:#838383;">| </span>
+	<span style="color:#838383;">主题:</span>${configcache.topicTotal!} <span style="color:#838383;">| </span>
+	<span style="color:#838383;">帖子:</span>${configcache.postTotal!} <span style="color:#838383;">| </span>
+	<span style="color:#838383;">会员:</span>${configcache.userTotal!} <span style="color:#838383;">| </span>
+	<span style="color:#838383;">欢迎新会员:</span><span class="black">[#if configcache.lastUser??]${configcache.lastUser.username!}[#else]无[/#if]</span>
+	[/@config_count]
+	</td>
+  </tr>
+</table>
+	</div>
+	</div>
+	<!--main-->
+    <div class="main-wrap">
+    <div id="main">
+    <div id="content">
+    <div class="contentwrap z">
+    <div class="t3">
+    	<a href="${base}/">最新主题</a>
+    	<a href="${base}/indexModerator.jhtml">最新回复</a>
+    </div>
+    <div class="t z">
+    <form method="post" action="" id="jvForm">
+    <table width="100%" cellspacing="0" cellpadding="0">
+      <tbody>
+        [@topic_page    topLevel='0' count='15' tpl='0'  status='-1' orderBy='0']
+        [#list tag_pagination.list as topic]
+        [#assign dispaly=1/]
+        [#if topic.shield]
+          [#if user??&&user.moderator]
+          	[#assign dispaly=1/]
+          [#else]
+          	[#assign dispaly=0/]
+          [/#if]
+        [/#if]
+        [#if dispaly==1]
+	        <tr class="tr3">	
+	        	<td>
+	        	<a id="link${topic.id}" href="${topic.url}">
+	        	[@text_cut s=topic.title?html len=16 append="..."/]
+	        	</a>
+	        	<!-- 是否精华帖 -->
+	        	[#if topic.primeLevel gt 0]
+	        		<img src="/${res}/bbs_forum/img/jing1.jpg" alt="" />
+				[/#if]
+				<!-- 是否有附件 -->
+				[#if topic.affix??&&topic.affix]<img src="/${res}/bbs_forum/img/comm.gif"/>[/#if]
+	        	[#if topic.shield]
+					已屏蔽
+				[/#if]
+				
+	        	</td>
+	        </tr>
+	        <tr class="tr3">
+	        	<td>
+	        	赞:${topic.ups!}   &nbsp;回复: ${topic.replyCount!} 
+	        	 &nbsp;浏览: ${topic.viewCount!} 
+	        	  &nbsp;作者:${topic.creater.username!}&nbsp;
+	        	  发布于:${topic.firstPost.createTimeHtml!} 
+	        	 ${topic.firstPost.postSource!} 
+	        	[#if topic.lastPost??]
+	        	最新回复:${topic.lastReply.username!}  &nbsp;
+	        	${topic.lastPost.createTimeHtml!}
+	        	[/#if]
+	        	</td>
+	        </tr>
+        [/#if]
+		[/#list]
+      </tbody>
+    </table>
+    </form>
+    <span class="fl">[#include "../tag/forumtopic.html"/]</span>
+    [/@topic_page]
+    </div>
+    
+    
+    </div>
+    </div>
+    </div>
+    [#include "../include/在线人数统计.html"/]
+    [#include "../include/页脚友情链接栏.html"/]
+    </div>
+    <!--/main-->
+    
+	<!--footer--> 
+	[#include "../include/页脚.html"/]
+	<!--footer-->
+  </body>
+</html>

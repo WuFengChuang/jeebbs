@@ -1,0 +1,251 @@
+[@topic_page  forumId=forumId topicTypeId=topicTypeId  topLevel=topicLevel pageNo=pageNo
+      count='5' tpl='0'  status='-1' orderBy='1']
+        [#list tag_pagination.list as topic]
+        [#assign dispaly=1/]
+[@post_page topicId=topic.id createrId=createrId orderBy=orderBy count='2' option='2']
+        [#if topic.shield]
+          [#if user??&&user.moderator]
+          	[#assign dispaly=1/]
+          [#else]
+          	[#assign dispaly=0/]
+          [/#if]
+        [/#if]
+        [#if dispaly==1]
+			<li>
+                <div class="user-header clearfix">
+                    <img src="${topic.creater.avatar!'/${res}/bbs_member/img/face/none.gif'}" class="user-img" />
+                    <div class="user-info">
+                        <p>
+                            <span class="user-name">[#if topic.firstPost.anonymous]匿名[#else]${topic.creater.username!}[/#if]</span>
+                            [#if user??]
+                            <img src="${topic.creater.group.imgPath!}" class="level"/>
+                            [/#if]
+                        </p>
+                        <p class="time-box">
+                            <span>${topic.createTimeHtml!}</span>
+                            <span></span>
+                        </p>
+                    </div>
+                    <div class="friend-bar">
+                        <!--通讯录-->
+                        [#if user??&&user.id!=topic.creater.id]
+                        [#if !user.myFriendIds?seq_contains('${topic.creater.id}')]
+                        <a id="u${topic.creater.id}_${topic.id}" onclick="apply('${base}','${topic.creater.id}','${topic.creater.username}','${topic.id}')"  class="iconfont  icon-tongxunlu1 green" title="添加好友"></a>
+                        [#else]
+                        <a id="u${topic.creater.id}_${topic.id}" onclick="applyDel('${base}','${topic.creater.id}','${topic.creater.id}','${topic.id}')"  class="iconfont  icon-tongxunlu green" title="取消好友"></a>
+                        [/#if]
+                        [/#if]
+                        <!--关注-->
+                        [#if user??&&user.id!=topic.creater.id]
+                        [#if !user.myAttentionIds?seq_contains('${topic.creater.id}')]
+                        <a id="a${topic.creater.id}_${topic.id}" onclick="attent('${base}','${topic.creater.id}',0)" class="iconfont icon-guanzhu yellow" title="添加关注"></a>
+                        [#else]
+                        <a id="a${topic.creater.id}_${topic.id}" onclick="attent('${base}','${topic.creater.id}',1)" class="iconfont icon-yiguanzhu yellow" title="取消关注"></a>
+                        [/#if]
+                        [/#if]
+						<!--禁用用户-->
+                        [#if user??]
+							[#if user.moderator&&!topic.creater.moderator]
+								<a id="forbiddenLink_${topic.creater.id}_${topic.firstPost.id}" onclick="forBidden('${base}','${topic.creater.id}','${topic.forum.id}')"  [#if topic.creater.disabled]title="取消禁用" class="qxjy-btn"[#else]title="禁用" class="jy-btn"[/#if]></a>
+							[/#if]
+					   [/#if]
+                    </div>
+                </div>
+                 [#if topic.types??&&topic.types?size gt 0]
+                <div class="form-topic">
+                    <span>来自话题:</span>
+                    [#list topic.types as t]
+                    [#if topic_index<3]
+                    <span class="topic"><a href="${t.url!}">${t.name!}</a></span>
+                    [/#if]
+                    [/#list]
+                </div>
+                [/#if]
+                <h2 class="theme-tit"><a id="link${topic.id}" target="_blank" href="${topic.url}"
+										[#if topic.style]
+											style="color:#${topic.styleColor!};"
+										[/#if]>[@text_cut s=topic.title?html /]</a></h2>
+                <ul class="theme-pics clearfix" id="themePics${topic.firstPost.id}">
+                	[#if topic.affix]
+                	[#list topic.firstPost.attachments as t]
+                        [#if t.picture]
+                       	 	<li><img src="${t.zoomPicPath!}" data-original="${t.filePath!}" width="218" height="143" /></li>
+                        [/#if]
+                    [/#list]
+                    [/#if]
+                </ul>
+                <p class="theme-desc">
+						<span id="topicContent${topic.firstPost.id}">
+							[@text_cut s=topic.firstPost.shortContentHtml len="50" append="..."/]
+						</span>
+						<span id="topicContentAll${topic.firstPost.id}"></span>
+						[#if topic.firstPost.shortContentHtml?length gte 50]
+						<a id="readMore${topic.firstPost.id}" onclick="loadContent('${base}','${topic.firstPost.id}')">阅读全文</a>
+						<a id="packup${topic.firstPost.id}" style="display:none" onclick="packupuContent('${base}','${topic.firstPost.id}')">收起</a>
+						[/#if]
+				</p>
+                <div class="theme-bottom-bar clearfix">
+                    <div class="theme-operation">
+                    	[#if user??] 
+                        <a id="uptopic${topic.id}" onclick="topicOp('${base}','${topic.id}',0)" class="operation-btn" title="赞" ><i class="icon-zan"></i>
+                            <span id="upcount${topic.id}">${topic.ups!}</span>
+                        </a>
+						<a id="cuptopic${topic.id}" onclick="topicOp('${base}','${topic.id}',3)" class="operation-btn on" title="取消赞" ><i class="icon-zan"></i>
+                            <span id="cupcount${topic.id}">${topic.ups!}</span>
+                        </a>
+						<script type="text/javascript">
+						[#if user??&&user.upTopicIds??&&user.upTopicIds?seq_contains("${topic.id}")]
+							$("#uptopic${topic.id}").hide();
+							$("#cuptopic${topic.id}").show();
+						[#else]
+							$("#uptopic${topic.id}").show();
+							$("#cuptopic${topic.id}").hide();
+						[/#if]
+						</script>
+                        [/#if]
+                        <a id="replyMore${topic.id}"  onclick="getTopicPost('${base}',${topic.id})" class="operation-btn" title="回复数"><i class="icon-mes"></i>
+                            <span>${topic.replyCount!}</span>
+                        </a>
+                        <span class="views">${topic.viewCount!}次浏览</span>
+                    </div>
+					<!--操作等-->
+					<div class="more-contorl">
+						<div class="theme-operation">
+							[#if user??]
+								<div href="javascript:void(0);" class="hover-blue magic-tool-box">使用道具
+								<div class="tooltip">
+								<ul>
+								[#if magicTopicList??]
+										[#list magicTopicList as magic]
+										[#if magic.identifier=="anonymouspost"]
+											[#if user??]
+												[#if topic.creater.id==user.id]
+												<li><a id="magica_${topic.firstPost.id!}_${topic.firstPost.id!}_anonymouspost">${magic.name!}</a></li>
+												[/#if]
+											[/#if]
+										[#elseif magic.identifier=="sofa"]
+										[#elseif magic.identifier=="repent"]
+											[#if user??]
+												[#if topic.creater.id==user.id]
+												<li><a id="magica_${topic.id!}_${topic.firstPost.id!}_repent">${magic.name!}</a></li>
+												[/#if]
+											[/#if]
+										[#elseif magic.identifier=="namepost"]
+											<li><a id="magica_${topic.firstPost.id!}_${topic.firstPost.id!}_namepost">${magic.name!}</a></li>
+										[#else]
+											<li><a id="magica_${topic.id!}_${topic.firstPost.id!}_${magic.identifier!}">${magic.name!}</a></li>
+										[/#if]
+										[/#list]
+									[/#if]
+									[#if magicUserList??]
+										[#list magicUserList as magic]
+											[#if magic.identifier=="checkonline"]
+												[#if user??]
+													[#if topic.firstPost.creater.id!=user.id]
+														<li><a id="magica_${topic.firstPost.id!}_${topic.firstPost.id!}_checkonline_${topic.firstPost.creater.username!}">${magic.name!}</a></li>
+													[/#if]
+												[#else]
+													<li><a id="magica_${topic.firstPost.id!}_${topic.firstPost.id!}_checkonline_${topic.firstPost.creater.username!}">${magic.name!}</a></li>
+												[/#if]
+											[#elseif magic.identifier=="showip"]
+													<li><a id="magica_${topic.firstPost.id!}_${topic.firstPost.id!}_showip_${topic.firstPost.creater.username!}">${magic.name!}</a></li>
+											[/#if]
+										[/#list]
+									[/#if]
+								</ul>
+									</div>				
+									</div>
+								[#if user.moderator||user.id==topic.creater.id]
+								<a href="${base}/post/v_edit${topic.firstPost.id!}.jspx" class="hover-blue" title="编辑">
+									<span>编辑</span>
+								</a>
+								[/#if]
+								<a href="${base}/post/v_quote${topic.firstPost.id!}.jspx" class="hover-blue" title="引用">
+									<span>引用</span>
+								</a>
+								<a  onclick="report('${base}','${topic.wholeUrl!}')" class="hover-blue" title="举报">
+									<span>举报</span>
+								</a>
+								[#if user.moderator]
+								  [#if !topic.firstPost.shield]
+								  <a href="${base}/post/v_shield${topic.firstPost.id!}_${-1}.jspx" class="hover-blue" title="屏蔽">
+									<span>屏蔽</span>
+								  </a>
+								  [#else]
+								   <a href="${base}/post/v_shield${topic.firstPost.id!}_${0}.jspx" class="hover-blue" title="取消屏蔽">
+									<span>取消屏蔽</span>
+								  </a>
+								  [/#if]
+								  <a id="topLevel${topic.id}" onclick="upTopLevel('${base}','${topic.id}','${topic.forum.id}')"  class="hover-blue" [#if topic.topLevel lte 0]title="置顶"[#else]取消置顶[/#if] >
+										<span>[#if topic.topLevel lte 0]置顶[#else]取消置顶[/#if]</span>
+								   </a>
+								[/#if]
+								[#if user.moderator]
+									[#if topic.lastReply??]
+									[#else]
+									<a href="${base}/topic/o_delete.jspx?topicIds=${topic.id!}" class="hover-blue" title="删除">
+										<span>删除</span>
+									</a>
+									[/#if]
+								[/#if]
+							[/#if]
+						</div>
+						<!--关注-->
+						[#if user??]
+							<div class="att-contorl">
+							<a class="add-atten" id="attenttopic${topic.id}" onclick="topicOp('${base}','${topic.id}',2)">+ 关注帖子</a>
+							<a class="close-atten"  id="cattenttopic${topic.id}" onclick="topicOp('${base}','${topic.id}',5)">- 取消关注</a>
+							<script type="text/javascript">
+							[#if user??&&user.attentTopicIds??&&user.attentTopicIds?seq_contains("${topic.id}")]
+								$("#attenttopic${topic.id}").hide();
+								$("#cattenttopic${topic.id}").show();
+							[#else]
+								$("#attenttopic${topic.id}").show();
+								$("#cattenttopic${topic.id}").hide();
+							[/#if]
+							</script>         
+							</div>
+						[/#if]          
+					</div>
+				</div>
+                <!--回复区域-->
+				<div id="topicposts${topic.id}"></div>
+            </li>
+			<div id="topic${topic.id}"></div>
+			<div id="topicposts${topic.id}"></div>
+		 [/#if]
+		[/@post_page]
+		[/#list]
+    [/@topic_page]
+<script src="/${res}/bbs_forum/js/viewer-jquery.min.js"  type="text/javascript" ></script>
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/viewer.min.css" />
+<script>
+$(function() {
+    $('.theme-pics').viewer({
+	url: 'data-original'
+    });
+	var id;
+	var strs = new Array();
+	$("a[id^='magica']").each(function(){
+		$(this).click(function(){
+			id=$(this).attr('id');
+			strs = id.split("_");
+			if(strs.length>=5){
+				$("#useMagic").load("${base}/magic/getmagicpage.jspx?pid="+strs[1]+"&ppid="+strs[2]+"&mid="+strs[3]+"&username="+strs[4],function (){
+					showModel('#useMagic');
+				});
+			}else{
+				$("#useMagic").load("${base}/magic/getmagicpage.jspx?pid="+strs[1]+"&ppid="+strs[2]+"&mid="+strs[3],function (){
+					showModel('#useMagic');
+				})
+			}
+		})
+	})
+});
+</script>
+<!--弹窗-->
+	<div class="model-panel buy-panel" id="useMagic">
+	<div class="edit-topic-header">
+	<a href="javascript:void(0)" class="iconfont icon-Delete pull-right" title="关闭"  onclick="closeModel()"></a>
+	</div>
+		</div>

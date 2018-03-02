@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>${site.name} - JEECMS官方论坛|开源java cms,jsp cms,jsp bbs</title>
+<meta name="keywords" content="java,cms,jsp,cms,jsp bbs,开源网站内容管理系统,网站群,站群,多站点,jeecms" />
+<meta name="description" content="讨论jsp cms、jsp bbs相关资讯，struts,hibernate,spring,freemarker最新技术研究" /> 
+<script src="/${res}/bbs_forum/js/jquery1.9.1.js" type="text/javascript"></script>
+<script src="${resSys}/front.js" type="text/javascript"></script>
+<script src="/${res}/bbs_forum/js/blocksit.min.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/main.css" />
+</head>
+<body>
+ <div id="wrapper" style="width:100%;overflow-x:hidden;">
+    <div id="scroller">
+	  	 <div id="pullDown">
+			<span class="pullDownIcon"></span>
+		 </div>
+  [#if user??]<div class="fatie"><a href="${base}/topic/v_add${forum.id!}.jspx" data-ajax="false"><img src="/${res}/bbs_forum/img/fatie.png"></a></div>[/#if]
+  [#include "../include/页头.html"/]
+  <div class="zhuti">
+   <div class="zhuti-title">
+     <a>${forum.title!}</a><br>
+     <p>主题:<span>${forum.topicTotal!}</span>   贴数:<span>${forum.postTotal!}</span></p> 
+   </div>      
+   <div class="jht-top-list">
+     <ul>
+       [@top_topic_list topLevel='1' count='5' orderBy='1']
+	 [#list tag_list as topic]
+	   <li><a href="${topic.url}"><div style="width:81%;overflow:hidden;float:left;"><div class="top"><span style="float:none;color:#008cdc;font-size:10px;line-height:15px;">置顶</span></div><p>${topic.title!}</p></div><img src="/${res}/bbs_forum/img/pl_pic03.png"><span>${topic.replyCount!}</span></a></li>
+         [/#list]
+	[/@top_topic_list]
+    </ul>
+   </div>
+   <div class="jht-list">
+     <ul id="thelist"  data-role="listview" data-icon="false">
+     </ul>
+   </div>
+  </div>
+</div>
+</div>
+</body>
+<script>
+var first=0;
+var count=10;
+content="";
+function getContent(){
+             $.get("${base}/topic/v_list_json.jspx", {
+                forumId:"${forum.id}",
+		first:first,
+		count:count
+	   }, function(data) {
+                content="";
+                for (var i=0;i<data.length;i++){
+			content = content + "<li><a href='"+data[i].url+"' data-ajax='false'>";
+			content = content +"<p>"+ data[i].title+"</p>";
+			content = content +"<img src='/${res}/bbs_forum/img/pl_pic03.png'><span>"+ data[i].replyCount+"</span></a></li>";
+		}
+                setTimeout(function () { $('#thelist').append(content); first=first+count; },100);
+	   }, "json");
+}
+
+$(function(){
+var lastTime=new Date();
+getContent();
+	$(window).scroll(function(){
+               var time=new Date();
+               if((time.getTime()-lastTime.getTime())/1000>0.5){
+                // 当滚动到最底部以上50像素时， 加载新内容
+		if ($(document).height() - $(this).scrollTop() - $(this).height()<50){
+                      lastTime=time;
+                      getContent();
+			$('#main').BlocksIt({
+				numOfCol:5,
+				offsetX: 8,
+				offsetY: 8
+			});
+		}
+               }
+	});
+});
+</script>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>jeecms-left</title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+$(function(){
+	Cms.lmenu('lmenu');
+});
+</script>
+</head>
+<body class="lbody">
+<ul id="lmenu">
+<li><a href="../topicType/main.do" target="rightFrame"><@s.m "bbsTopicType.function"/></a></li>
+<li><a href="../sensitivity/v_list.do" target="rightFrame"><@s.m "cmsSensitivity.function"/></a></li>
+<li><a href="../friendlink/v_list.do" target="rightFrame"><@s.m "cmsFriendlink.function"/></a></li>
+<li><a href="../friendlink_ctg/v_list.do" target="rightFrame"><@s.m "cmsFriendlinkCtg.function"/></a></li>
+<li><a href="../advertising/v_list.do" target="rightFrame"><@s.m "cmsAdvertising.function"/></a></li>
+
+<li><a href="../magic/v_list.do" target="rightFrame"><@s.m "magic.function"/></a></li>
+<li><a href="../gift/v_list.do" target="rightFrame"><@s.m "bbsGift.function"/></a></li>
+<li><a href="../report/v_list.do" target="rightFrame"><@s.m "report.function"/></a></li>
+<li><a href="../accountPay/draw_apply_list.do" target="rightFrame"><@s.m "cmsAccountDraw.function"/></a></li>
+<li><a href="../accountPay/v_list.do" target="rightFrame"><@s.m "cmsAccountPay.function"/></a></li>
+<li><a href="../order/charge_list.do" target="rightFrame"><@s.m "topic.order.static.function"/></a></li>
+<li><a href="../order/user_account_list.do" target="rightFrame"><@s.m "userAccount.author.static.function"/></a></li>
+<li><a href="../order/user_order_list.do" target="rightFrame"><@s.m "topic.order.record.function"/></a></li>
+<li><a href="../data/incomestatistic.do" target="rightFrame">收益统计</a></li>
+<li><a href="../data/forumstatistic.do" target="rightFrame">数据中心</a></li>
+</ul>
+</body>
+</html>

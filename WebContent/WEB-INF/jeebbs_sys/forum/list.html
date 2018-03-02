@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+$(function() {
+	$("#tableForm").validate();
+	categoryBtnControl();
+	forumBtnControl();
+});
+function getTableForm() {
+	return document.getElementById('tableForm');
+}
+function optDelete() {
+	if(Pn.checkedCount('ids')<=0) {
+		alert("<@s.m 'error.checkRecord'/>");
+		return;
+	}
+	if(!confirm("<@s.m 'global.confirm.delete'/>")) {
+		return;
+	}
+	var f = getTableForm();
+	f.action="o_delete.do";
+	f.submit();
+}
+function categoryup(categoryId){
+	var obj=$("#catediv_"+categoryId);
+	var prev = $("#catediv_"+categoryId).prev();
+	obj.insertBefore(prev);
+	priorityCategory();
+	categoryBtnControl();
+}
+function categorydown(categoryId){
+	var obj=$("#catediv_"+categoryId);
+	var next = $("#catediv_"+categoryId).next();
+	obj.insertAfter(next);
+	priorityCategory();
+	categoryBtnControl();
+}
+function forumup(categoryId,forumId){
+	var obj=$("#f_"+categoryId+"_"+forumId);
+	var prev = obj.prev();
+	obj.insertBefore(prev);
+	priorityForum();
+	forumBtnControl();
+}
+function forumdown(categoryId,forumId){
+	var obj=$("#f_"+categoryId+"_"+forumId);
+	var next = obj.next();
+	obj.insertAfter(next);
+	priorityForum();
+	forumBtnControl();
+}
+function priorityCategory(){
+	var categoryIds="";
+	$("input[name='categoryIds']").each(function(){
+		categoryIds+=$(this).val()+",";
+	});
+	$.post("../category/o_m_priority.do", {
+		categoryIds:categoryIds
+	}, function(data) {
+	}, "json");
+}
+function priorityForum(){
+	var forumIds="";
+	$("input[name='forumIds']").each(function(){
+		forumIds+=$(this).val()+",";
+	});
+	$.post("o_m_priority.do", {
+		forumIds:forumIds
+	}, function(data) {
+	}, "json");
+}
+function categoryBtnControl(){
+	$("input[id^='btn_up_cate_']").each(function(i){
+		if(i==0){
+			$(this).prop("disabled","disabled");
+		}else{
+			$(this).prop("disabled","");
+		}
+	});
+	var btnDownLen=$("input[id^='btn_down_cate_']").length;
+	$("input[id^='btn_down_cate_']").each(function(i){
+		if(i==btnDownLen-1){
+			$(this).prop("disabled","disabled");
+		}else{
+			$(this).prop("disabled","");
+		}
+	});
+}
+function forumBtnControl(){
+	$("div[id^='forumdiv_']").each(function(){
+		$(this).find("input[id^='btn_up_f']").each(function(i){
+			if(i==0){
+				$(this).prop("disabled","disabled");
+			}else{
+				$(this).prop("disabled","");
+			}
+		});
+		var btnDownLen=$(this).find("input[id^='btn_down_f']").length;
+		$(this).find("input[id^='btn_down_f']").each(function(i){
+			if(i==btnDownLen-1){
+				$(this).prop("disabled","disabled");
+			}else{
+				$(this).prop("disabled","");
+			}
+		});
+	});
+}
+
+</script>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos"><@s.m "global.position"/>: 版块 - <@s.m "global.list"/></div>
+	<form class="ropt">
+		<input type="submit" value="<@s.m "global.add"/>" onclick="this.form.action='v_add.do';"/>
+	</form>
+	<div class="clear"></div>
+</div>
+<form id="tableForm" method="post" action="batchUpdate.do">
+	<div> ID   分区/板块     访问路径   排序      操作</div>
+	<#list categoryList as category>
+	<div id="catediv_${category.id}">
+		<div>
+			<span>${category.id}</span>
+			<input name="categoryIds" value="${category.id!}" type="hidden"/>
+			<span><input name="categoryTitle" value="${category.title!}" required="true" class="required" maxlength="150"/></span>
+			<span>
+				<input name="categoryPath" value="${category.path!}" required="true" class="required" maxlength="150"/>
+			</span>
+			<span>
+				<input id="btn_up_cate_${category.id}" onclick="categoryup('${category.id}')" type="button" value="上移"/>
+				<input id="btn_down_cate_${category.id}" onclick="categorydown('${category.id}')" type="button" value="下移"/>
+			</span>
+			<span><a href="../category/o_delete.do?ids=${category.id}" onclick="if(!confirm('你确定要删除吗?')) {return false;}" class="pn-opt">删除</a></span>
+		</div>
+		<div id="forumdiv_${category.id}">
+			<#list category.forums as bbsForum>
+			<div id="f_${category.id}_${bbsForum.id!}">
+				<input name="forumIds" value="${bbsForum.id!}" type="hidden"/>
+				<input name="bbsForumTitle" value="${bbsForum.title!}" required="true" class="required" maxlength="150"/>
+				<input name="bbsForumPath" value="${bbsForum.path!}" required="true" class="required" maxlength="150"/>
+				<input id="btn_up_f_${category.id}_${bbsForum.id}" onclick="forumup('${category.id}','${bbsForum.id}')"  type="button" value="上移"/>
+				<input id="btn_down_f_${category.id}_${bbsForum.id}" onclick="forumdown('${category.id}','${bbsForum.id}')" type="button" value="下移"/>
+				<a href="v_edit.do?forumId=${bbsForum.id}&id=${bbsForum.id}&pageNo=${pageNo!}" class="pn-opt"><@s.m "global.edit"/></a> | <#rt/>
+				<a href="o_delete.do?forumId=${bbsForum.id}&ids=${bbsForum.id}&pageNo=${pageNo!}" onclick="if(!confirm('<@s.m "global.confirm.delete"/>')) {return false;}" class="pn-opt"><@s.m "global.delete"/></a><#t/>
+			</div>
+			</#list>
+			<div id="newDiv_${category.id}">
+				<a href="v_add.do?categoryId=${category.id}">添加新板块</a>
+			</div>	
+		</div>
+	</div>
+	</#list>
+	<div>
+		<a href="../category/v_add.do">添加新分区</a>
+	</div>
+<div>
+	<input type="submit" value="提交" />
+	<input type="reset" value="重置" />
+</div>
+</form>
+</div>
+<#include "/common/alert_message.html"/>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+function getTableForm() {
+	return document.getElementById('tableForm');
+}
+function check(){
+	if(Pn.checkedCount('ids')<=0) {
+		alert("<@s.m 'error.checkRecord'/>");
+		return;
+	}
+	if(!confirm("<@s.m 'global.confirm.check'/>")) {
+		return;
+	}
+	var f = getTableForm();
+	f.action="v_check.do";
+	f.submit();
+}
+function reback(){
+	if(Pn.checkedCount('ids')<=0) {
+		alert("<@s.m 'error.checkRecord'/>");
+		return;
+	}
+	if(!confirm("<@s.m 'global.confirm.reback'/>")) {
+		return;
+	}
+	var f = getTableForm();
+	f.action="v_reject.do";
+	f.submit();
+}
+function optDelete() {
+	if(Pn.checkedCount('ids')<=0) {
+		alert("<@s.m 'error.checkRecord'/>");
+		return;
+	}
+	if(!confirm("<@s.m 'global.confirm.delete'/>")) {
+		return;
+	}
+	var f = getTableForm();
+	f.action="o_delete.do";
+	f.submit();
+}
+function queryModeChange(){
+	$("#queryForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos"><@s.m "global.position"/>: <@s.m "bbsLiveApply.function"/> - <@s.m "global.list"/></div>
+	<form id="queryForm" class="ropt" method="post" action="v_list.do">
+		<select name="queryMode" onchange="queryModeChange()">
+			<option value="0" selected="selected">待审核</option>
+			<option value="1">已审核</option>
+		</select>
+	    用户名：<input type="text" name="username" value="${username!}" size="10"/>
+	    手机号：<input type="text" name="mobile" value="${mobile!}" size="10"/>
+		<input type="submit" value="<@s.m 'global.query'/>" onclick="this.form.action='v_list.do';"/>
+	</form>
+	<div class="clear"></div>
+</div>
+<form id="tableForm" method="post">
+<input type="hidden" name="pageNo" value="${pageNo!}"/>
+<input type="hidden" name="mobile" value="${mobile!}"/>
+<input type="hidden" name="status" value="${status!}"/>
+<input type="hidden" name="username" value="${username!}"/>
+<@p.table value=pagination;bbsLiveApply,i,has_next><#rt/>
+	<@p.column title="<input type='checkbox' onclick='Pn.checkbox(\"ids\",this.checked)'/>" width="20">
+		<input type='checkbox' name='ids' value='${bbsLiveApply.id}'/><#t/>
+	</@p.column><#t/>
+	<@p.column title="ID">${bbsLiveApply.id}</@p.column><#t/>
+	<@p.column title="主播">${bbsLiveApply.applyUser.username}</@p.column><#t/>
+	<@p.column code="bbsLiveApply.applyTime">${bbsLiveApply.applyTime?string("yyyy-MM-dd HH:mm:ss")}</@p.column><#t/>
+	<@p.column code="global.operate" align="center">
+		<a href="v_view.do?id=${bbsLiveApply.id}&pageNo=${pageNo!}"><@s.m "global.view"/></a> | <#rt/>
+		<a href="o_delete.do?ids=${bbsLiveApply.id}&pageNo=${pageNo!}&mobile=${mobile!}&status=${status!}&username=${username!}" onclick="if(!confirm('<@s.m "global.confirm.delete"/>')) {return false;}"><@s.m "global.delete"/></a><#t/>
+	</@p.column><#t/>
+</@p.table>
+<div>
+<@p.button code="global.check" onclick="check()"/>
+<@p.button code="global.reback" onclick="reback()"/>
+<input type="button" value="<@s.m "global.delete"/>" onclick="optDelete();"/>
+</div>
+</form>
+</div>
+<#include "/common/alert_message.html"/>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.jeecms.plug.live.entity">
+	<class
+		name="BbsLiveChapter"
+		table="bbs_live_chapter"
+	>
+		<meta attribute="sync-DAO">false</meta>
+		<cache usage="read-write"/>
+		<id
+			name="id"
+			type="integer"
+			column="chapter_id"
+		>
+			<generator class="identity"/>
+		</id>
+
+		<property
+			name="name"
+			column="name"
+			type="string"
+			not-null="true"
+			length="255"
+		/>
+		<property
+			name="path"
+			column="chapter_path"
+			type="string"
+			not-null="true"
+			length="255"
+		/>
+		<property
+			name="lft"
+			column="lft"
+			type="integer"
+			not-null="true"
+			length="10"
+		/>
+		<property
+			name="rgt"
+			column="rgt"
+			type="integer"
+			not-null="true"
+			length="10"
+		/>
+		<property
+			name="priority"
+			column="priority"
+			type="integer"
+			not-null="true"
+			length="10"
+		/>
+		<many-to-one
+			name="parent"
+			column="parent_id"
+			class="BbsLiveChapter"
+			not-null="false"
+		>
+		</many-to-one>
+		<many-to-one
+			name="user"
+			column="user_id"
+			class="com.jeecms.bbs.entity.BbsUser"
+			not-null="true"
+		>
+		</many-to-one>
+		<set name="child" inverse="true" cascade="delete" sort="com.jeecms.common.hibernate4.PriorityComparator">
+			<cache usage="read-write"/>
+			<key column="parent_id"/>
+			<one-to-many class="BbsLiveChapter"/>
+		</set>
+
+
+	</class>	
+</hibernate-mapping>

@@ -1,0 +1,69 @@
+<#--
+栏目翻页样式
+1 2 3 4 5 ... 10    <1-3>
+1 ..2 3 4 5 6 ... 10    <4>
+1 ..3 4 5 6 7... 10    <5>
+
+pageClass: 翻页DIV class
+pageStyle: 翻页DIV style
+currPageClass:当前页码class
+norPageClass:其他页码class
+-->
+<#assign n=5/>
+<#assign m=3/>
+<#assign b=2/>
+<#assign p=pagination/>
+<div class="table-bottom-bar">
+	<div class="pull-left">
+		<div class="checkbox ">
+			<label>
+				 <input type="checkbox">全选
+			</label>
+		</div>
+		<input type="button" class="btn btn-default" value="批量删除"/>
+		<span>每页显示 <input type="text"  class="input-sm" value="${p.pageSize!}"  onfocus="this.select();" onblur="$.cookie('_cookie_page_size',this.value,{expires:3650});" onkeypress="if(event.keyCode==13){$(this).blur();return false;}"/>条,输入后按回车</span>
+	</div>
+	<div class="pull-right">
+		<nav>
+		<ul class="pagination">
+			<#if !p.firstPage>
+			<li class="page-next">
+			<a href="#"><span class="iconfont bbs-shangyiye-copy"></span></a>
+			</li>
+		    </#if>
+		    <#if p.totalPage gt n>
+				 <#if p.pageNo lte m>
+					<#list 1..n as page>
+						<li class="" <#if page==p.pageNo>class="active"</#if>><a href="#">${page}</a></li>
+					</#list>
+				     <li class="more"><a href="#">...</a></li>
+				     <li class="" <#if p.totalPage==p.pageNo>class="active"</#if>><a href="#">${p.totalPage!}</a></li>
+			     <#elseif p.pageNo>p.totalPage-m>
+				     <li <#if 1==p.pageNo>class="active"</#if>><a href="#">1</a></li>
+				     <li class="more"><a href="#">...</a></li>
+				     <#list p.totalPage-n+1..p.totalPage as page>  
+				     <li class="" <#if page==p.pageNo>class="active"</#if>><a href="#">${page}</a></li>
+				     </#list>
+			     <#else>
+				     <li <#if 1==p.pageNo>class="active"</#if>><a href="#">1</a></li>
+				     <li class="more"><a href="#">...</a></li>
+				     <#list p.pageNo-b..p.pageNo+b as page>
+				     <li class="" <#if page==p.pageNo>class="active"</#if>><a href="#">${page}</a></li>
+				     </#list>
+				     <li class="more"><a href="#">...</a></li>
+				     <li class="" <#if p.totalPage==p.pageNo>class="active"</#if>><a href="#">${p.totalPage!}</a></li>
+			     </#if>
+	       <#else>
+		     <#list 1..p.totalPage as page>
+		     <li class="" <#if page==p.pageNo>class="active"</#if>><a href="#">${page}</a></li>
+		     </#list>
+		   </#if>
+		   <#if !p.lastPage>
+		   <li class="page-prev">
+		   <a href="#" class=""><span class="iconfont bbs-shangyiye-copy xz"></span></a>
+		   </li>	
+		   </#if>		 		
+ 		 </ul>
+		</nav>
+	</div>
+</div>

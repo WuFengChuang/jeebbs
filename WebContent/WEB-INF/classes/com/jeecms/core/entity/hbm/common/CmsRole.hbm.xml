@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.jeecms.core.entity">
+	<class name="CmsRole" table="jb_role">
+		<meta attribute="sync-DAO">false</meta>
+		<cache usage="read-write"/>
+		<id name="id" type="integer" column="role_id"><generator class="identity"/></id>
+		<property name="name" column="role_name" type="string" not-null="true" length="100"/>
+		<property name="priority" column="priority" type="integer" not-null="true" length="10"/>
+		<property name="level" column="role_level" type="integer" not-null="true" length="10"/>
+		<property name="all" column="is_super" type="java.lang.Boolean" not-null="true"/>
+		<many-to-one name="site" column="site_id" class="com.jeecms.core.entity.CmsSite" not-null="false"></many-to-one>
+		<set name="perms" table="jb_role_permission">
+			<cache usage="read-write"/>
+			<key column="role_id" not-null="true"/>
+			<element column="uri" type="string" length="100" not-null="true"/>
+		</set>
+		<set name="users" table="jb_user_role"  cascade="delete-orphan">
+			<cache usage="read-write"/>
+			<key column="role_id"/>
+			<many-to-many column="user_id" class="com.jeecms.bbs.entity.BbsUser"/>
+		</set>
+	</class>
+</hibernate-mapping>

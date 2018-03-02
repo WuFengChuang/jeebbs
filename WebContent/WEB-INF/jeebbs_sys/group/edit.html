@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script src="${base}/res/common/js/jquery.ui.widget.js" type="text/javascript"></script>
+<script src="${base}/res/common/js/jquery.iframe-transport.js" type="text/javascript"></script>
+<script src="${base}/res/common/js/jquery.fileupload.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(function() {
+	$("#jvForm").validate();
+});
+</script>
+<script type="text/javascript">
+function checkboxChildSelect(forumId,parentId){
+	if($("#forumId_"+forumId+"_"+parentId).attr("checked")){
+		$("input[id^='forumId_"+forumId+"_"+parentId+"']").each(function(i){
+			$(this).attr("checked","checked");
+		 });
+	}else{
+		$("input[id^='forumId_"+forumId+"_"+parentId+"']").each(function(i){
+			$(this).attr("checked","");
+		 });
+		}
+}
+function selectTypes(forumId){
+	if($("#forumId_"+forumId).attr("checked")){
+		$("input[id^='forumId_"+forumId+"']").each(function(i){
+			$(this).attr("checked","checked");
+		 });
+	}else{
+		$("input[id^='forumId_"+forumId+"']").each(function(i){
+			$(this).attr("checked","");
+		 });
+		}
+}
+function chkRow(i,b) {
+	$("#right-table input[rgtrow="+i+"]").each(function(){
+		$(this).attr("checked",b);
+	});
+}
+function chkCol(i,b) {
+	$("#right-table input[rgtcol="+i+"]").each(function(){
+		$(this).attr("checked",b);
+	});
+}
+</script>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos">当前位置： 核心功能 - 会员组管理 - 权限</div>
+	<form class="ropt">
+		<input type="button" value="返回列表" onclick="history.back();"/>
+	</form>
+	<div class="clear"></div>
+</div>
+<@p.form id="jvForm" action="o_update.do">
+<@p.text colspan="2" label="名称" name="name" value=bbsUserGroup.name class="required" maxlength="100"/>
+<@p.tr/>
+<@p.radio colspan="1" width="50" label="允许发表主题" name="perms['allow_topic']" value=bbsUserGroup.perms['allow_topic'] list={"true":"是","false":"否"}/>
+<@p.radio colspan="1" width="50" label="允许发表回复" name="perms['allow_reply']" value=bbsUserGroup.perms['allow_reply'] list={"true":"是","false":"否"}/>
+<@p.tr/>
+<@p.radio colspan="2" label="允许发布附件" name="perms['allow_attach']" value=bbsUserGroup.perms['allow_attach'] list={"true":"是","false":"否"}/>
+<@p.tr/>
+<@p.text colspan="2" label="允许附件类型" name="perms['attach_type']" value=bbsUserGroup.perms['attach_type'] size="50" maxlength="255" help="用逗号,分割，留空不限制"/>
+<@p.tr/>
+<@p.text colspan="1" width="50" label="最大附件尺寸" id="attach_max_size" name="perms['attach_max_size']" value=bbsUserGroup.perms['attach_max_size'] class="required digits" maxlength="9" help="(KB) 为0不限制"/>
+<@p.text colspan="1" width="50" label="每日附件总尺寸" id="attach_per_day" name="perms['attach_per_day']" value=bbsUserGroup.perms['attach_per_day'] class="required digits" maxlength="9" help="(KB) 为0不限制"/><@p.tr/>
+
+<@p.td colspan="2" label="权限设置">
+<table width="100%" cellspacing="1" cellpadding="1" id="right-table" class="right-table">
+<tr>
+	<td align="left">&nbsp;</td>
+	<td align="left"><input type="checkbox" id="chk-1" onclick="chkCol(1,this.checked);"/><label for="chk-1">浏览版块</label></td>
+	<td align="left"><input type="checkbox" id="chk-2" onclick="chkCol(2,this.checked);"/><label for="chk-2">发新话题</label></td>
+	<td align="left"><input type="checkbox" id="chk-3" onclick="chkCol(3,this.checked);"/><label for="chk-3">发表回复</label></td>
+</tr>
+<#list forumList as forum>
+<input name="forumIds" type="hidden" value="${forum.id!}"/>
+<tr>
+	<td align="left"><input type="checkbox" id="forum${forum_index}" onclick="chkRow(${forum_index},this.checked);"/><label for="forum${forum_index}">${forum.title}</label></td>
+	<td align="left"><input type="checkbox" rgtcol="1" rgtrow="${forum_index}" name="views" <#if forumViewsIds??&&forumViewsIds?contains(","+forum.id+",")> checked="checked"</#if> value="${forum.id}"/></td>
+	<td align="left"><input type="checkbox" rgtcol="2" rgtrow="${forum_index}" name="topics" <#if forumTopicIds??&&forumTopicIds?contains(","+forum.id+",")> checked="checked"</#if> value="${forum.id}"/></td>
+	<td align="left"><input type="checkbox" rgtcol="3" rgtrow="${forum_index}" name="replies" <#if forumReplyIds??&&forumReplyIds?contains(","+forum.id+",")> checked="checked"</#if> value="${forum.id}"/></td>
+</tr>
+</#list>
+</table>
+</@p.td>
+<@p.tr/>
+
+<@p.td colspan="2" label="头衔标识">
+<input type="text" id="imgPath" name="imgPath" value="${bbsUserGroup.imgPath!}" style="width:150px"  class="required" />
+<input id="fileupload" type="file" name="Filedata" data-url="../common/o_picsUpload.jspx">
+<script>
+$(function () {
+	$('#fileupload').fileupload({
+        dataType: 'json',
+        add: function (e, data) {
+            data.submit();
+            $("#submit").prop("disabled","disabled");
+        },
+        done: function (e, data) {
+            //data.context.text('Upload finished.');
+            $.each(data.result, function (index, file) {
+                $("#imgPath").val(file.url);
+            });
+        }
+    });
+});
+</script>
+</@p.td>
+<@p.tr/>
+<#if bbsUserGroup.type==2>
+<@p.radio colspan="1" width="50" label="超级管理权限" name="perms['super_moderator']" value=bbsUserGroup.perms['super_moderator'] list={"true":"是","false":"否"} help="无须成为版主即可管理"/>
+<@p.radio colspan="1" width="50" label="发帖不受限制" name="perms['post_limit']" value=bbsUserGroup.perms['post_limit'] list={"true":"是","false":"否"}/>
+<@p.tr/>
+<@p.radio colspan="2" label="置顶权限" name="perms['topic_top']" value=bbsUserGroup.perms['topic_top'] list={"0":"无","1":"置顶I","2":"置顶II","3":"置顶III"} help="分别为本版置顶,分区置顶,全局置顶"/>
+<@p.tr/>
+<@p.radio colspan="1" width="50" label="帖子管理" name="perms['topic_manage']" value=bbsUserGroup.perms['topic_manage'] list={"true":"是","false":"否"} help="精、锁、提、亮、压"/>
+<@p.radio colspan="1" width="50" label="帖子编辑" name="perms['topic_edit']" value=bbsUserGroup.perms['topic_edit'] list={"true":"是","false":"否"}/>
+<@p.tr/>
+<@p.radio colspan="1" width="50" label="屏蔽帖子" name="perms['topic_shield']" value=bbsUserGroup.perms['topic_shield'] list={"true":"是","false":"否"} help="屏蔽、移动帖子"/>
+<@p.radio colspan="1" width="50" label="删除帖子" name="perms['topic_delete']" value=bbsUserGroup.perms['topic_delete'] list={"true":"是","false":"否"}/>
+<@p.tr/>
+<@p.radio colspan="1" width="50" label="查看IP" name="perms['view_ip']" value=bbsUserGroup.perms['view_ip'] list={"true":"是","false":"否"}/>
+<@p.radio colspan="1" width="50" label="会员禁言" name="perms['member_prohibit']" value=bbsUserGroup.perms['member_prohibit'] list={"true":"是","false":"否"}/>
+<@p.tr/>
+</#if>
+<@p.td colspan="2">
+	<@p.hidden name="id" value=bbsUserGroup.id id="groupId"/>
+	<@p.hidden name="groupType" value=groupType/>
+	<@p.submit code="global.submit"/> &nbsp; <@p.reset code="global.reset"/>
+</@p.td>
+</@p.form>
+<script type="">
+$(function(){
+	var groupId=$("#groupId").val();
+	$("#browser").treeview({
+		url: "v_tree.do?groupId="+groupId
+	});
+	Cms.lmenu("lmenu");
+});
+</script>
+</div>
+</body>
+</html>

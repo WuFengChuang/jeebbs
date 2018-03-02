@@ -1,0 +1,91 @@
+<!--左侧 include-->
+<div class="left-main">
+    <!--最新动态-->
+    <div class="left-panel">
+        <ul>
+            <li [#if location?ends_with('/')||location?contains('indexModerator.jhtm')]class="active"[/#if]>
+                <a href="${base}/"><small>NEW</small>最新动态</a>
+            </li>
+            <li [#if location?contains('indexRecommend.jhtm')]class="active"[/#if]>
+                <a href="${base}/indexRecommend.jhtml"><small>HOT</small>热门推荐</a>
+            </li>
+        </ul>
+    </div>
+    <!--版块-->
+    <div class="left-panel">
+        <ul class="forum-items"  id="unfold">
+            <li class="forum-header">
+                <a>版块</a>
+            </li>
+             [#if forum??]
+             <li class="forum-item active">
+                <a href="${forum.url!}">
+                    <img src="/${res}/bbs_forum/images/${forum.path!}.png" /> ${forum.title!?html}
+                    [#if forum.postToday gt 0]<span>${forum.postToday!}</span>[/#if]
+                </a>
+            </li>
+             [/#if]
+            [@forum_list]
+            [#list tag_list as f]
+		    [#if forum??]
+			    [#if f.id!=forum.id]
+			    <li class="forum-item">
+				<a href="${f.url!}">
+				    <img src="/${res}/bbs_forum/images/${f.path!}.png" /> ${f.title!?html}
+				    [#if f.postToday gt 0]<span>${f.postToday!}</span>[/#if]
+				</a>
+			    </li>
+			    [/#if]
+		    [#else]
+		    <li class="forum-item">
+			<a href="${f.url!}">
+			    <img src="/${res}/bbs_forum/images/${f.path!}.png" /> ${f.title!?html}
+			    [#if f.postToday gt 0]<span>${f.postToday!}</span>[/#if]
+			</a>
+		    </li>
+		    [/#if]
+            [/#list]
+            [/@forum_list]
+            
+            <li class="forum-bottom">
+              <a href="javascript:void(0);"><i class="more-icon"></i>更多版块</a>
+            </li>
+        </ul>
+    </div>
+    <!--左侧链接-->
+    <div class="more-panel">
+        <a href="${base}/topicType/index.jhtml">
+            <img src="/${res}/bbs_forum/images/icon-topic.png" >
+            话题
+        </a>
+        <a href="${base}/live/front/index.jspx">
+            <img src="/${res}/bbs_forum/images/icon-live.png" >
+            直播
+        </a>
+    </div>
+</div>
+
+<script>
+	$(function () {
+		  $('#unfold li.forum-item:nth-child(n+7)').css('display','none');	
+	if($('#unfold li.forum-item').length<=5){	
+	$('#unfold li.forum-bottom').css('display','none');
+	}else{
+			$('#unfold li.forum-bottom').css('display','block');
+	}
+	$('#unfold').on("click","li.forum-bottom",function () {
+		if($(this).hasClass('on')){
+				console.log("触发");
+			$(this).removeClass('on');
+		$('#unfold li.forum-item:nth-child(n+7)').css('display','none');
+		$('#unfold li.forum-bottom').css('display','block');
+		$(this).html('<a href="javascript:void(0);"><i class="more-icon"></i>更多版块</a>')
+		}else{
+	    $(this).addClass('on');
+		$('#unfold li.forum-item:nth-child(n+7)').css('display','block');
+		$(this).html('<a href="javascript:void(0);"><i class="more-icon rotate180"></i>收起</a>')
+		}		
+	})
+	})		
+</script>
+

@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.jeecms.bbs.entity">
+	<class
+		name="BbsSession"
+		table="bbs_session"
+	>
+		<meta attribute="sync-DAO">false</meta>
+		<id
+			name="id"
+			type="java.lang.Long"
+			column="sid"
+		>
+			<generator class="identity"/>
+		</id>
+
+		<property
+			name="sessionId"
+			column="session_id"
+			type="string"
+			not-null="true"
+			length="100"
+		/>
+		<property
+			name="ip"
+			column="ip"
+			type="string"
+			not-null="true"
+			length="50"
+		/>
+		<property
+			name="firstActivetime"
+			column="first_activetime"
+			type="timestamp"
+			not-null="true"
+			length="19"
+		/>
+		<property
+			name="lastActivetime"
+			column="last_activetime"
+			type="timestamp"
+			not-null="true"
+			length="19"
+		/>
+		<many-to-one
+			name="user"
+			column="user_id"
+			class="BbsUser"
+			not-null="false"
+		>
+		</many-to-one>
+
+
+	</class>	
+</hibernate-mapping>

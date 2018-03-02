@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>会员中心 - ${site.name} - Powered by JEECMS</title>
+<script src="${resSys}/jquery.js" type="text/javascript"></script>
+<script src="${resSys}/front.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/base.css" />
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_member/css/l-member.css" />
+<script type="text/javascript" src="/${res}/bbs_forum/js/jquery-1.11.0.js"></script>
+<script type="text/javascript" src="/${res}/bbs_forum/js/base.js"></script>
+<script type="text/javascript">
+$(function() {
+	$("#jvForm").validate();
+});
+</script>
+<style>
+.daojulist li{
+float:none;
+display:inline-block;
+
+}
+</style>
+</head>
+
+<body>
+[#include "../include/页头.html"/]
+[#include "../include/论坛信息.html"/]
+<div class="bbs-main clearfix">
+    <!--左侧 include-->
+			<div class="left-main">
+				<!--版块-->
+				[#include "../member/会员中心页_导航.html"/]
+				
+			</div>
+    <!--右侧内容-->
+    <div class="right-main clearfix" style="min-height: 592px;">
+				<div class="mydaojubox">
+					<div class="myD">
+						<img src="images/mydaoju.png"/>
+					</div>
+					<img src="images/djjl.png" class="djjl"/>
+					<ul class="daojulist clearfix" >
+            [#if memberMagics?size>0]
+                    [#list memberMagics as magic]
+                	[#assign commonmagic=magic.magic/]
+						<li>
+                 [#if commonmagic.identifier=="money"||commonmagic.identifier=="showip"||commonmagic.identifier=="checkonline"]
+                <a href="${base}/magic/getsellmagicpage.jspx?mid=${commonmagic.identifier}&&operator=1" id="magica_${commonmagic.identifier}_1" >
+                    [#else]
+                   [/#if]
+							<img src="images/goldenmoney.jpg"/>
+							<span>${commonmagic.name!}</span>
+							<i class="radpoint">${magic.num!}</i>
+                            [#if commonmagic.identifier=="money"||commonmagic.identifier=="showip"||commonmagic.identifier=="checkonline"]
+                                               </a>
+                         [#else]
+                   [/#if]
+						</li>
+						[/#list]
+     [#else]
+     	暂无道具
+     [/#if]
+					</ul>
+				</div>
+				<div class="daojuShopbox">
+					<img src="images/djsd.jpg" class="djsd"/>
+					<div class="jifen">
+						<span class="wenzi"><img src="/${res}/bbs_member/images/wdjf.png"/></span> 
+						<span class="shuzi">1174</span> 
+						<span class="wenzi"><img src="/${res}/bbs_member/images/wdww.png"/></span> 
+						<span class="shuzi">174</span>
+					</div>
+					<div class="shopbox clearfix">
+						<div class="shop">
+							<div class="left">
+								<img src="images/goldenmoney.jpg"/>
+							</div>
+							<div class="right">
+								<p class="title">金钱卡</p>
+								<p class="miaoshu">可随机获得一些积分</p>
+								<p class="danjia">售价： <span>10</span> 积分</p>
+								<div class="shuliangbox clearfix">
+									<div class="shuliang clearfix">
+										<input type="button" id="" value="" class="reduce"/>
+										<input type="text" id="" value="1" class="shopnum"/>
+										<input type="button" id="" value="" class="btn-add"/>
+									</div>
+									<input type="button" id="" value="" class="goumai"/>
+								</div>
+							</div>
+						</div>
+						<div class="shop">
+							<div class="left">
+								<img src="images/goldenmoney.jpg"/>
+							</div>
+							<div class="right">
+								<p class="title">金钱卡</p>
+								<p class="miaoshu">可随机获得一些积分</p>
+								<p class="danjia">售价： <span>10</span> 积分</p>
+								<div class="shuliangbox clearfix">
+									<div class="shuliang clearfix">
+										<input type="button" id="" value="" class="reduce"/>
+										<input type="text" id="" value="1" class="shopnum"/>
+										<input type="button" id="" value="" class="btn-add"/>
+									</div>
+									<input type="button" id="" value="" class="goumai"/>
+								</div>
+							</div>
+						</div>
+						<div class="shop">
+							<div class="left">
+								<img src="images/goldenmoney.jpg"/>
+							</div>
+							<div class="right">
+								<p class="title">金钱卡</p>
+								<p class="miaoshu">可随机获得一些积分</p>
+								<p class="danjia">售价： <span>10</span>积分</p>
+								<div class="shuliangbox clearfix">
+									<div class="shuliang clearfix">
+										<input type="button" id="" value="" class="reduce"/>
+										<input type="text" id="" value="1" class="shopnum"/>
+										<input type="button" id="" value="" class="btn-add"/>
+									</div>
+									<input type="button" id="" value="" class="goumai"/>
+								</div>
+							</div>
+						</div>
+						<div class="shop">
+							<div class="left">
+								<img src="images/goldenmoney.jpg"/>
+							</div>
+							<div class="right">
+								<p class="title">金钱卡</p>
+								<p class="miaoshu">可随机获得一些积分</p>
+								<p class="danjia">售价： <span>10</span>积分</p>
+								<div class="shuliangbox clearfix">
+									<div class="shuliang clearfix">
+										<input type="button" id="" value="" class="reduce"/>
+										<input type="text" id="" value="1" class="shopnum"/>
+										<input type="button" id="" value="" class="btn-add"/>
+									</div>
+									<input type="button" id="" value="" class="goumai"/>
+								</div>
+							</div>
+						</div>
+						<div class="shop">
+							<div class="left">
+								<img src="images/goldenmoney.jpg"/>
+							</div>
+							<div class="right">
+								<p class="title">金钱卡</p>
+								<p class="miaoshu">可随机获得一些积分</p>
+								<p class="danjia">售价： <span>10</span>积分</p>
+								<div class="shuliangbox clearfix">
+									<div class="shuliang clearfix">
+										<input type="button" id="" value="" class="reduce"/>
+										<input type="text" id="" value="1" class="shopnum"/>
+										<input type="button" id="" value="" class="btn-add"/>
+									</div>
+									<input type="button" id="" value="" class="goumai"/>
+								</div>
+							</div>
+						</div>
+						<div class="shop">
+							<div class="left">
+								<img src="images/goldenmoney.jpg"/>
+							</div>
+							<div class="right">
+								<p class="title">金钱卡</p>
+								<p class="miaoshu">可随机获得一些积分</p>
+								<p class="danjia">售价： <span>10</span>积分</p>
+								<div class="shuliangbox clearfix">
+									<div class="shuliang clearfix">
+										<input type="button" id="" value="" class="reduce"/>
+										<input type="text" id="" value="1" class="shopnum"/>
+										<input type="button" id="" value="" class="btn-add"/>
+									</div>
+									<input type="button" id="" value="" class="goumai"/>
+								</div>
+							</div>
+						</div>
+						<div class="shop">
+							<div class="left">
+								<img src="images/goldenmoney.jpg"/>
+							</div>
+							<div class="right">
+								<p class="title">金钱卡</p>
+								<p class="miaoshu">可随机获得一些积分</p>
+								<p class="danjia">售价： <span>10</span>积分</p>
+								<div class="shuliangbox clearfix">
+									<div class="shuliang clearfix">
+										<input type="button" id="" value="" class="reduce"/>
+										<input type="text" id="" value="1" class="shopnum"/>
+										<input type="button" id="" value="" class="btn-add"/>
+									</div>
+									<input type="button" id="" value="" class="goumai"/>
+								</div>
+							</div>
+						</div>
+						<div class="shop">
+							<div class="left">
+								<img src="images/goldenmoney.jpg"/>
+							</div>
+							<div class="right">
+								<p class="title">金钱卡</p>
+								<p class="miaoshu">可随机获得一些积分</p>
+								<p class="danjia">售价： <span>10</span>积分</p>
+								<div class="shuliangbox clearfix">
+									<div class="shuliang clearfix">
+										<input type="button" id="" value="" class="reduce"/>
+										<input type="text" id="" value="1" class="shopnum"/>
+										<input type="button" id="" value="" class="btn-add"/>
+									</div>
+									<input type="button" id="" value="" class="goumai"/>
+								</div>
+							</div>
+						</div>
+						<div class="shop">
+							<div class="left">
+								<img src="images/goldenmoney.jpg"/>
+							</div>
+							<div class="right">
+								<p class="title">金钱卡</p>
+								<p class="miaoshu">可随机获得一些积分</p>
+								<p class="danjia">售价： <span>10</span>积分</p>
+								<div class="shuliangbox clearfix">
+									<div class="shuliang clearfix">
+										<input type="button" id="" value="" class="reduce"/>
+										<input type="text" id="" value="1" class="shopnum"/>
+										<input type="button" id="" value="" class="btn-add"/>
+									</div>
+									<input type="button" id="" value="" class="goumai"/>
+								</div>
+							</div>
+						</div>
+						<div class="shop">
+							<div class="left">
+								<img src="images/goldenmoney.jpg"/>
+							</div>
+							<div class="right">
+								<p class="title">金钱卡</p>
+								<p class="miaoshu">可随机获得一些积分</p>
+								<p class="danjia">售价： <span>10</span>积分</p>
+								<div class="shuliangbox clearfix">
+									<div class="shuliang clearfix">
+										<input type="button" id="" value="" class="reduce"/>
+										<input type="text" id="" value="1" class="shopnum"/>
+										<input type="button" id="" value="" class="btn-add"/>
+									</div>
+									<input type="button" id="" value="" class="goumai"/>
+								</div>
+							</div>
+						</div>
+						<div class="shop">
+							<div class="left">
+								<img src="images/goldenmoney.jpg"/>
+							</div>
+							<div class="right">
+								<p class="title">金钱卡</p>
+								<p class="miaoshu">可随机获得一些积分</p>
+								<p class="danjia">售价： <span>10</span>积分</p>
+								<div class="shuliangbox clearfix">
+									<div class="shuliang clearfix">
+										<input type="button" id="" value="" class="reduce"/>
+										<input type="text" id="" value="1" class="shopnum"/>
+										<input type="button" id="" value="" class="btn-add"/>
+									</div>
+									<input type="button" id="" value="" class="goumai"/>
+								</div>
+							</div>
+						</div>
+						<div class="shop">
+							<div class="left">
+								<img src="images/goldenmoney.jpg"/>
+							</div>
+							<div class="right">
+								<p class="title">金钱卡</p>
+								<p class="miaoshu">可随机获得一些积分</p>
+								<p class="danjia">售价： <span>10</span>积分</p>
+								<div class="shuliangbox clearfix">
+									<div class="shuliang clearfix">
+										<input type="button" id="" value="" class="reduce"/>
+										<input type="text" id="" value="1" class="shopnum"/>
+										<input type="button" id="" value="" class="btn-add"/>
+									</div>
+									<input type="button" id="" value="" class="goumai"/>
+								</div>
+							</div>
+						</div>
+						<div class="shop">
+							<div class="left">
+								<img src="images/goldenmoney.jpg"/>
+							</div>
+							<div class="right">
+								<p class="title">金钱卡</p>
+								<p class="miaoshu">可随机获得一些积分</p>
+								<p class="danjia">售价： <span>10</span>积分</p>
+								<div class="shuliangbox clearfix">
+									<div class="shuliang clearfix">
+										<input type="button" id="" value="" class="reduce"/>
+										<input type="text" id="" value="1" class="shopnum"/>
+										<input type="button" id="" value="" class="btn-add"/>
+									</div>
+									<input type="button" id="" value="" class="goumai"/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="back-top">
+						
+					</div>
+				</div>
+				
+			</div>
+</div>
+[#include "../include/页脚.html"/]
+</body>
+</html>

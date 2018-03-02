@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+function getTableForm() {
+	return document.getElementById('tableForm');
+}
+function optDelete() {
+	if(Pn.checkedCount('ids')<=0) {
+		alert("<@s.m 'error.checkRecord'/>");
+		return;
+	}
+	if(!confirm("<@s.m 'global.confirm.delete'/>")) {
+		return;
+	}
+	doDelete();
+}
+function doDelete(){
+	var f = getTableForm();
+	f.action="draw_apply_delete.do";
+	f.submit();
+}
+</script>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+  <div class="rpos"><@s.m "global.position"/>: <@s.m "cmsAccountDraw.function"/> > <@s.m "global.list"/></div>
+	<div class="clear"></div>
+</div>
+<form action="draw_apply_list.do" method="post">
+<div style="padding-top:5px; padding-bottom:5px; text-indent:10px; border-bottom:1px solid #fff; border-top:1px solid #fff;">
+<@s.m "cmsUser.username"/>: <input type="text" name="queryUsername" value="${queryUsername!}" style="width:100px"/>
+<@s.m "cmsAccountDraw.applyTime"/>:
+<input name="timeBegin" value="${timeBegin!}" style="width:140px"  type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate" />
+-<input name="timeEnd" value="${timeEnd!}" style="width:140px"  type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate" />
+<@s.m "cmsAccountDraw.applyStatus"/>:
+<@p.select name="status" value=status list={"-1":"global.all","0":"cmsAccountDraw.applyStatus.0","3":"cmsAccountDraw.applyStatus.3"}/>
+<input class="query" type="submit" value="<@s.m "global.query"/>"/>
+</div>
+</form>
+<form id="tableForm" method="post">
+<input type="hidden" name="pageNo" value="${pageNo!}"/>
+<input type="hidden" name="queryUsername" value="${queryUsername!}"/>
+<input type="hidden" name="timeBegin" value="${timeBegin!}"/>
+<input type="hidden" name="timeEnd" value="${timeEnd!}"/>
+<input type="hidden" name="status" value="${status!}"/>
+<@p.table value=pagination listAction="draw_apply_list.do";cmsAccountDraw,i,has_next><#rt/>
+	<@p.column title="<input type='checkbox' onclick='Pn.checkbox(\"ids\",this.checked)'/>" width="20">
+		<input type='checkbox' name='ids' value='${cmsAccountDraw.id}' /><#t/>
+		<input type='hidden' name='checks' id="checks${cmsAccountDraw.id}" value='false'/><#t/>
+	</@p.column><#t/>
+	<@p.column title="ID">${cmsAccountDraw.id}</@p.column><#t/>
+	<@p.column code="cmsAccountDraw.drawUser">${cmsAccountDraw.drawUser.username!}</@p.column><#t/>
+	<@p.column code="cmsAccountDraw.applyAccount">${cmsAccountDraw.applyAccount!}</@p.column><#t/>
+	<@p.column code="cmsAccountDraw.applyAmount">${cmsAccountDraw.applyAmount!}</@p.column><#t/>
+	<@p.column code="cmsAccountDraw.applyTime">${cmsAccountDraw.applyTime!}</@p.column><#t/>
+	<@p.column code="cmsAccountDraw.applyStatus"><@s.m "cmsAccountDraw.applyStatus.${cmsAccountDraw.applyStatus!}"/></@p.column><#t/>
+	<@p.column code="cmsAccountDraw.applyType"><@s.m "cmsAccountDraw.applyType.${cmsAccountDraw.applyType!}"/></@p.column><#t/>
+	<@p.column code="global.operate" align="center">
+		<#assign params>&pageNo=${pageNo!}&queryUsername=${queryUsername!?url}&timeBegin=${timeBegin!}&timeEnd=${timeEnd!}&status=${status!}</#assign>
+		<a href="draw_apply_delete.do?ids=${cmsAccountDraw.id}${params}" onclick="if(!confirm('<@s.m "global.confirm.delete"/>')) {return false;}"  class="pn-opt"><@s.m "global.delete"/></a>
+		<#if cmsAccountDraw.applyStatus!=3>
+		| <#rt/>
+		<a href="goToPay.do?id=${cmsAccountDraw.id}" class="pn-opt"><@s.m "cmsAccountPay.pay"/></a><#t/>
+		</#if>
+	</@p.column><#t/>
+</@p.table>
+<div>
+<input class="del-button" type="button" value="<@s.m "global.delete"/>" onclick="optDelete();"/>
+</div>
+</form>
+</div>
+<#include "/common/alert_message.html"/>
+</body>
+</html>

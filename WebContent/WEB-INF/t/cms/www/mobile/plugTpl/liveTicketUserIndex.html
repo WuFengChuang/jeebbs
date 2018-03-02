@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>JEECMS官方论坛|开源java cms,jsp cms,jsp bbs</title>
+    <meta content="java,cms,jsp,cms,jsp bbs,开源网站内容管理系统,网站群,站群,多站点,jeecms" name="keywords" />
+    <meta content="讨论jsp cms、jsp bbs相关资讯，struts,hibernate,spring,freemarker最新技术研究" name="description" />
+	<link href="${resSys}/front.css" rel="stylesheet" type="text/css"/>
+    <script src="${resSys}/jquery.js" type="text/javascript"></script>
+    <script src="${resSys}/front.js" type="text/javascript"></script>
+    <link href="/${res}/bbs_forum/css/whole.css" type="text/css" rel="stylesheet" />
+    <link href="/${res}/bbs_forum/css/layout.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript">
+    $(function() {
+    	$("#jvForm").validate();
+    });
+	function getTableForm() {
+		return document.getElementById('jvForm');
+	}
+	function assignTicket(){
+		var username=$("#username").val();
+		if(!confirm("确认分配给"+username+"?")) {
+			return;
+		}
+		var f = getTableForm();
+		f.submit();
+	}
+    </script>
+  </head>
+  <body>
+    <!--header-->[#include "../include/页头.html"/]<!--/header-->
+    <!--main-->
+    <div class="main-wrap">
+	
+    <div id="main">
+	
+    <!--登录统计栏_Begin-->[#include "../include/登录统计.html"/]<!--登录统计栏_End-->
+	
+    <div class="c"></div>
+    <div id="breadCrumb"><img align="absMiddle" src="/${res}/bbs_forum/img/home.gif"/> <a href="${base}/">${site.name}</a> &raquo;  &raquo; </div>
+    <div class="c"></div>
+   		[#assign usernameExist][@s.m "error.usernameNotExist"/][/#assign]
+		<form id="jvForm" action="assign.jspx">
+			[#if order??]
+			<input name="orderId" value="${order.id}" type="hidden"/>
+			<span>剩余票数:${order.liveUserNum-order.liveUsedNum}</span>
+			<input name="username" id="username" required="true" maxlength="100" vld="{required:true,username:true,remote:'${base}/username_exist.jspx',messages:{remote:'${usernameExist}'}}"/>
+			<input type="submit" onclick="assignTicket()" [#if order.liveUserNum-order.liveUsedNum<=0]disabled="disabled"[/#if] value="分配用户"/>
+			[/#if]
+		</form><br/>
+	<!--liveTicket列表_Begin-->	
+		[#list tag_pagination.list as l]
+			用户:${l.joinUser.username!}
+			分配时间 ${l.buyTime!?string("yyyy-MM-dd HH:mm:ss")}
+			<br/>
+		[/#list]
+		[#include "../tag/topic.html"/] 
+		
+	<!--liveTicket列表_End-->
+    <div class="c"></div>
+    </div>
+    </div>
+    <!--/main-->
+    <!--footer-->[#include "../include/页脚.html"/]<!--footer-->
+  </body>
+</html>

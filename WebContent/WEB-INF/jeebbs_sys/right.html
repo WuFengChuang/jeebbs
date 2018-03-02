@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>jeecms-left</title>
+<#include "/jeebbs_sys/head.html"/>
+<script>
+$(function() {
+	$("#incomeChartDive").load("income/indexStatistic.do?flag=1");
+});
+function openLive(liveId){
+	$.post("live/o_ajax_start.do", {
+		id:liveId
+	}, function(data) {
+		if(data){
+			alert(data);
+		}
+	}, "json");
+}
+function closeLive(liveId){
+	$.post("live/o_ajax_stop.do", {
+		id:liveId
+	}, function(data) {
+		if(data){
+			alert(data);
+		}
+	}, "json");
+}
+</script>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos"><@s.m "global.position"/>: <@s.m "global.admin.home"/> - <@s.m "global.admin.index"/></div>
+	<div class="clear"></div>
+</div>
+主播申请:${hostApplyCount!}
+直播申请:${liveApplyCount!}
+即将到期广告:${adDueCount!}
+提现申请:${drawCount!}
+<br/>
+今日收益
+总收益：${todayIncome[0]}  ${incomeUp[0]}<br/>
+广告收益：${todayIncome[1]} ${incomeUp[1]}<br/>
+礼物收益：${todayIncome[2]} ${incomeUp[2]}<br/>
+道具收益：${todayIncome[3]} ${incomeUp[3]}<br/>
+直播收益：${todayIncome[4]}  ${incomeUp[4]}<br/>
+帖子收益：${todayIncome[5]}  ${incomeUp[5]}<br/>
+进行中的直播  <br/>
+<#list lives as live> 
+	<img src="${live.demandImageUrl!site.defImg!}" style="width: 100px;height: 100px;" alt="" />
+	${live.title!} <br/>
+	主播:${live.user.realname!live.user.username!} <br/>
+	售出门票: ${live.ticketNum!}  &nbsp;	在线人数:${live.inliveUserNum!} <br/>
+	收到礼物:${live.giftNum!} <br/>
+	<span onclick="openLive('${live.id}')">开</span> <span onclick="closeLive('${live.id}')">关闭</span>
+</#list>
+主播排行 <br>
+<#list hosts as host> 
+	<img src="${host.user.avatar!site.defImg!}" style="width: 100px;height: 100px;" alt="" />
+	${host.user.realname!host.user.username!}
+	售出门票:${host.ticketNum!}<br/>
+</#list>
+<div id="incomeChartDive"></div>
+</div>
+</body>
+</html>

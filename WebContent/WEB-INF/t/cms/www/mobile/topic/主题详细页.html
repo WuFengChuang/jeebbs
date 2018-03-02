@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>${site.name} - JEECMS官方论坛|开源java cms,jsp cms,jsp bbs</title>
+<meta name="keywords" content="java,cms,jsp,cms,jsp bbs,开源网站内容管理系统,网站群,站群,多站点,jeecms" />
+<meta name="description" content="讨论jsp cms、jsp bbs相关资讯，struts,hibernate,spring,freemarker最新技术研究" /> 
+<script src="/${res}/bbs_forum/js/jquery1.9.1.js" type="text/javascript"></script>
+<script src="${resSys}/front.js" type="text/javascript"></script>
+<script src="/${res}/bbs_forum/js/blocksit.min.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/main.css" />
+</head>
+<body>
+  [#if user??]<div class="fatie"><a href="${base}/topic/v_add${forum.id!}.jspx" data-ajax="false"><img src="/${res}/bbs_forum/img/fatie.png"></a></div>[/#if]
+<div class="main" id="wrapper" style="width:100%;overflow-x:hidden;">
+<div   id="scroller">
+ [#include "../include/页头.html"/]
+  <div class="zt-content">
+    <div class="zt-content-main">
+      <h1>${topic.title!}</h1>
+    </div>
+  </div>
+  <div class="pl-content">
+    <div class="pl-content-list" >
+      <ul id="pl-list">
+      </ul>
+    </div>
+    [#include "../include/inc_share.html"/]
+  </div>
+</div>
+</div>
+<div id="postDivTpl" style="display: none;">
+<li>
+  	<div class="inf">
+       <div class="inf-txt">
+         <img src="/${res}/bbs_forum/img/user_pic.jpg" id="avarterTpl">
+         <div class="inf-n">
+           <h2><span id="usernameTpl">abingge</span><a id="groupTpl">白丁</a></h2>
+           <h3><span id="flotTpl">2楼</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+           <span id="timeTpl">09-10   10:16</span>
+           </h2>
+         </div>
+         <div class="pl"><a href="" id="urlTpl"><img src="/${res}/bbs_forum/img/pl_pic.png"></a></div>
+       </div>
+     </div>
+     <div class="pl-content-txt">
+       <span id="contentTpl">终于等到了，先下载下来看看 </span>
+     </div>
+</li>
+</div>
+[#include "../include/inc_share_baidu.html"/]
+<textarea id="postLi" style="display:none">
+<div id="tpl{0}">
+<li>
+       <div class="inf">
+       <div class="inf-txt">
+         <img src="/${res}/bbs_forum/img/user_pic.jpg" id="avarterTpl{0}">
+         <div class="inf-n">
+           <h2><span id="usernameTpl{0}">abingge</span><a id="groupTpl{0}">白丁</a></h2>
+           <h3><span id="flotTpl{0}">2楼</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+           <span id="timeTpl{0}">09-10   10:16</span>
+           </h2>
+         </div>
+         <div class="pl"><a href="" id="urlTpl{0}"><img src="/${res}/bbs_forum/img/pl_pic.png"></a></div>
+       </div>
+     </div>
+     <div class="pl-content-txt">
+       <span id="contentTpl{0}">终于等到了，先下载下来看看 </span>
+     </div>
+</li>
+</div>
+</textarea>
+<div id="postContainer" style="display: none;"></div>
+<script>
+var postTpl = $.format($("#postLi").val());
+function addPost(postTplId) {
+ $('#postContainer').append(postTpl(postTplId));
+}
+var first=0;
+var count=10;
+content="";
+var topicTime="${topic.createTime}";
+function getContent(){
+        $("#postContainer").html("");
+	$.get("${base}/post/v_list_json.jspx", {
+		topicId:"${topic.id}",
+		first:first,
+		count:count
+	}, function(data) {
+		content="";
+		for (var i=0;i<data.length;i++){
+                      if(topicTime!=data[i].createTime){
+                      var postTplId=first+i;
+                            addPost(postTplId);
+                            var avatar="";
+                           if(data[i].avatar==null||data[i].avatar==""){
+                              avatar="/${res}/bbs_member/img/face/none.gif";
+                           }else{
+                              if(data[i].avatar.indexOf('user/images')!=-1){
+                                avatar=data[i].avatar;
+                              }else{
+                                avatar="/${res}/bbs_member/img/face/"+data[i].avatar;
+                              }
+                           }
+			    $("#avarterTpl"+postTplId).attr("src",avatar);
+			     $("#usernameTpl"+postTplId).html(data[i].username);
+			    $("#timeTpl"+postTplId).html(data[i].createTime);
+			    $("#groupTpl"+postTplId).html(data[i].group);
+			    $("#contentTpl"+postTplId).html(data[i].content);
+			    $("#urlTpl"+postTplId).attr("href","${base}/post/v_add${topic.id!}.jspx");
+			   $("#flotTpl"+postTplId).html(first+i+1+"楼"); 
+                      }  
+		}
+		content=$("#postContainer").html();
+                setTimeout(function () {$('#pl-list').append(content);first=first+count; }, 100);
+	}, "json");
+}
+$(function(){
+var lastTime=new Date();
+getContent();
+	$(window).scroll(function(){
+               var time=new Date();
+               if((time.getTime()-lastTime.getTime())/1000>0.5){
+                // 当滚动到最底部以上50像素时， 加载新内容
+		if ($(document).height() - $(this).scrollTop() - $(this).height()<50){
+                      lastTime=time;
+                      getContent();
+			$('#main').BlocksIt({
+				numOfCol:5,
+				offsetX: 8,
+				offsetY: 8
+			});
+		}
+               }
+	});
+});
+</script>
+</body>
+</html>

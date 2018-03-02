@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+	default-lazy-init="true">
+	
+    
+    <bean id="dynamicPageAct" class="com.jeecms.bbs.action.front.DynamicPageAct"/>
+    <bean id="bbsPostAct" class="com.jeecms.bbs.action.front.BbsPostAct"/>
+	<bean id="bbsTopicAct" class="com.jeecms.bbs.action.front.BbsTopicAct"/>
+	<bean id="registerAct" class="com.jeecms.bbs.action.front.RegisterAct"/>
+	<bean id="casLoginAct" class="com.jeecms.bbs.action.front.CasLoginAct"/>
+	<bean id="userPostAct" class="com.jeecms.bbs.action.member.UserPostAct"/>
+	<bean id="friendlinkAct" class="com.jeecms.bbs.action.front.FriendlinkAct"/>
+	<bean id="forgotPasswordAct" class="com.jeecms.bbs.action.member.ForgotPasswordAct"/>
+	<bean id="bbsMagicAct" class="com.jeecms.bbs.action.front.BbsMagicAct"/>
+	<bean id="friendAct" class="com.jeecms.bbs.action.member.FriendAct"></bean>
+	<bean id="messageAct" class="com.jeecms.bbs.action.member.MessageAct"></bean>
+	<bean id="imageUploadAct" class="com.jeecms.bbs.action.member.ImageUploadAct"></bean>
+	<bean id="imageCutAct" class="com.jeecms.bbs.action.member.ImageCutAct"></bean>
+	<bean id="reportFrontAct" class="com.jeecms.bbs.action.member.BbsReportFrontAct"></bean>
+	<bean id="bbsTopicSearchAct" class="com.jeecms.bbs.action.front.BbsTopicSearchAct"/>
+	
+	<bean id="thirdLoginAct" class="com.jeecms.bbs.action.login.ThirdLoginAct"/>
+	<bean id="bbsSessionStatisticAct" class="com.jeecms.bbs.action.front.BbsSessionStatisticAct"/>
+	
+	<bean id="csiCustomAct" class="com.jeecms.bbs.action.front.CsiCustomAct"/>
+	<bean id="topicTypeAct" class="com.jeecms.bbs.action.front.TopicTypeAct"/>
+	<bean id="topicExtAct" class="com.jeecms.bbs.action.front.BbsTopicExtAct"/>
+	<bean id="orderAct" class="com.jeecms.bbs.action.front.OrderAct"/>
+	
+	<bean id="dimensionCodeAct" class="com.jeecms.bbs.action.front.DimensionCodeAct"/>
+	<bean id="weiXinAuthAct" class="com.jeecms.bbs.action.member.WeiXinAuthAct"/>
+	<bean id="userOrderAct" class="com.jeecms.bbs.action.member.UserOrderAct"/>
+	<bean id="accountDrawAct" class="com.jeecms.bbs.action.member.AccountDrawAct"/>
+	<bean id="attentAct" class="com.jeecms.bbs.action.member.AttentAct"/>
+	<bean id="forumMngAct" class="com.jeecms.bbs.action.member.ForumMngAct"/>
+	<bean id="userAdAct" class="com.jeecms.bbs.action.member.UserAdAct"/>
+	<bean id="advertisingAct" class="com.jeecms.bbs.action.front.AdvertisingAct"/>
+	<bean id="swfUploadAct" class="com.jeecms.bbs.action.front.SwfUploadAct"/>
+	<bean id="giftAct" class="com.jeecms.bbs.action.front.BbsGiftAct"/>
+	<bean id="TopicTypeMemberAct" class="com.jeecms.bbs.action.member.TopicTypeAct"/>
+	
+	<bean id="bbsForumApiAct" class="com.jeecms.bbs.api.front.BbsForumApiAct"/>
+	<bean id="categoryApiAct" class="com.jeecms.bbs.api.front.CategoryApiAct"/>
+	<bean id="bbsTopicApiAct" class="com.jeecms.bbs.api.front.BbsTopicApiAct"/>
+	<bean id="bbsPostApiAct" class="com.jeecms.bbs.api.front.BbsPostApiAct"/>
+	<bean id="bbsAdApiAct" class="com.jeecms.bbs.api.front.BbsAdApiAct"/>
+	<bean id="friendlinkApiAct" class="com.jeecms.bbs.api.front.CmsFriendlinkApiAct"/>
+	<bean id="bbsOrderApiAct" class="com.jeecms.bbs.api.front.BbsOrderApiAct"/>
+	<bean id="magicApiAct" class="com.jeecms.bbs.api.front.BbsMagicApiAct"/>
+	<bean id="statisticApiAct" class="com.jeecms.bbs.api.front.BbsStatisticApiAct"/>
+	<bean id="friendFrontApiAct" class="com.jeecms.bbs.api.front.FriendApiAct"/>
+	<bean id="liveApiAct" class="com.jeecms.bbs.api.front.BbsLiveApiAct"/>
+	<bean id="userApiAct" class="com.jeecms.bbs.api.front.UserApiAct"/>
+	<bean id="topicTypeApiAct" class="com.jeecms.bbs.api.front.BbsTopicTypeApiAct"/>
+	
+
+</beans>

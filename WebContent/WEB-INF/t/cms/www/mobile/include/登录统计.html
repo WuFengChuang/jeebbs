@@ -1,0 +1,75 @@
+[#if site.config.ssoEnable]
+<script type="text/javascript">
+Cms.loginSSO('${base}');
+</script>
+[/#if]
+<div class="dlkbg">
+<div class="t3 cc">
+  <div class="cc" id="nav-user"> 
+  
+  [#if user??]
+    欢迎您：${user.username}
+    &nbsp;&nbsp;[#if user.group??]【级别：${user.group.name}】[/#if]
+    &nbsp;&nbsp;【<a href="${base}/member/index.jhtml">用户中心</a>】
+    [#if returnUrl?? && returnUrl?length gt 0]
+    &nbsp;&nbsp;【<a href="${base}/logout.jspx?returnUrl=${returnUrl!}">退出</a>】
+    [#else]
+    &nbsp;&nbsp;【<a href="${base}/logout.jspx?returnUrl=/">退出</a>】
+    [/#if]
+   
+    [#else]
+    <script type="text/javascript">
+	$(function() {
+		$("#jvForm").validate();
+	});
+	</script>
+    <form id="jvForm" action="${base}/login.jspx" method="post">
+      <table cellspacing="0" cellpadding="0" border="0">
+        <tbody>
+          <tr>
+            <td><input class="uname" title="请输入用户名" maxlength="16" name="username"  vld="{required:true}"  id="username" type="text" /></td>
+            <td><input class="pwd"  title="请输入密码" type="password" maxlength="18"   vld="{required:true}"  name="password" id="password" /></td>
+            <td>
+			<input type="hidden" id="process" name="processUrl"/>
+			[#if returnUrl?? && returnUrl?length gt 0]
+              <input type="hidden" name="returnUrl" value="${returnUrl!}"/>
+              [#else]
+              <input type="hidden" name="returnUrl" value="${site.urlWhole!}"/>
+              [/#if]
+              <input type="checkbox" value="true" name="rememberMe"/>&nbsp;下次自动登录
+              <input type="submit" name="button" value="登录"  class="loginbutton"  />
+              [#if site.config.qqEnable]
+              <script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="${site.config.qqID!}" data-redirecturi="http://${site.domain}/public_auth.jspx" charset="utf-8"></script>
+			<span id="qqLoginBtn"></span>
+			<script type="text/javascript">
+				//插入按钮的节点qqLoginBtn id
+			    QC.Login({btnId:"qqLoginBtn",size: "A_M"}, function(reqData, opts){//登录成功
+			       //根据返回数据，更换按钮显示状态方法
+			       var dom = document.getElementById(opts['btnId']),
+			       _logoutTemplate=[
+			            //头像
+			         //   '<span><img src="{figureurl}" class="{size_key}"/></span>',
+			            //昵称
+			            '<span>{nickname}</span>',
+			            //退出
+			            '<span><a href="javascript:QC.Login.signOut();">退出</a></span>'    
+			       ].join("");
+			       dom && (dom.innerHTML = QC.String.format(_logoutTemplate, {
+			           nickname : QC.String.escHTML(reqData.nickname), //做xss过滤
+			           figureurl : reqData.figureurl
+			       }));
+			   });
+			 </script>
+              [/#if]
+              </td>
+            <td>&nbsp; <a href="${base}/register.jspx" style="color:red;">注册</a> &nbsp; <a href="${base}/member/forgot_password.jspx" style="color:red;">找回密码</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+    [/#if]
+    </div>
+</div>
+
+</div>

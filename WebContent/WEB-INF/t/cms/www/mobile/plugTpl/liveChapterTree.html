@@ -1,0 +1,30 @@
+<#if isRoot>
+[{
+	"text": "<a href='list.jspx' target='chapterRightFrame'><@s.m "chapter.root"/></a>",
+	"classes": "folder"
+	<#if list?size gt 0>,
+	"expanded": true,
+	"children": [
+	<#list list as chapter>
+		{
+		"id": "${chapter.id}",
+		"text": "<a href='<#if chapter.child?size gt 0>list.jspx?root=${chapter.id}<#else>edit.jspx?id=${chapter.id}</#if>' target='chapterRightFrame'>${chapter.name}</a>",
+		"classes": "<#if chapter.child?size gt 0>folder<#else>file</#if>",
+		"hasChildren": <#if chapter.child?size gt 0>true<#else>false</#if>
+		}<#if chapter_has_next>,</#if>
+	</#list>
+	]
+	</#if>
+}]
+<#else>
+	[
+	<#list list as chapter>
+		{
+		"id": "${chapter.id}",
+		"text": "<a href='<#if chapter.child?size gt 0>v_list.jspx?root=${chapter.id}<#else>edit.jspx?id=${chapter.id}</#if>' target='chapterRightFrame'>${chapter.name}</a>",
+		"classes": "<#if chapter.child?size gt 0>folder<#else>file</#if>",
+		"hasChildren": <#if chapter.child?size gt 0>true<#else>false</#if>
+		}<#if chapter_has_next>,</#if>
+	</#list>
+	]
+</#if>

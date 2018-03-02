@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.jeecms.bbs.entity">
+	<class
+		name="BbsIncomeStatistic"
+		table="bbs_income_statistic"
+	>
+		<meta attribute="sync-DAO">false</meta>
+		<cache usage="read-write"/>
+		
+		<id
+			name="id"
+			type="integer"
+			column="income_id"
+		>
+			<generator class="sequence"><param name="sequence">S_BBS_INCOME_STATISTIC</param></generator>
+		</id>
+		<property
+			name="totalIncomeAmount"
+			column="total_income_amount"
+			type="java.lang.Double"
+			not-null="true"
+			length="11"
+		/>
+		<property
+			name="adIncomeAmount"
+			column="ad_income_amount"
+			type="java.lang.Double"
+			not-null="true"
+			length="11"
+		/>
+		<property
+			name="magicIncomeAmount"
+			column="magic_income_amount"
+			type="java.lang.Double"
+			not-null="true"
+			length="11"
+		/>
+		<property
+			name="giftIncomeAmount"
+			column="gift_income_amount"
+			type="java.lang.Double"
+			not-null="true"
+			length="11"
+		/>
+		<property
+			name="liveIncomeAmount"
+			column="live_income_amount"
+			type="java.lang.Double"
+			not-null="true"
+			length="11"
+		/>
+		<property
+			name="postIncomeAmount"
+			column="post_income_amount"
+			type="java.lang.Double"
+			not-null="true"
+			length="11"
+		/>
+		<property
+			name="incomeDate"
+			column="income_date"
+			type="date"
+			not-null="true"
+			length="10"
+		/>
+
+
+	</class>	
+</hibernate-mapping>

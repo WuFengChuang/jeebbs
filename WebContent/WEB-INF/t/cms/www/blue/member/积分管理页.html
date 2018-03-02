@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	    <title>积分兑换 - JEECMS官方论坛|开源java cms,jsp cms,jsp bbs</title>
+	    <meta content="java,cms,jsp,cms,jsp bbs,开源网站内容管理系统,网站群,站群,多站点,jeecms" name="keywords" />
+	    <meta content="讨论jsp cms、jsp bbs相关资讯，struts,hibernate,spring,freemarker最新技术研究" name="description" />
+	    <link href="${resSys}/front.css" rel="stylesheet" type="text/css"/>
+		<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/base.css" />
+		<link rel="stylesheet" type="text/css" href="/${res}/bbs_member/css/l-member.css" />
+		<script src="${resSys}/jquery.js" type="text/javascript"></script>
+		<script type="text/javascript" src="/${res}/bbs_forum/js/base.js"></script>
+		<script type="text/javascript" src="/${res}/bbs_member/js/l-member.js"></script>
+<script type="text/javascript">
+	function g(o){
+		return document.getElementById(o);
+	}
+	
+	$(function() {
+		$("#jvForm").validate();
+$("#creditInType").on('change',function () {
+	setCreditOutValue();
+			  var val= $(this).val();
+			  if(val==1){
+			  	$("#creditOutType").val(2)
+			  }else{
+			  		$("#creditOutType").val(1)
+			  }
+			  
+		})
+	});
+	function setCreditOutValue() {
+		if($("#creditIn").val()!=""&&$("#creditIn").val()!=0&&$("#creditOutType").val()!=$("#creditInType").val()){
+			$.post('${base}/member/getCreditOutValue.jspx', 
+			{
+				creditIn:$("#creditIn").val(),
+				creditInType:$("#creditInType").val(),
+				creditOutType:$("#creditOutType").val(),
+				exchangetax:$("#exchangetax").val()
+			}, function(data) {
+				$("#creditOut").val(data.creditOutValue);
+			},"json");
+		}else{
+			$("#creditOut").val("");	
+		}
+	}
+	function exchange() {
+		if($("#creditIn").val()==""){
+			alert("抱歉，您尚未输入需要兑换的数量");
+		}else if($("#creditOut").val()==""){
+			alert("您要兑换的积分相同，无法兑换");
+		}else if($("#password").val()==""){
+			alert("您需要输入密码");
+		}else{
+			$.post('${base}/member/creditExchange.jspx', 
+					{
+						creditIn:$("#creditIn").val(),
+						creditOut:$("#creditOut").val(),
+						creditOutType:$("#creditOutType").val(),
+						password:$("#password").val()
+					}, function(data) {
+						alert(data.message);
+					},"json");
+			}
+	}
+</script>
+	</head>
+	<body>
+		<!--include-header-->
+		[#include "../include/页头.html"/]
+		<!--论坛信息-->
+		[#include "../include/论坛信息.html"/]
+	  <!--main-->
+	<div class="bbs-main clearfix">
+			<!--左侧 include-->
+			<div class="left-main">
+				<!--版块-->
+				[#include "会员中心页_导航.html"/]
+				
+			</div>
+			<!--右侧内容-->
+                        <div class="right-main right-panel clearfix" style="min-height: 592px;">
+				<div class="main-header clearfix">
+					<div class="channl-name">
+						<span style="vertical-align: middle;">积分兑换</span>
+					</div>
+				</div>
+				<div class="wdjfbox">
+					<div class="wdjf">
+						<p class="orange">${user.point!}</p>
+						<p class="gray">我的积分</p>
+						<div class="vertical-line"></div>
+					</div>
+					<div class="wdjf">
+						<p style="color: #8fc826; font-size: 30px;">${user.prestige!}</p>
+						<p class="gray">我的威望</p>
+					</div>
+				</div>
+                              <form id="creator" action="${base}/member/update.jspx" method="post" enctype="multipart/form-data" onSubmit="return procheck(this)" name="creator">
+				<div class="tabelbox" style="margin-bottom: 80px; margin-top: 38px;">
+					 [#if exchangeAvailable]
+						<table border="0" cellspacing="0" cellpadding="0" style="width: 100%;">
+							<tr>
+								<td width="20%" class="left-td">兑换：</td>
+								<td class="right-td">
+									<div class="tabelInput" style="padding-left: 0;">
+										<select name="creditInType" id="creditInType" onchange="setCreditOutValue()" class="jf-select">
+											[#if pointInAvail]<option value="1">积分</option>[/#if]
+	                                                                                [#if prestigeInAvail]<option value="2">威望</option>[/#if]
+										</select>
+										<input type="number" name="creditIn" id="creditIn"  onchange="setCreditOutValue()" class="jf-input" required="required" pattern="[0-9]" min="1"/>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td width="20%" class="left-td">需要：</td>
+								<td class="right-td">
+									<div class="tabelInput" style="padding-left: 0; background: #fafafa;">
+										<select name="creditOutType" onchange="setCreditOutValue()" id="creditOutType" class="jf-select">
+											[#if prestigeOutAvail]<option value="2">威望</option>[/#if]
+	                                                                                [#if pointOutAvail]<option value="1">积分</option>[/#if]
+										</select>
+										<input type="text" name="creditOut" readonly="readonly" id="creditOut" class="jf-input" style="background: #fafafa;"/>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td width="20%" class="left-td">登录密码：</td>
+								<td class="right-td">
+									<input type="password" name="password" id="password" class="tabelInput"/>
+								</td>
+							</tr>
+							<tr>
+								<td width="20%" class="left-td"></td>
+								<td class="right-td">
+                                                                        <input class="input" type="hidden" maxlength="75" name="userid" value="${user.id!}"/>
+                                                                        <input class="submit" type="button" name="submit" value="兑换" onclick="exchange()"/>
+		
+								</td>
+							</tr>
+						</table>
+					[/#if]
+				</div>
+                           </form>
+			</div>
+		</div>
+		<!--footer-->
+		[#include "../include/页脚.html"/]
+	</body>
+
+</html>

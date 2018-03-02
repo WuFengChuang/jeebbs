@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.jeecms.bbs.entity">
+	<class
+		name="BbsTopicType"
+		table="bbs_topic_type"
+	>
+		<meta attribute="sync-DAO">false</meta>
+		<cache usage="read-write"/>
+		<id
+			name="id"
+			type="integer"
+			column="type_id"
+		>
+			<generator class="identity"/>
+		</id>
+		<property
+			name="name"
+			column="name"
+			type="string"
+			not-null="true"
+			length="255"
+		/>
+		<property
+			name="path"
+			column="type_path"
+			type="string"
+			not-null="true"
+			length="255"
+		/>
+		<property
+			name="lft"
+			column="lft"
+			type="integer"
+			not-null="true"
+			length="10"
+		/>
+		<property
+			name="rgt"
+			column="rgt"
+			type="integer"
+			not-null="true"
+			length="10"
+		/>
+		<property
+			name="priority"
+			column="priority"
+			type="integer"
+			not-null="true"
+			length="10"
+		/>
+		<property
+			name="display"
+			column="is_display"
+			type="boolean"
+			not-null="true"
+		/>
+		<property
+			name="description"
+			column="description"
+			type="string"
+			not-null="false"
+			length="1000"
+		/>
+		<property
+			name="typeLog"
+			column="type_log"
+			type="string"
+			not-null="false"
+			length="255"
+		/>
+		<property
+			name="topicCount"
+			column="topic_count"
+			type="integer"
+			not-null="true"
+			length="10"
+		/>
+		<property
+			name="topicEssenceCount"
+			column="topic_essence_count"
+			type="integer"
+			not-null="true"
+			length="10"
+		/>
+		<property
+			name="subscribeCount"
+			column="subscribe_count"
+			type="integer"
+			not-null="true"
+			length="255"
+		/>
+		<many-to-one
+			name="parent"
+			column="parent_id"
+			class="BbsTopicType"
+			not-null="false"
+		>
+		</many-to-one>
+		<many-to-one
+			name="site"
+			column="site_id"
+			class="com.jeecms.core.entity.CmsSite"
+			not-null="true"
+			>
+		</many-to-one>
+		<set name="child" inverse="true" cascade="delete" sort="com.jeecms.common.hibernate4.PriorityComparator">
+			<cache usage="read-write"/>
+			<key column="parent_id"/>
+			<one-to-many class="BbsTopicType"/>
+		</set>
+		<set name="subscribes" inverse="true" cascade="delete" >
+			<cache usage="read-write"/>
+			<key column="type_id"/>
+			<one-to-many class="BbsTopicTypeSubscribe"/>
+		</set>
+
+	</class>	
+</hibernate-mapping>

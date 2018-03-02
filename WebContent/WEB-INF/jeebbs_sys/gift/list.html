@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+function getTableForm() {
+	return document.getElementById('tableForm');
+}
+function optDelete() {
+	if(Pn.checkedCount('ids')<=0) {
+		alert("<@s.m 'error.checkRecord'/>");
+		return;
+	}
+	if(!confirm("<@s.m 'global.confirm.delete'/>")) {
+		return;
+	}
+	var f = getTableForm();
+	f.action="o_delete.do";
+	f.submit();
+}
+var max=300;
+function showImage(a) {
+	var img = $("<img src='"+ a.href +"' style='border:1px solid #ccc;'/>");
+	var imgDiv = $("#sd").append(img);	
+	imgDiv.show();
+	
+	var	width = img.attr("width");
+	var	height = img.attr("height");
+	if(width>=height&&width>max) {
+		height = height*max/width;
+		width = max;
+	} else if(height>=width||height>max) {
+		width = width*max/height;
+		height = max;
+	}
+	var offset = $(a).offset();
+	imgDiv.css("left",offset.left+$(a).outerWidth()+3);	
+	var buttom = $(window).height()+$(document).scrollTop()-max-offset.top;
+	if(buttom<0) {
+		imgDiv.css("top",offset.top+buttom-3);
+	} else {
+		imgDiv.css("top",offset.top-3);
+	}
+	img.width(width);
+	img.height(height);
+}
+function hideImage(a) {
+	$("#sd").empty().hide();
+}
+</script>
+</head>
+<body>
+<div id="sd" style="display:none;position:absolute;height:300px;width:300px"></div>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos"><@s.m "global.position"/>: <@s.m "bbsGift.function"/> - <@s.m "global.list"/></div>
+	<form class="ropt">
+		<input type="submit" value="<@s.m "global.add"/>" onclick="this.form.action='v_add.do';"/>
+	</form>
+	<div class="clear"></div>
+</div>
+<form id="tableForm" method="post">
+<input type="hidden" name="pageNo" value="${pageNo!}"/>
+<@p.table value=pagination;bbsGift,i,has_next><#rt/>
+	<@p.column title="<input type='checkbox' onclick='Pn.checkbox(\"ids\",this.checked)'/>" width="20">
+		<input type='checkbox' name='ids' value='${bbsGift.id}'/><#t/>
+	</@p.column><#t/>
+	<@p.column title="ID">${bbsGift.id}</@p.column><#t/>
+	<@p.column code="bbsGift.name"><a href="${bbsGift.picPath!}" onmouseover="showImage(this)" onmouseout="hideImage(this)" target="_blank">${bbsGift.name}</a></@p.column><#t/>
+	<@p.column code="bbsGift.price">${bbsGift.price!}</@p.column><#t/>
+	<@p.column code="bbsGift.priority">${bbsGift.priority!}</@p.column><#t/>
+	<@p.column code="bbsGift.disabled"><#if bbsGift.disabled><@s.m "global.true"/><#else><@s.m "global.false"/></#if></@p.column><#t/>
+	<@p.column code="bbsGift.giftType"><@s.m "bbsGift.giftType.${bbsGift.giftType}"/></@p.column><#t/>
+	<@p.column code="global.operate" align="center">
+		<a href="v_edit.do?id=${bbsGift.id}&pageNo=${pageNo!}"><@s.m "global.edit"/></a> | <#rt/>
+		<a href="o_delete.do?ids=${bbsGift.id}&pageNo=${pageNo!}" onclick="if(!confirm('<@s.m "global.confirm.delete"/>')) {return false;}"><@s.m "global.delete"/></a><#t/>
+	</@p.column><#t/>
+</@p.table>
+<div><input type="button" value="<@s.m "global.delete"/>" onclick="optDelete();"/></div>
+</form>
+</div>
+<#include "/common/alert_message.html"/>
+</body>
+</html>

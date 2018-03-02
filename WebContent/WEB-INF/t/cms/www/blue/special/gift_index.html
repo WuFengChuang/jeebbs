@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>JEECMS官方论坛|开源java cms,jsp cms,jsp bbs</title>
+    <meta content="java,cms,jsp,cms,jsp bbs,开源网站内容管理系统,网站群,站群,多站点,jeecms" name="keywords" />
+    <meta content="讨论jsp cms、jsp bbs相关资讯，struts,hibernate,spring,freemarker最新技术研究" name="description" />
+	<link href="${resSys}/front.cssgiftId" rel="stylesheet" type="text/css"/>
+    <script src="${resSys}/jquery.js" type="text/javascript"></script>
+    <script src="${resSys}/front.js" type="text/javascript"></script>
+    <link href="/${res}/bbs_forum/css/whole.css" type="text/css" rel="stylesheet" />
+    <link href="/${res}/bbs_forum/css/layout.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript">
+	$("#jvForm").validate($.validator.AlertError);
+	function bugGift(giftId){
+		var num=$("#gift_num_"+giftId).val();
+		$("#giftId").val(giftId);
+		$("#buyNum").val(num);
+		$("#giftBuyForm").submit();
+	}
+    </script>
+  </head>
+  <body>
+    <!--header-->[#include "../include/页头.html"/]<!--/header-->
+    <!--main-->
+    <div class="main-wrap">
+	
+    <div id="main">
+	
+    <!--登录统计栏_Begin-->[#include "../include/登录统计.html"/]<!--登录统计栏_End-->
+	
+    <div class="c"></div>
+    <div id="breadCrumb"><img align="absMiddle" src="/${res}/bbs_forum/img/home.gif"/> <a href="${base}/">${site.name}</a> &raquo;  &raquo; </div>
+    <div class="c"></div>
+	
+	<!--gift列表_Begin-->
+	<form action="${base}/gift/buy.jspx" method="post" id="giftBuyForm">
+		<input name="buyNum" type="hidden" id="buyNum"/>
+		<input name="giftId" type="hidden" id="giftId"/>
+	[#list tag_pagination.list as g]
+		<img src="${g.picPath!}" style="width: 50px;height: 50px">
+		${g.name!} <input value="1" id="gift_num_${g.id}"/><a href="#" onclick="bugGift('${g.id}')">购买</a>
+		价格:${g.price!}<br/>
+	[/#list]
+	</form>
+	[#include "../tag/topic.html"/] 
+	<!--gift列表_End-->
+    <div class="c"></div>
+    </div>
+    </div>
+    <!--/main-->
+    <!--footer-->[#include "../include/页脚.html"/]<!--footer-->
+  </body>
+</html>

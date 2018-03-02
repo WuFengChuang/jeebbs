@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>他的回复 - ${site.name} - JEECMS官方论坛|开源java cms,jsp cms,jsp bbs</title>
+    <meta content="java,cms,jsp,cms,jsp bbs,开源网站内容管理系统,网站群,站群,多站点,jeecms" name="keywords" />
+    <meta content="讨论jsp cms、jsp bbs相关资讯，struts,hibernate,spring,freemarker最新技术研究" name="description" />
+	<link href="${resSys}/front.css" rel="stylesheet" type="text/css"/>
+		<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/base.css" />
+		<link rel="stylesheet" type="text/css" href="/${res}/bbs_member/css/l-member.css" />
+		<script src="${resSys}/jquery.js" type="text/javascript"></script>
+		<script type="text/javascript" src="/${res}/bbs_forum/js/base.js"></script>
+		<script type="text/javascript" src="/${res}/bbs_member/js/l-member.js"></script>
+ 
+  </head>
+  <body>
+  	<!--include-header-->
+		[#include "../include/页头.html"/]
+		<!--论坛信息-->
+		[#include "../include/论坛信息.html"/]
+		
+  		<div class="bbs-main clearfix">
+			<!--左侧 include-->
+			<div class="left-main">
+				<!--版块-->
+				[#include "../member/会员中心页_导航.html"/]
+			</div>
+			<div class="right-main clearfix">
+						<div class="memberInfobox right-panel">
+					<div class="infobox">
+						<div class="touxiang">
+						 [#if attentUser.avatar??]<img src="${attentUser.avatar}" class="user-img" />[#else]<img src="/${res}/bbs_forum/images/userImg-all.png" class="m-userImg" />[/#if]
+						</div>
+						<div class="usernamebox">
+							<ul class="top">
+								<li class="user">${attentUser.username}</li>
+									<li class="dengjibox"><img src="${attentUser.group.imgPath!}"/><span style="vertical-align: middle;">${attentUser.group.name}</span></li>	
+							</ul>
+						</div>		
+					</div>
+				</div>
+			
+				<div class="right-panel clearfix">
+						<ul class="bbs-content-card">
+									<li class="clearfix top">
+										<div class=" card">
+											<a href="${base}/person/topics.jhtml?userId=${userId!}">发帖</a>
+										</div>
+										<div class="card active">
+											<a href="${base}/person/posts.jhtml?userId=${userId!}">回复</a>
+										</div>
+									</li>                                     
+                                </ul>
+                                  <form method="post" action="" id="jvForm">
+                                  			<ul class="bbs-content-list">
+                                  				 [@my_reply createrId=userId  topLevel='0' count='10' tpl='0']
+ 	[#list tag_pagination.list as topic]
+ 	
+ 		
+ 	<li>
+                    <h2 class="theme-tit">
+                    	<a id="link${topic.id}" href="${topic.url}">[@text_cut s=topic.title?html len=30 append="..."/]</a>
+                        <!-- 是否置顶 -->
+                        [#if topic.topLevel gt 0]
+                        <img src="/${res}/bbs_forum/images/icon-ding.png" alt="顶"/>
+                        [/#if]
+                        <!-- 是否精华帖 -->
+                        [#if topic.primeLevel gt 0]
+                        <img src="/${res}/bbs_forum/images/icon-jing.png" alt="精"/>
+                        [/#if]
+                        <!-- 是否有附件 -->
+                        [#if topic.affix??&&topic.affix]<img src="/${res}/bbs_forum/images/icon-file.png" alt="附件"/>[/#if]
+                        [#if topic.shield]
+                        已屏蔽
+                        [/#if]
+                    </h2>
+                    <div class="theme-bottom-bar">
+                        <div class="left-bar">
+                            <span class="">赞：${topic.ups!}</span>
+                            <span class="">回复：${topic.replyCount!}</span>
+                            <span class="">浏览：${topic.viewCount!}</span>
+                            <span class="">作者：${topic.creater.username!}</span>
+                            <span class="">发布于${topic.createTimeHtml!}</span>
+                        </div>
+                        <div class="right-bar">
+                        	[#if topic.lastPost??]
+                            <span>最新回复：</span>
+                            <span class="blue">${topic.lastReply.username!}</span>
+                            <span class="">${topic.lastPost.createTimeHtml!}</span>
+                            [/#if]
+                        </div>
+                    </div>
+              </li>
+  	[/#list]
+    [/@my_reply]                            				
+                                  	</ul>
+                                  	 [@my_reply createrId=userId  topLevel='0' count='10' tpl='0']
+    [#include "../tag/topic.html"/]
+    [/@my_reply]
+                                  </form>
+                                
+					</div>
+			
+			</div>	
+  	</div>
+  	
+  	
+
+    <!--/main--><!--footer-->[#include "../include/页脚.html"/]<!--footer-->
+  </body>
+</html>

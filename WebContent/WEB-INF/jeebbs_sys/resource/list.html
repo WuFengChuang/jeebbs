@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script src="${base}/res/common/js/jquery.ui.widget.js" type="text/javascript"></script>
+<script src="${base}/res/common/js/jquery.iframe-transport.js" type="text/javascript"></script>
+<script src="${base}/res/common/js/jquery.fileupload.js" type="text/javascript"></script>
+<script type="text/javascript">
+function getTableForm() {
+	return document.getElementById("tableForm");
+}
+function optDelete() {
+	if(Pn.checkedCount("names")<=0) {
+		alert("<@s.m "error.checkRecord"/>");
+		return;
+	}
+	if(!confirm("<@s.m "global.confirm.delete"/>")) {
+		return;
+	}
+	var f = getTableForm();
+	f.action="o_delete.do";
+	f.submit();
+}
+var max=300;
+function showImage(a) {
+	var img = $("<img src='"+ a.href +"' style='border:1px solid #ccc;'/>");
+	var imgDiv = $("#sd").append(img);	
+	imgDiv.show();
+	
+	var	width = img.attr("width");
+	var	height = img.attr("height");
+	if(width>=height&&width>max) {
+		height = height*max/width;
+		width = max;
+	} else if(height>=width||height>max) {
+		width = width*max/height;
+		height = max;
+	}
+	var offset = $(a).offset();
+	imgDiv.css("left",offset.left+$(a).outerWidth()+3);	
+	var buttom = $(window).height()+$(document).scrollTop()-max-offset.top;
+	if(buttom<0) {
+		imgDiv.css("top",offset.top+buttom-3);
+	} else {
+		imgDiv.css("top",offset.top-3);
+	}
+	img.width(width);
+	img.height(height);
+}
+function hideImage(a) {
+	$("#sd").empty().hide();
+}
+$(function () {
+	$('#fileupload').fileupload({
+        dataType: 'json',
+        add: function (e, data) {
+            data.submit();
+        },
+        done: function (e, data) {
+            //data.context.text('Upload finished.');
+            $.each(data.result, function (index, file) {
+                //$("#mediaPath").val(file.url);
+            });
+            location.href="v_list.do?root=${root}";
+        },
+		progressall: function (e, data) {
+			var progress = parseInt(data.loaded / data.total * 100, 10);
+			$('#progress .bar').css(
+				'width',
+				progress + '%'
+			);
+			$('#progress .bar').html(progress + '%');
+		}
+    });
+});
+</script>
+</head>
+<body>
+<div id="sd" style="display:none;position:absolute;height:300px;width:300px"></div>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos"><@s.m "global.position"/>: <@s.m "resource.function"/> - <@s.m "global.list"/></div>
+	<form class="ropt">
+		<input type="hidden" name="root" value="${root}"/>
+		<@cms_perm url="/resource/v_add.do">
+		<input type="submit" value="<@s.m "resource.create"/>" onclick="this.form.action='v_add.do';"/>
+		</@cms_perm>
+	</form>
+	<div class="clear"></div>
+</div>
+<form method="post" enctype="multipart/form-data">
+<input type="hidden" name="root" value="${root}"/>
+<table border="0" style="padding-top:3px">
+<tr>
+	<td><@s.m "resource.currentDir"/>: ${root}</td>
+	<@cms_perm url="/resource/o_swfupload.do">
+	<td><input id="fileupload" type="file" name="Filedata" data-url="o_swfupload.do" multiple></td>
+	</@cms_perm>
+	<@cms_perm url="/resource/o_create_dir.do">
+	<td>
+&nbsp;	<@s.m "resource.addDir"/>: <input type="text" name="dirName" size="10" onkeypress="if(event.keyCode==13){$('#dirButton').click();return false;}"/>
+		<input id="dirButton" type="submit" value="<@s.m "resource.createDir"/>" onclick="this.form.method='post';this.form.action='o_create_dir.do';"/>
+	</td>
+	</@cms_perm>
+</tr>
+<tr>
+<td colspan="4">
+	<div id="progress">
+	<div class="bar" style="width: 0%;color: green;"></div>
+	</div>
+</td>
+</tr>
+</table>
+</form>
+<form id="tableForm" method="post">
+<input type="hidden" name="root" value="${root}"/>
+<@p.table value=list;resource,i,has_next><#rt/>
+	<@p.column title="<input type='checkbox' onclick='Pn.checkbox(\"names\",this.checked)'/>" width="20">
+		<input type="checkbox" name="names" value="${resource.name}"/><#t/>
+	</@p.column><#t/>
+	<@p.column title=" " width="20" align="center"><img src="${base}/res/common/img/file/${resource.ico}.gif"/></@p.column><#t/>
+	<@p.column code="resource.filename">
+		<#if resource.directory>
+		<a href="v_list.do?root=${resource.name}">${resource.filename}</a>
+		<#else>
+		<a href="${base+resource.name}"<#if resource.image> onmouseover="showImage(this)" onmouseout="hideImage(this)"</#if> target="_blank">${resource.filename}</a>
+		</#if>
+	</@p.column><#t/>
+	<@p.column code="resource.size" align="right">${resource.size} KB</@p.column><#t/>
+	<@p.column code="resource.lastModified" align="center">${resource.lastModifiedDate?string('yyyy-MM-dd HH:mm:ss')}</@p.column><#t/>
+	<@p.column code="global.operate" align="center">
+		<@cms_perm url="/resource/v_rename.do">
+		<a href="v_rename.do?root=${root?url}&name=${resource.name?url}" class="pn-opt"><@s.m "resource.rename"/></a> | <#rt/>
+		</@cms_perm>
+		<@cms_perm url="/resource/v_edit.do">
+		<a <#if resource.editable>href="v_edit.do?root=${root?url}&name=${resource.name?url}" class="pn-opt"<#else>disabled="disabled"</#if>><@s.m "global.edit"/></a> | <#rt/>
+		</@cms_perm>
+		<@cms_perm url="/resource/o_delete_single.do">
+		<a href="o_delete_single.do?root=${root?url}&name=${resource.name?url}" onclick="if(!confirm('<@s.m "global.confirm.delete"/>')) {return false;}" class="pn-opt"><@s.m "global.delete"/></a><#t/>
+		</@cms_perm>
+	</@p.column><#t/>
+</@p.table>
+<div>
+	<@cms_perm url="/resource/o_delete.do">
+	<input type="button" value="<@s.m "global.delete"/>" onclick="optDelete();"/>
+	</@cms_perm>
+</div>
+</form>
+</div>
+<#include "/common/alert_message.html"/>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.jeecms.bbs.entity">
+	<class
+		name="BbsTopicPostOperate"
+		table="bbs_topic_post_operate"
+	>
+		<meta attribute="sync-DAO">false</meta>
+		<cache usage="read-write"/>
+		<id
+			name="id"
+			type="java.lang.Long"
+			column="id"
+		>
+			<generator class="identity"/>
+		</id>
+
+		<property
+			name="operate"
+			column="operate"
+			type="integer"
+			not-null="true"
+			length="3"
+		/>
+		<property
+			name="opTime"
+			column="op_time"
+			type="timestamp"
+			not-null="true"
+			length="19"
+		/>
+		
+		<property
+			name="dataId"
+			column="data_id"
+			type="integer"
+			not-null="true"
+			length="11"
+		/>
+		
+		<property
+			name="dataType"
+			column="data_type"
+			type="java.lang.Short"
+			not-null="true"
+			length="1"
+		/>
+		<many-to-one
+			name="user"
+			column="user_id"
+			class="BbsUser"
+			not-null="true"
+			>
+		</many-to-one>
+
+	</class>	
+</hibernate-mapping>

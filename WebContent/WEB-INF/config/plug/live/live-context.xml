@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+	default-lazy-init="true">
+    
+	<bean id="webSocketHandler" class="com.jeecms.plug.live.websocket.WebSocketExtHandler"/>
+	<bean id="handShake" class="com.jeecms.plug.live.websocket.HandShake"/>
+	
+	<bean id="live_list" class="com.jeecms.plug.live.directive.LiveListDirective"/>
+	<bean id="live_page" class="com.jeecms.plug.live.directive.LivePageDirective"/>
+	<bean id="live_host_list" class="com.jeecms.plug.live.directive.LiveHostListDirective"/>
+	<bean id="live_host_page" class="com.jeecms.plug.live.directive.LiveHostPageDirective"/>
+	
+	<bean id="liveApplyDao" class="com.jeecms.plug.live.dao.impl.BbsLiveApplyDaoImpl"/>
+	<bean id="LiveChapterDao" class="com.jeecms.plug.live.dao.impl.BbsLiveChapterDaoImpl"/>
+	<bean id="liveDao" class="com.jeecms.plug.live.dao.impl.BbsLiveDaoImpl"/>
+	<bean id="liveMessageDao" class="com.jeecms.plug.live.dao.impl.BbsLiveMessageDaoImpl"/>
+	<bean id="liveRateDao" class="com.jeecms.plug.live.dao.impl.BbsLiveRateDaoImpl"/>
+	<bean id="liveUserDao" class="com.jeecms.plug.live.dao.impl.BbsLiveUserDaoImpl"/>
+	<bean id="liveChargeDao" class="com.jeecms.plug.live.dao.impl.BbsLiveChargeDaoImpl"/>
+	<bean id="liveUserAccountDao" class="com.jeecms.plug.live.dao.impl.BbsLiveUserAccountDaoImpl"/>
+	
+	<bean id="liveApplyMng" class="com.jeecms.plug.live.manager.impl.BbsLiveApplyMngImpl"/>
+	<bean id="liveChapterMng" class="com.jeecms.plug.live.manager.impl.BbsLiveChapterMngImpl">
+		<property name="deleteCheckerList">
+			<list>
+				<ref bean="liveMng"/>
+			</list>
+		</property>
+	</bean>
+	<bean id="liveMessageMng" class="com.jeecms.plug.live.manager.impl.BbsLiveMessageMngImpl"/>
+	<bean id="liveMng" class="com.jeecms.plug.live.manager.impl.BbsLiveMngImpl"/>
+	<bean id="liveRateMng" class="com.jeecms.plug.live.manager.impl.BbsLiveRateMngImpl"/>
+	<bean id="liveUserMng" class="com.jeecms.plug.live.manager.impl.BbsLiveUserMngImpl"/>
+	<bean id="liveChargeMng" class="com.jeecms.plug.live.manager.impl.BbsLiveChargeMngImpl"/>
+	<bean id="liveUserAccountMng" class="com.jeecms.plug.live.manager.impl.BbsLiveUserAccountMngImpl"/>
+</beans>

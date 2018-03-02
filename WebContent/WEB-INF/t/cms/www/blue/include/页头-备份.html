@@ -1,0 +1,222 @@
+<script src="/${res}/bbs_forum/js/PnEditor.js" type="text/javascript"></script>
+<script>
+	var topicTypeIndex = 1;
+	var topicTypeTpl;
+	$(function () {
+		//创建发帖编辑器
+		new PnEditor();
+       [#if !user??]
+			$('#loadbox').load('${base}/login.jspx');
+       [/#if]
+	   topicTypeTpl= $.format($("#topicTypeTpl").val());
+	})
+	function getloginTab(that,url) {
+	   $('.login-tab span').each(function(){
+		$(this).removeClass('active');
+	   });
+       $(that).addClass('active');
+	   $('#loadbox').load(url);
+	}
+	function addtopicTypeLine() {
+		$('#topicTypeAppend').append(topicTypeTpl(topicTypeIndex++));
+	}
+	function selectHotType(typeId){
+		var liClass=$("#hottypeli"+typeId).prop("class");
+		if(liClass!=null&&liClass!=""){
+			$("#hottypeli"+typeId).removeClass("active");
+			topicTypeDel(typeId);
+		}else{
+			$("#hottypeli"+typeId).addClass("active");
+			addtopicTypeLine();
+			var index = topicTypeIndex - 1;
+			$("#topicTypeNames"+index).html($("#hottypeli"+typeId).html());
+			$("#topicTypeIds"+index).val($("#hottypeli"+typeId).prop("id").split("hottypeli")[1]);
+		}
+	}
+	function createTopicTypeTag(){
+		$("#topicTypeAppend").html("");
+		$.post("${base}/topic/o_generateTags.jspx", 
+			{title:$("#topicTypeText").val()},
+			function(data){
+				var ids=data.ids;
+				var names=data.names;
+				for(var i=0;i<names.length;i++){
+					addtopicTypeLine();
+					var index = topicTypeIndex - 1;
+					$("#topicTypeNames"+index).html(names[i]);
+					$("#topicTypeIds"+index).val(ids[i]);
+				}
+		   },"json");
+	}
+	function topicTypeTplDel(typeId){
+		$("#topicTypeRow"+typeId).remove();
+	}
+	function topicTypeDel(typeId){
+		$("input[name='topicTypeIds']").each(function(){
+			var tid=$(this).val();
+			if(tid==typeId){
+				$(this).parent().remove();
+			}
+		});
+	}
+</script>
+<style>
+.login-box{position:relative;}
+#loginMsg{font-size:10px; color:#ff0000; position:absolute; top:45px; left:32px;}
+.form-group{position:relative;}
+.form-group label{font-size:10px; color:#ff0000; position:absolute; bottom:-16px; left:0;}
+.nav .nav-bar li { margin-right: 38px;}
+.nav-fun-bar .user-logo{width:auto; margin-right:32px;}
+.nav-fun-bar .user-logo img{float:left; margin-right:6px;}
+.nav-fun-bar .user-logo span{height:33px; line-height:33px; font-size:12px; color:#fff;}
+.nav-fun-bar .user-logo .tooltip{left:0;}
+</style>
+<!--include-header-->
+<header class="header">
+    <div class="container header-inner">
+        <div class="header-logo">
+            <img src="/${res}/bbs_forum/images/logo.png" />
+        </div>
+        <div class="nav clearfix">
+            <ul class="nav-bar">
+                <li class="active">
+                    <a href="${base}/">首页</a>
+                </li>
+                <li>
+                    <a href="http://www.jeecms.com">官网</a>
+                </li>
+                <li>
+                    <a href="http://www.jeecms.com/goumai.htm">购买</a>
+                </li>
+                <li>
+                    <a href="http://www.jeecms.com/service/index.htm">服务</a>
+                </li>
+            </ul>
+            <!--功能区-->
+            <ul class="nav-fun-bar">
+                <li>
+                    <a href="#" title="搜索" class="iconfont icon-search"></a>
+                </li>
+                [#if site.config.ssoEnable]
+                <script type="text/javascript">
+                Cms.loginSSO('${base}');
+                </script>
+                [/#if]
+                <script type="text/javascript">
+                [#if user??]
+                Cms.loginAdmin('${base}');
+                [#else]
+                Cms.logoutAdmin('${base}');
+                [/#if]
+                </script>
+                
+                [#if user??]
+                <!--已登录-->
+                <li class="user-logo">
+                    [#if user.avatar??]<img src="${user.avatar}" />[#else]<img src="/${res}/bbs_forum/images/profile3.jpg" />[/#if]<span>${user.username!}</span>
+                    <div class="tooltip">
+                        <ul>
+                            <li>
+                                <a href="${base}/member/index.jhtml">个人中心</a>
+                            </li>
+                            <li>
+                                [#if returnUrl?? && returnUrl?length gt 0]
+                                <a href="${base}/logout.jspx?returnUrl=${returnUrl!}">退出登录</a>
+                                [#else]
+                                <a href="${base}/logout.jspx?returnUrl=/">退出登录</a>
+                                [/#if]
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                [#else]
+                <!--未登录-->
+                <li>
+                    <a href="#"  title="登录" class="iconfont icon-denglu" onclick="showModel('#login')"></a>
+                </li>
+                [/#if]
+                <li>
+                    <a href="#" title="发帖" class="post" onclick="showModel('#edit')">发帖</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+<!--login-->
+<div class="model-panel login-panel"  id="login">
+    <div class="login-header">
+        <a href="#" class="iconfont icon-Delete pull-right" title="关闭"  onclick="closeModel()"></a>
+    </div>
+    <div class="login-tab clearfix">
+        <span class="pull-left active" onclick="getloginTab(this,'${base}/login.jspx')">登录</span>
+		<span class="pull-right"  onclick="getloginTab(this,'${base}/register.jspx')">注册</span>
+    </div>
+    <div id="loadbox"></div>
+</div>
+<!--发帖-->
+<div class="model-panel edit-topic" id="edit">
+    <div class="edit-topic-header">
+    	<span class="fatie pull-left"><i class="iconfont icon-fatie1"></i>发帖</span>
+        <a href="#" class="iconfont icon-Delete pull-right" title="关闭"  onclick="closeModel()"></a>
+    </div>
+    <!--发帖内容-->
+     <div class="edit-topic-body">
+		<form action="${base}/topic/o_save.jspx" method="post" enctype="multipart/form-data" >
+		[#if forum??]
+		<input name="forumId" value="${forum.id}" type="hidden"/>
+		[#else]
+        <select name="forumId">
+			[#if user??]
+				[@forum_list groupId=user.group.id]
+				[#list tag_list as forum]
+						<option value="${forum.id}">${forum.title!}</option>
+				[/#list]
+				[/@forum_list]
+			[#else]
+				[@forum_list]
+				[#list tag_list as forum]
+						<option value="${forum.id}">${forum.title!}</option>
+				[/#list]
+				[/@forum_list]
+			[/#if]
+		</select>
+		[/#if]
+        <input type="text" placeholder="标题"  name="title" class="topic-input"/>
+        <textarea placeholder="内容" class="topic-area" name="content" id="_editor_textarea"></textarea>
+		<div id="_file_container"></div>
+        <div class="upload-box">
+            <span><img src="/${res}/bbs_forum/images/icon-img.png"/></span>
+            <span><img src="/${res}/bbs_forum/images/icon-file.png"/></span>
+			<div id="_file_selecter">插入图片或附件：
+			<input id="_editor_file" type="file" onchange="PnEditor.selectFile();" name="attachments" />
+			</div>
+        </div>
+        <div class="topic-header"  >
+                <span class="pull-left">话题</span>
+                <span class="pull-right" style="color: #798f9f;">手动输入或在下方选择，可有多个话题</span>
+        </div>
+        <input type="text" id="topicTypeText" onblur="createTopicTypeTag()" placeholder="请输入话题" class="topic-input"/>
+        <div>
+            <span class="hot-topic">热门话题</span>
+            <ul class="top-items">
+				[@topic_type_list count='5'   orderBy='3']
+					[#list tag_list as t]
+						<li onclick="selectHotType('${t.id}')" id="hottypeli${t.id}">${t.name!}</li>
+					[/#list]
+				[/@topic_type_list]
+            </ul>
+        </div>
+		分类标签:   
+	    <div id="topicTypeAppend"></div>
+		<textarea id="topicTypeTpl" style="display: none;">
+			<span id="topicTypeRow{0}">
+				<span id='topicTypeNames{0}'></span>&nbsp;&nbsp;<span style="cursor: pointer;" onclick="topicTypeTplDel({0})">删</span>
+				<input id='topicTypeIds{0}' name="topicTypeIds" type='hidden' />
+			</span>
+		</textarea>       
+		<br />
+		<input type="hidden" name="returnUrl" value="${location!}"/>
+        <input type="submit" name="" id="" value="确认发布" class="blue-btn"/>
+        </form>
+     </div>
+</div>

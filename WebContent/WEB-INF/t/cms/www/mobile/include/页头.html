@@ -1,0 +1,29 @@
+<div class="head">
+	 <a href="${base}/" data-ajax="false"><img src="/${res}/bbs_forum/img/logo.png"></a>
+	 <div class="search">
+<a href="${base}/topic/search.jhtml" data-ajax="false" style="-webkit-tap-highlight-color:rgba(0,0,0,0);"><img src="/${res}/bbs_forum/img/search.png"></a>
+         </div>
+</div>
+<div class="nav">
+   <p><a href="${base}/" data-ajax="false" style="color:#ff5a00;">首页</a>
+   <a href="http://www.jeecms.com" data-ajax="false">官网</a><span>
+   <a href="${base}/member/mytopic.jhtml" data-ajax="false"><img src="/${res}/bbs_forum/img/user.png">个人中心</a>
+   <a href="http://www.jeecms.com/jeecms.apk" data-ajax="false"><img src="/${res}/bbs_forum/img/app.png">APP下载</a></span></p>
+   <p style="padding:10px 0 0 3%;">
+   [@config_count]
+	今日:${configcache.postToday!}
+	昨日: ${configcache.postYestoday!} 
+	主题:${configcache.topicTotal!} 
+	帖子:${configcache.postTotal!}
+	会员:${configcache.userTotal!} 
+	[/@config_count]
+   	在线人数 <span id="usertotal"></span>
+   </p>
+</div>
+<script type="text/javascript">
+	$.post("${base}/session/statistic.jspx", {
+		 	member:true
+		}, function(data) {
+			$("#usertotal").html(data.usertotal);
+	}, "json");
+</script>

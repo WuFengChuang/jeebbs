@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>${site.name} - JEECMS官方论坛|开源java cms,jsp cms,jsp bbs</title>
+    <meta name="keywords" content="java,cms,jsp,cms,jsp bbs,开源网站内容管理系统,网站群,站群,多站点,jeecms" />
+    <meta name="description" content="讨论jsp cms、jsp bbs相关资讯，struts,hibernate,spring,freemarker最新技术研究" /> 
+<meta property="qc:admins" content="26435257006110776654" />
+	<link href="${resSys}/front.css" rel="stylesheet" type="text/css"/>
+
+    <script src="${resSys}/jquery.js" type="text/javascript"></script>
+    <script src="${resSys}/front.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/whole.css" />
+    <link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/layout.css" />
+ 	<script type="text/javascript">
+	var first=5;
+	var count=5;
+ 	function getContent(){
+ 		var i=0;
+        $.post("${base}/topic/v_list_json.jspx", {
+        	topLevel:1,
+			first:first,
+			count:count
+	    }, function(data) {
+			while (i<data.length){
+				addTopicLine();
+		 		var index = topicIndex - 1;
+				$("#upSpan"+index).html(data[i].ups);
+				$("#replyCountSpan"+index).html(data[i].replyCount);
+				$("#viewCountSpan"+index).html(data[i].viewCount);
+				$("#createrSpan"+index).html(data[i].username);
+				$("#createTimeSpan"+index).html(data[i].createTimeHtml);
+				$("#postSourceSpan"+index).html(data[i].postSource);
+				$("#lastReplySpan"+index).html(data[i].lastReplyUsername);
+				$("#lastReplyCreateTimeSpan"+index).html(data[i].lastReplyCreateTimeHtml);
+				$("#topicUrl"+index).attr("href",data[i].url);
+				$("#topicTitleSpan"+index).html(data[i].title);
+				if(data[i].topLevel<=0){
+					$("#primeImg"+index).css("display","none");
+				}else{
+					$("#primeImg"+index).css("display","");
+				}
+				if(data[i].affix){
+					$("#attachImg"+index).css("display","");
+				}else{
+					$("#attachImg"+index).css("display","none");
+				}
+				i++;
+			}
+	        first=first+count;
+	      } , "json");
+	}
+ 	</script>
+  </head>
+  <body>
+  <div style="width:1000px; margin:auto;">
+    <!--header--> 
+	[#include "../include/页头.html"/]
+	<!--/header-->
+	<!--20条信息_Begin--> [#include "../include/信息.html"/]<!--/End--> 
+    <!--登录统计栏_Begin-->[#include "../include/登录统计.html"/]<!--登录统计栏_End-->
+	<div style="line-height:28px;">
+	<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="30"><img src="/r/cms/www/blue/bbs_forum/img/top/icon001.gif" /></td>
+    <td>
+    [@config_count]
+	<span style="color:#838383;">今日:</span>${configcache.postToday!} <span style="color:#838383;">| </span>
+	<span style="color:#838383;">昨日:</span> ${configcache.postYestoday!} <span style="color:#838383;">| </span>
+	<span style="color:#838383;">最高日:</span>${configcache.postMax!} 于 ${configcache.postMaxDate?string("yyyy-MM-dd")!} <span style="color:#838383;">| </span>
+	<span style="color:#838383;">主题:</span>${configcache.topicTotal!} <span style="color:#838383;">| </span>
+	<span style="color:#838383;">帖子:</span>${configcache.postTotal!} <span style="color:#838383;">| </span>
+	<span style="color:#838383;">会员:</span>${configcache.userTotal!} <span style="color:#838383;">| </span>
+	<span style="color:#838383;">欢迎新会员:</span><span class="black">[#if configcache.lastUser??]${configcache.lastUser.username!}[#else]无[/#if]</span>
+	[/@config_count]
+	</td>
+  </tr>
+</table>
+	</div>
+	</div>
+	<!--main-->
+    <div class="main-wrap">
+    <div id="main">
+    <div id="content">
+    <div class="contentwrap z">
+    <div class="t3">
+    	<a href="${base}/">最新主题</a>
+    	<a href="${base}/indexModerator.jhtml">最新回复</a>
+    	<a href="${base}/indexRecommend.jhtml">热门推荐</a>
+    </div>
+    <div class="t z">
+    <table width="100%" cellspacing="0" cellpadding="0" id="topicTable">
+        [@topic_page    topLevel='1' count='5' tpl='0'  status='-1' orderBy='8']
+        [#list tag_pagination.list as topic]
+        [#assign dispaly=1/]
+        [#if topic.shield]
+          [#if user??&&user.moderator]
+          	[#assign dispaly=1/]
+          [#else]
+          	[#assign dispaly=0/]
+          [/#if]
+        [/#if]
+        [#if dispaly==1]
+	        <tr class="tr3">	
+	        	<td>
+	        	<a id="link${topic.id}" href="${topic.url}">
+	        	[@text_cut s=topic.title?html len=16 append="..."/]
+	        	</a>
+	        	<!-- 是否精华帖 -->
+	        	[#if topic.primeLevel gt 0]
+	        		<img src="/${res}/bbs_forum/img/jing1.jpg" alt="" />
+				[/#if]
+				<!-- 是否有附件 -->
+				[#if topic.affix??&&topic.affix]<img src="/${res}/bbs_forum/img/comm.gif"/>[/#if]
+	        	</td>
+	        </tr>
+	        <tr class="tr3">
+	        	<td>
+	        	赞:${topic.ups!}   &nbsp;回复: ${topic.replyCount!} 
+	        	 &nbsp;浏览: ${topic.viewCount!} 
+	        	  &nbsp;作者:${topic.creater.username!}&nbsp;
+	        	  发布于:${topic.firstPost.createTimeHtml!} 
+	        	 ${topic.firstPost.postSource!} 
+	        	[#if topic.lastPost??]
+	        	最新回复:${topic.lastReply.username!}  &nbsp;
+	        	${topic.lastPost.createTimeHtml!}
+	        	[/#if]
+	        	</td>
+	        </tr>
+        [/#if]
+		[/#list]
+    </table>
+    [/@topic_page]
+    <div><span onclick="getContent()">获取更多</span></div>
+    </div>
+    <div id="picBefore" style="clear:both"></div>
+	<textarea id="picTable" style="display:none;">
+	<div>	
+        	<a  href="" id="topicUrl{0}">
+        		<span id="topicTitleSpan{0}">标题</span>
+        	</a>
+        	<!-- 是否精华帖 -->
+        	<img src="/${res}/bbs_forum/img/jing1.jpg" alt="" id="primeImg{0}"/>
+			<!-- 是否有附件 -->
+			<img src="/${res}/bbs_forum/img/comm.gif" id="attachImg{0}"/>
+	    </div>
+	    <div>
+       	赞:<span id="upSpan{0}"></span>   &nbsp;
+       	回复:	<span id="replyCountSpan{0}"></span> &nbsp;
+       	浏览: <span id="viewCountSpan{0}"></span>&nbsp;
+       	作者:<span id="createrSpan{0}"></span>&nbsp;
+       	发布于:<span id="createTimeSpan{0}"></span>
+       	<span id="postSourceSpan{0}"></span>
+       	最新回复:	<span id="lastReplySpan{0}"></span> &nbsp;
+       	<span id="lastReplyCreateTimeSpan{0}"></span>
+       	</div>
+	</textarea>
+	<script type="text/javascript">
+	var topicIndex = 0;
+	var topicTpl = $.format($("#picTable").val());
+	function addTopicLine() {
+		$('#picBefore').before(topicTpl(topicIndex++));
+	}
+	</script>
+    </div>
+    </div>
+    </div>
+    [#include "../include/在线人数统计.html"/]
+    [#include "../include/页脚友情链接栏.html"/]
+    </div>
+    <!--/main-->
+    
+	<!--footer--> 
+	[#include "../include/页脚.html"/]
+	<!--footer-->
+  </body>
+</html>

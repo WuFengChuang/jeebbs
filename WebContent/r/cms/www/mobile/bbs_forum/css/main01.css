@@ -1,0 +1,160 @@
+@charset "utf-8";
+/* CSS Document */
+
+* {
+	padding:0px;
+	margin:0px;
+}
+
+body{
+	background:#ffffff;
+	font-family:微软雅黑,STHeiti,Arial;
+}
+
+ul, li {
+	margin:0px;
+	padding:0px;
+	list-style:none;
+}
+
+table {
+	padding:0px;
+	margin:0px;
+}
+
+a:hover{
+	text-decoration:underline;
+}
+body,ul,p{
+	margin:0;padding:0;
+}
+body{
+	text-align:left;
+	font-family:Microsoft Yahei,STHeiti,Arial;
+}
+a,a:visited{
+	text-decoration:none;
+	color:#000;
+}
+img{
+	border:none;
+}
+
+.clearfix:after{
+	clear:both;
+	height:0;
+	overflow:hidden;
+	display:block;
+	visibility:hidden;
+	content:".";
+}
+.fl{float:left;}
+.fr{float:right;}
+	
+.clear{
+	clear:both;
+}
+
+.fl{
+	float:left;
+}
+
+.fr{
+	float:right;
+}
+.main{
+	width:100%;
+	min-width:320px;
+	margin:0 auto;
+	max-width:640px;
+	font-size:14px;
+}
+
+
+#header,#footer{width:100%;color:#8b8b8b;font-size:14px;overflow:hidden;}
+#header{ position:fixed; z-index:99; left:0; top:0; background:#008cdc;}
+/*顶部*/
+.top-home{ position:relative; height:72px;}
+.top-home .logo{float:left; width:55%; height:49px; background:url(../../img/logo.gif);}
+.top-home .logo>a,.logo>a:visited{width:50px; height:72px; float:right; display:block; position:relative;}
+.top-home .logo #return{float:left; width:20%; min-width:120px;}
+
+.nav{
+	height:113px;
+	
+}
+.lineyy{
+	background:url(../../img/line1.gif);
+	width:100%;
+	height:3px;
+}
+
+.biaotiBg{
+	background-color:#eeeeee;
+	width:100%;
+	height:60px;
+	line-height:60px;
+	font-size:24px;
+	color:#000000;
+	text-indent:2em;
+	
+}
+.areaBg{
+	height:54px;
+	line-height:54px;
+	text-indent:2em;
+	font-size:24px;
+	border-bottom:1px solid #dcdcdc;
+}
+.PostList1{
+	width:95%;
+	margin:auto auto 39px auto;
+}
+.PostList1 ul{
+}
+.PostList1 ul li{
+	border-bottom:1px solid #dcdcdc;
+	line-height:69px;
+	height:69px;
+}
+
+
+
+/*精华贴*/
+.rel-list{font-size:24px;}
+.rel-list>li{ padding:10px 0; line-height:24px;margin:0 4.2%;border-top:1px solid #ececec; background-size:auto 12px; background:url(../img/icon3.gif) right center no-repeat;}
+.rel-list>li:nth-child(1){border-top:none;}
+.rel-list>li>a,.rel-list>li>a:visited{display:block;width:96%;}
+.rel-list>li>a:after{float:right;}
+.article-list{ margin-bottom:10px;}
+.article-list .hd{padding:0 4.5%;height:38px;line-height:38px;background:#eeeeee;color:#000000;}
+.article-list .hd span{color:#000000;font-size:18px;}
+.rel-list>a,.rel-list>a:visited{height:auto;display:inline;}
+.rel-list>img{display:block;float:left;width:111px;height:83px;}
+.rel-list>div{float:left;width:57%;line-height:24px;margin-top:-3px;margin-left:4%;}
+.rel-list>p:nth-child(2){color:#A1A1A1;font-size:12px;line-height:20px;margin-left:3px;height:40px;overflow:hidden;}
+/*精华贴 END*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

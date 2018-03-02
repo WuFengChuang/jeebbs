@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+function getTableForm() {
+	return document.getElementById('tableForm');
+}
+function optDelete() {
+	if(Pn.checkedCount('ids')<=0) {
+		alert("<@s.m 'error.checkRecord'/>");
+		return;
+	}
+	if(!confirm("<@s.m 'global.confirm.delete'/>")) {
+		return;
+	}
+	doDelete();
+}
+function doDelete(){
+	var f = getTableForm();
+	f.action="o_delete.do";
+	f.submit();
+}
+</script>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos"><@s.m "global.position"/>: <@s.m "cmsAdvertising.function"/> > <@s.m "global.list"/></div>
+	<form action="v_list.do">
+		<a href="v_add.do" class="add-Class">添加</a>
+		<a href="../advertising_space/v_list.do" class="add-Class">版位管理</a>
+		<div class="search-box">
+			<input type="text" name="queryTitle" value="${queryTitle!}" class="top-search" placeholder="输入关键词"/>
+			<input type="submit" class="top-sub"  value="" />
+		</div>
+		<select name="orderBy" class="select">
+			<option value="1">按到期顺序降序</option>
+		</select>
+		<select name="queryChargeMode" class="select">
+			<option value="">选择付费方式</option>
+			<option value="0" <#if queryChargeMode??><#if queryChargeMode==0>selected="selected"</#if></#if>>周期付费</option>
+			<option value="1" <#if queryChargeMode??><#if queryChargeMode==1>selected="selected"</#if></#if>>点击付费</option>
+			<option value="2" <#if queryChargeMode??><#if queryChargeMode==2>selected="selected"</#if></#if>>展现付费</option>
+		</select>
+	</form>
+	<div class="clear"></div>
+</div>
+<form id="tableForm" method="post">
+<input type="hidden" name="pageNo" value="${pageNo!}"/>
+<input type="hidden" name="queryTitle" value="${queryTitle!}"/>
+<input type="hidden" name="orderBy" value="${orderBy!}"/>
+<input type="hidden" name="queryChargeMode" value="${queryChargeMode!}"/>
+<@p.table value=pagination;cmsAdvertising,i,has_next><#rt/>
+	<@p.column title="<input type='checkbox' onclick='Pn.checkbox(\"ids\",this.checked)'/>" width="25" align="center">
+		<input type='checkbox' name='ids' value='${cmsAdvertising.id}' onclick="Pn.selectCheckBox('${cmsAdvertising.id}',this.checked)"/><#t/>
+	</@p.column><#t/>
+	<@p.column title="ID" align="center">${cmsAdvertising.id}</@p.column><#t/>
+	<@p.column code="cmsAdvertising.name" align="center">${cmsAdvertising.name}</@p.column><#t/>
+	<@p.column code="cmsAdvertising.adspace" align="center">${cmsAdvertising.adspace.name}</@p.column><#t/>
+	<@p.column code="cmsAdvertising.category" align="center"><@s.m "cmsAdvertising.category.${cmsAdvertising.category}"/></@p.column><#t/>
+	<@p.column title="收费方式" align="center"><@s.m "cmsAdvertising.chargeMode.${cmsAdvertising.chargeMode}"/></@p.column><#t/>
+	<@p.column title="开始时间" align="center"><#if cmsAdvertising.startTime??>${cmsAdvertising.startTime?string("yyyy-MM-dd")}</#if></@p.column><#t/>
+	<@p.column title="结束时间" align="center"><#if cmsAdvertising.endTime??>${cmsAdvertising.endTime?string("yyyy-MM-dd")}</#if></@p.column><#t/>
+	<@p.column code="cmsAdvertising.count" align="center">${cmsAdvertising.clickCount}/${cmsAdvertising.displayCount}=${cmsAdvertising.percent}%</@p.column><#t/>
+	<@p.column code="cmsAdvertising.enabled" align="center"><#if cmsAdvertising.enabled><@s.m "global.true"/><#else><span style="color:red"><@s.m "global.false"/></span></#if></@p.column><#t/>
+	<@p.column code="global.operate" align="center">
+		<a href="v_edit.do?id=${cmsAdvertising.id}&pageNo=${pageNo!}" class="pn-opt"><@s.m "global.edit"/></a> | <#rt/>
+		<a href="o_delete.do?ids=${cmsAdvertising.id}&pageNo=${pageNo!}" onclick="if(!confirm('<@s.m "global.confirm.delete"/>')) {return false;}"  class="pn-opt"><@s.m "global.delete"/></a><#t/>
+	</@p.column><#t/>
+</@p.table>
+<div>
+<input class="del-button" type="button" value="<@s.m "global.delete"/>" onclick="optDelete();"/ style="float:left;">
+</div>
+</form>
+</div>
+<#include "/common/alert_message.html"/>
+</body>
+</html>

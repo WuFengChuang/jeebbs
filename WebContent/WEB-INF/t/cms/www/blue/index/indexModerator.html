@@ -1,0 +1,363 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>${site.name} - JEECMS官方论坛|开源java cms,jsp cms,jsp bbs</title>
+<meta name="keywords" content="java,cms,jsp,cms,jsp bbs,开源网站内容管理系统,网站群,站群,多站点,jeecms" />
+<meta name="description" content="讨论jsp cms、jsp bbs相关资讯，struts,hibernate,spring,freemarker最新技术研究" /> 
+<meta property="qc:admins" content="26435257006110776654" />
+<script src="${resSys}/jquery.js" type="text/javascript"></script>
+<script src="${resSys}/front.js" type="text/javascript"></script>
+<script src="/${res}/bbs_forum/js/sweet-alert.min.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/base.css" />
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/sweet-alert.css" />
+<script type="text/javascript" src="/${res}/bbs_forum/js/base.js"></script>
+<script type="text/javascript">
+function editTitle(id) {
+    $('#title'+id).show();
+    $('#link'+id).hide();
+    $('#title'+id).select();
+}
+function updateTitle(id) {
+    var title = $('#title'+id).val();
+    if($('#link'+id).text() == title) {
+        //do nothing
+    } else if($.trim(title).length<2) {
+        alert("标题不能小于2个字符");
+    } else  {
+        $.postJson('${base}/jeebbs/TopicTitleUpdate.do', {
+            'topicId' : id,
+            'title' : title
+        }, function(data) {
+            if (!data.success) {
+                alert(date.msg);
+            }
+        });
+    }
+    $('#title'+id).hide();
+    $('#link'+id).text(title).show();
+}
+function manageTopic(url) {
+    var batchChecks = document.getElementsByName('ids');
+    var hasChecked = false;
+    for(var i=0; i<batchChecks.length; i++) {
+        if(batchChecks[i].checked) {
+            hasChecked = true;
+            break;
+        }
+    }
+    if(!hasChecked) {
+        return;
+    }
+    	var ids = getStr(batchChecks);
+	$("#operation").load("${base}"+url+"?ids="+ids,function () {
+		showModel('#operation');
+	})
+ 
+    
+    
+    
+    
+  
+	
+}
+function getStr(batchChecks){
+	var ids = "";
+    for(var i=0;i<batchChecks.length;i++){
+		if(batchChecks[i].checked) {
+			ids+=batchChecks[i].value+",";
+		}
+	}
+	if (ids.length>0)
+	{
+		ids=ids.substring(0,ids.length-1);
+	}
+	return ids;
+}
+function recommendTopic(url){
+	swal({
+  title: "确定要推荐吗",
+  type: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#DD6B55",
+  confirmButtonText: "推荐",
+  cancelButtonText:'取消',
+  closeOnConfirm: false
+},
+function(){
+ 		var batchChecks = document.getElementsByName('ids');
+	var topicIds = getStr(batchChecks);
+	if(topicIds==""){
+		return;
+	}
+	$.post("${base}"+url,{
+		"ids":topicIds,
+		"status":1
+	},function(data){
+		if(data.status==0){
+			swal({
+				title: "推荐成功",
+				confirmButtonText:'确定'
+			})
+			window.location.href="${base}/indexRecommend.jhtml";
+		}else{
+			swal({
+				title: "推荐失败",
+				confirmButtonText:'确定'
+			})
+		}
+	},"json");
+});
+}
+function deleteTopic(url){
+		swal({
+  title: "确定要删除吗",
+  type: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#DD6B55",
+  confirmButtonText: "删除",
+  cancelButtonText:'取消',
+  closeOnConfirm: false
+},
+function(){
+ 		var batchChecks = document.getElementsByName('ids');
+	var topicIds = getStr(batchChecks);
+	if(topicIds == ""){
+		return;
+	}
+	$.post("${base}"+url,{
+		"topicIds":topicIds
+	},function(data){
+		if(data.status==0){
+			swal({
+				title: "删除成功",
+				confirmButtonText:'确定'
+			})
+		}else{
+			swal({
+				title: "删除失败",
+				confirmButtonText:'确定'
+			})
+		}
+		location.reload();
+	},"json");
+});
+
+}
+
+function checkall(){
+    var batchChecks = $("input[name='ids']");
+    var onCheck = $('#checkAll');
+    if(onCheck.prop("checked")){
+        batchChecks.each(function(){
+            $(this).prop("checked","checked");
+        });
+    }else{
+        batchChecks.each(function(){
+            $(this).prop("checked","");
+        });
+    }
+}
+function showChild(typeId){
+    $("#childType_"+typeId).toggle();
+}
+</script>
+
+<style>
+	.title-check{
+		   padding-right: 6px;
+	}
+	.title-check input{
+	width: 17px;
+    height: 17px;
+    position: relative;
+    top: 2px;
+ 
+	}
+	.check-all-layout {
+		padding: 0 30px;
+		font-size: 14px;
+		color: #999;
+		overflow: hidden;
+		margin-top: 30px;
+	}
+	.check-all-item{
+		display: inline-block;
+		    float: left;
+		    margin-right: 7px;
+	}
+	.check-all-item .check{
+		width: 17px;height: 17px;
+		position: relative;
+   		 top: 2px;
+	}
+</style>
+</head>
+<body>
+[#include "../include/页头.html"/]
+[#include "../include/论坛信息.html"/]
+
+<!--main-->
+<div class="bbs-main clearfix">
+	[#include "../include/左侧.html"/]
+    <div class="right-main right-panel clearfix">
+        <!--帖子类型切换-->
+        <div class="main-header clearfix">
+            <!--左侧通用-->
+            <div class="channl-name">
+                <span>最新动态</span>
+            </div>
+            <!--右侧切换内容-->
+            <div class="right-tab">
+                <div class="tooltip-con">
+                    <a href="${base}/"><img src="/${res}/bbs_forum/images/icon-card.png" /></a>
+                    <div class="tooltip">图文展示</div>
+                </div>
+                <div class="tooltip-con">
+                    <a href="${base}/indexModerator.jhtml"><img src="/${res}/bbs_forum/images/icon-list-on.png" /></a>
+                    <div class="tooltip">列表展示</div>
+                </div>
+            </div>
+        </div>
+        <!--列表式图-->
+        <form method="post" action="" id="jvForm">
+        	<ul class="bbs-content-list">
+            	[@topic_page recommend='0' count='10' tpl='0' status='-1' orderBy='1']
+                [#list tag_pagination.list as topic]
+                [#assign dispaly=1/]
+                [#if topic.shield]
+                [#if user??&&user.moderator]
+                [#assign dispaly=1/]
+                [#else]
+                [#assign dispaly=0/]
+                [/#if]
+                [/#if]
+                [#if dispaly==1]
+                <li>
+					
+                    <h2 class="theme-tit">
+                    	<!-- 批量选择框 -->
+					<div class="title-check" style="display: inline-block;">
+						<input type="checkbox" value="${topic.id!}" name="ids"/>
+					</div>
+						<!-- 主题状态 -->
+						[#if topic.status==1]
+							<span>锁定</span>
+						[#elseif topic.status==-1]
+							<span>屏蔽</span>
+						[#else]
+							<span style="display:none;">正常</span>
+						[/#if]
+                    	<a id="link${topic.id}" href="${topic.url}"
+							[#if topic.style]
+							style="color:#${topic.styleColor!};${topic.styleBold?string('font-weight:bold;','')!}${topic.styleItalic?string('font-style:italic;','')!}"
+							[/#if]
+							>
+							[@text_cut s=topic.title?html len=30 append="..."/]
+						</a>
+                        <!-- 是否置顶 -->
+						[#if topic.topLevel??]
+							[#if topic.topLevel==1]
+							<span><img src="/${res}/bbs_forum/images/icon-ding.png" alt="顶"/></span>
+						
+							[#elseif topic.topLevel==2]
+							<span><img src="/${res}/bbs_forum/images/icon-ding.png" alt="顶"/></span>
+							[#elseif topic.topLevel==3]
+							<span><img src="/${res}/bbs_forum/images/icon-ding.png" alt="顶"/></span>
+							[#else]
+							<span style="display:none;">无置顶</span>
+							[/#if]
+						[#else]
+						<span style="display:none;">无置顶</span>
+                        [/#if]
+
+                        <!-- 是否精华帖 -->
+						[#if topic.primeLevel??]
+							[#if topic.primeLevel==1]
+							
+							<span><img src="/${res}/bbs_forum/images/icon-jing.png" alt="精"/></span>
+							[#elseif topic.primeLevel==2]
+							<span><img src="/${res}/bbs_forum/images/icon-jing.png" alt="精"/></span>
+							[#elseif topic.primeLevel==3]
+							<span><img src="/${res}/bbs_forum/images/icon-jing.png" alt="精"/></span>
+							[#else]
+							<span style="display:none;">非精华</span>
+							[/#if]
+						[#else]
+						<span style="display:none;">非精华</span>
+                        [/#if]
+
+                        <!-- 是否有附件 -->
+                        [#if topic.affix??&&topic.affix]<img src="/${res}/bbs_forum/images/icon-file.png" alt="附件"/>[/#if]
+                        [#if topic.shield]
+                        已屏蔽
+                        [/#if]
+                    </h2>
+                    <div class="theme-bottom-bar">
+                        <div class="left-bar">
+                            <span class="">赞：${topic.ups!}</span>
+                            <span class="">回复：${topic.replyCount!}</span>
+                            <span class="">浏览：${topic.viewCount!}</span>
+                            <span class="">作者：${topic.creater.username!}</span>
+                            <span class="">发布于${topic.createTimeHtml!}</span>
+                            <span class=""></span>
+                        </div>
+                        <div class="right-bar">
+                        	[#if topic.lastPost??]
+                            <span>最新回复：</span>
+                            <span class="blue">${topic.lastReply.username!}</span>
+                            <span class="">${topic.lastPost.createTimeHtml!}</span>
+                            [/#if]
+                        </div>
+                    </div>
+                </li>
+                [/#if]
+                [/#list]
+        	</ul>
+			<div class="theme-operation check-all-layout">
+			[#if user??]
+				<div class="check-all-item" style="margin-right: 10px; margin-top: 4px;">
+					<input id="checkAll" onclick="checkall()" type="checkbox" class="check">全选&nbsp;
+				</div>
+				[#if user.moderator]
+					<a id="" onclick="recommendTopic('/topic/o_recommend.jspx')"  class="check-all-item" title="推荐">
+						<span><img src="/${res}/bbs_forum/images/check-tj.png" alt="推荐"/></span>
+					</a>
+					<a id="" onclick="manageTopic('/topic/v_primeInput.jspx')"  class="check-all-item" title="精华">
+							<span><img src="/${res}/bbs_forum/images/check-jh.png" alt="精华"/></span>
+					</a>
+					<a id="" onclick="manageTopic('/topic/v_highlightInput.jspx')"  class="check-all-item" title="加亮">
+					<span><img src="/${res}/bbs_forum/images/check-jl.png" alt="加亮"/></span>
+					</a>
+					<a id="" onclick="manageTopic('/topic/v_lockInput.jspx')"  class="check-all-item" title="锁定/打开" style="display: none;">
+						<span>锁定/打开</span>
+					</a>
+					<a id="" onclick="manageTopic('/topic/v_moveInput.jspx')"  class="check-all-item" title="移动">
+							<span><img src="/${res}/bbs_forum/images/check-yd.png" alt="移动"/></span>
+					</a>
+					<a id="" onclick="manageTopic('/topic/v_shieldInput.jspx')"  class="check-all-item" title="屏蔽/取消屏蔽">
+							<span><img src="/${res}/bbs_forum/images/check-pb.png" alt="屏蔽"/></span>
+					</a>
+				[/#if]
+					<a onclick="deleteTopic('/topic/delete_ajax.jspx')" class="check-all-item"  title="删除">
+						<span><img src="/${res}/bbs_forum/images/check-sc.png" alt="删除"/></span>
+					</a>
+				
+			[/#if]
+			</div>
+        </form>
+        [#include "../tag/topic.html"/] 
+        [/@topic_page]
+  
+	<!--弹窗-->
+	<div class="model-panel buy-panel" id="operation">
+	
+</div>
+</div>
+<!--/main-->
+  </div>
+<!--footer--> 
+[#include "../include/页脚.html"/]
+<!--footer-->
+</body>
+</html>

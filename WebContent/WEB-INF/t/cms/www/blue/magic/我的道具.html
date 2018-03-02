@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>会员中心 - ${site.name} - Powered by JEECMS</title>
+<script src="${resSys}/jquery.js" type="text/javascript"></script>
+<script src="${resSys}/front.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/base.css" />
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_member/css/l-member.css" />
+<script type="text/javascript" src="/${res}/bbs_forum/js/jquery-1.11.0.js"></script>
+<script type="text/javascript" src="/${res}/bbs_forum/js/base.js"></script>
+	<script type="text/javascript" src="/${res}/bbs_box/wbox.js"></script> 
+	<link rel="stylesheet" type="text/css" href="/${res}/bbs_box/wbox.css" />
+<script type="text/javascript">
+$(function() {
+	$("#jvForm").validate();
+});
+function buy(event){
+	var id = $(event).attr('id').split("_")[1];
+	var num = $("#num_"+id).val();
+	if(num==""){
+		alert("请输入购买数量");
+		return;
+	}
+	if(!validation(num)){
+		alert("购买数量必须为正整数");
+		$("#num_"+id).val(1);
+		return;
+	}
+	var credit = $("#credit_"+id).val();
+	var identifier = $("#iden_"+id).val();
+	if(credit!=3){
+		$.post("${base}/magic/buymagic.jspx",{
+			"mid":identifier,
+			"buynum":num
+		},function(data){
+			alert(data.message);
+			location.reload();
+		});
+	}else{
+	   $("#buyBox").load("/magic/buy.jspx?mid="+identifier+"&buyNum=+"+num,function () {
+	   	  showModel('#buyBox');
+	   })
+	}
+	
+}
+function validation(num){
+	var regu = /^[1-9]\d*$/;
+	if(!regu.test(num)){
+		return false;
+	}else{
+		return true;
+	}
+}
+function numAdd(event){
+	var id = $(event).attr('id').split("_")[1];
+	$("#num_"+id).val($("#num_"+id).val()*1+1);
+}
+function numSub(event){
+	var id = $(event).attr('id').split("_")[1];
+	if(($("#num_"+id).val()*1)>1){
+		$("#num_"+id).val($("#num_"+id).val()*1-1);
+	}else{
+		$("#num_"+id).val(1);
+	}
+	
+}
+</script>
+<style>
+.daojulist li{
+float:none;
+display:inline-block;
+
+}
+</style>
+</head>
+
+<body>
+[#include "../include/页头.html"/]
+[#include "../include/论坛信息.html"/]
+<div class="bbs-main clearfix">
+    <!--左侧 include-->
+			<div class="left-main">
+				<!--版块-->
+				[#include "../member/会员中心页_导航.html"/]
+				
+			</div>
+    <!--右侧内容-->
+    <div class="right-main clearfix" style="min-height: 592px;">
+				<div class="mydaojubox">
+					<div class="myD">
+						<img src="/${res}/bbs_member/images/mydaoju.png"/>
+					</div>
+					<a href="${base}/magic/magiclog.jhtml"><img src="/${res}/bbs_member/images/djjl.png" class="djjl"/></a>
+					<ul class="daojulist clearfix">
+            [#if memberMagics?size>0]
+                    [#list memberMagics as magic]
+                	[#assign commonmagic=magic.magic/]
+						<li>
+                 [#if commonmagic.identifier=="money"||commonmagic.identifier=="showip"||commonmagic.identifier=="checkonline"]
+                <a href="${base}/magic/getsellmagicpage.jspx?mid=${commonmagic.identifier}&&operator=1" id="magica_${commonmagic.identifier}_1" >
+                    [#else]
+                   [/#if]
+							<img src="${commonmagic.magicLogo!}"/>
+							<span>${commonmagic.name!}</span>
+							<i class="radpoint">${magic.num!}</i>
+                            [#if commonmagic.identifier=="money"||commonmagic.identifier=="showip"||commonmagic.identifier=="checkonline"]
+                                               </a>
+                         [#else]
+                   [/#if]
+						</li>
+						[/#list]
+     [#else]
+     	<div class="zwnr zwdj">暂无道具</div>
+     [/#if]
+					</ul>
+				</div>
+<script type="text/javascript"> 
+var id;
+var strs=new Array();
+$("a[id^='magica']").each(function(){
+	id=$(this).attr("id");
+	strs=id.split("_");
+	if(strs[2]==0){
+		$(this).wBox({title: "出售道具",requestType:"iframe",iframeWH:{width:250,height:100},target:"${base}/magic/getsellmagicpage.jspx?mid="+strs[1]+"&operator=0"});
+		}else if(strs[2]==1){
+			$(this).wBox({title: "使用道具",requestType:"iframe",iframeWH:{width:220,height:100},target:"${base}/magic/getsellmagicpage.jspx?mid="+strs[1]+"&operator=1"});
+			}else if(strs[2]==2){
+				$(this).wBox({title: "丢弃道具",requestType:"iframe",iframeWH:{width:200,height:100},target:"${base}/magic/getsellmagicpage.jspx?mid="+strs[1]+"&operator=2"});
+				}
+		
+	});
+</script>
+				<div class="daojuShopbox">
+					<img src="/${res}/bbs_member/images/djsd.jpg" class="djsd"/>
+					<div class="jifen">
+						<span class="wenzi"><img src="/${res}/bbs_member/images/wdjf.png"/></span> 
+						<span class="shuzi">${user.point!}</span> 
+						<span class="wenzi"><img src="/${res}/bbs_member/images/wdww.png"/></span> 
+						<span class="shuzi">${user.prestige!}</span>
+					</div>
+					<div class="shopbox clearfix">
+     [#if shopMagics?size>0]
+	     [#list shopMagics as shopping]
+						<div class="shop">
+							<div class="left">
+								<img src="${shopping.magicLogo!}"/>
+							</div>
+							<div class="right">
+								<p class="title">${shopping.name!}</p>
+								<p class="miaoshu">${shopping.description!}</p>
+								<p class="danjia">售价： <span>${shopping.price!}</span> [#if shopping.credit==1]积分[#elseif shopping.credit==2]威望[#else]元[/#if]</p>
+								<div class="shuliangbox clearfix">
+									<div class="shuliang clearfix">
+										<input type="button" id="sub_${shopping.id}" onclick="numSub(this)" value="" class="reduce"/>
+										<input type="text" id="num_${shopping.id!}" value="1" class="shopnum"/>
+										<input type="hidden" id="iden_${shopping.id!}" value="${shopping.identifier!}"/>
+										<input type="hidden" id="credit_${shopping.id!}" value="${shopping.credit!}"/>
+										<input type="button" id="add_${shopping.id}" value="" onclick="numAdd(this)" class="btn-add"/>
+									</div>
+									<input type="button" id="btn_${shopping.id!}" onclick="buy(this)" value="" class="goumai"/>
+								</div>
+							</div>
+						</div>
+						
+		[/#list]
+     [#else]
+     	<div class="zwnr zwdj">暂无道具</div>
+     [/#if]
+					</div>
+					
+				</div>
+				
+			</div>
+</div>
+<!--购买弹窗-->
+<!--购买弹窗-->
+   <div class="model-panel buy-panel" id="buyBox">
+				   	<div class="edit-topic-header">
+					<a href="javascript:void(0)" class="iconfont icon-Delete pull-right" title="关闭"  onclick="closeModel()"></a>
+					</div>
+</div>
+[#include "../include/页脚.html"/]
+</body>
+</html>

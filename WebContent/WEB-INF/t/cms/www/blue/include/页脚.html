@@ -1,0 +1,48 @@
+<style>
+.footer{height:auto; padding-bottom:16px;}
+.online-count{margin-bottom:16px; color:#6e757b;}
+</style>
+
+<!--footer-->
+<footer class="footer">
+    <div class="container">
+         <ul class="about-items">
+            <li><a href="http://www.jeecms.com/" target="_blank">关于我们</a></li>
+            <li><a href="http://www.jeecms.com/lxwm.htm" target="_blank">联系我们</a></li>
+            <li><a href="http://www.jeecms.com/zhaopin.htm" target="_blank">诚聘英才</a></li>
+            <li><a href="http://www.jeecms.com/download.htm" target="_blank">程序下载</a></li>
+            <li><a href="http://www.jeecms.com/ad.htm" target="_blank">广告服务</a></li>
+            <li><a href="http://www.jeecms.com/xkxy.htm" target="_blank">许可协议</a></li>
+         </ul>
+         <p class="about-us online-count">
+            在线人数总共：<span id="usertotal">0</span>&nbsp;&nbsp;&nbsp;会员：<span id="membertotal">0</span>&nbsp;&nbsp;&nbsp;游客：<span id="visitortotal">0</span>&nbsp;&nbsp;&nbsp;最高纪录是：${site.config.userOnlineTopNum!}&nbsp;&nbsp;&nbsp;于：${site.config.userOnlineTopDay!}
+         </p>
+         <p class="about-us">
+            电话：0791-86538070　13576281815    　传真：0791-86538070    　ICP备案号：赣ICP备13005266号    　Powered by JeeCms Copyright © 2007-2017 www.jeecms.com, All Rights Reserved
+         </p>
+    </div>
+</footer>
+<script type="text/javascript">
+	var memberTotal=$.cookie('membertotal'); 
+	var visitorTotal=$.cookie('visitortotal');
+	var total=$.cookie('usertotal');
+	var date=new Date();
+	var cookieExpireMinute=5;
+	date.setTime(date.getTime() + (cookieExpireMinute * 60 * 1000));
+	if(memberTotal!=null){
+		$("#membertotal").html(memberTotal);
+		$("#visitortotal").html(visitorTotal);
+		$("#usertotal").html(total);
+	}else{
+		 $.post("${base}/session/statistic.jspx", {
+			 	member:true
+			}, function(data) {
+				$("#membertotal").html(data.membtertotal);
+				$("#visitortotal").html(data.visitortotal);
+				$("#usertotal").html(data.usertotal);
+				$.cookie('membertotal',data.membtertotal,{expires:date,path:'/'});
+				$.cookie('visitortotal',data.visitortotal,{expires:date,path:'/'});
+				$.cookie('usertotal',data.usertotal,{expires:date,path:'/'});
+		  }, "json");
+	}
+</script>

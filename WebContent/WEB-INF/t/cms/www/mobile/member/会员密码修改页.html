@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>密码修改 - ${site.name} - JEECMS官方论坛|开源java cms,jsp cms,jsp bbs</title>
+<meta name="keywords" content="java,cms,jsp,cms,jsp bbs,开源网站内容管理系统,网站群,站群,多站点,jeecms" />
+<meta name="description" content="讨论jsp cms、jsp bbs相关资讯，struts,hibernate,spring,freemarker最新技术研究" /> 
+<link href="${resSys}/front.css" rel="stylesheet" type="text/css"/>
+<script src="${resSys}/jquery.js" type="text/javascript"></script>
+<script src="${resSys}/front.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/main.css" />
+</head>
+<body>
+<div class="main">
+  <div class="login-head">
+    <a href="javascript:history.go(-1)"><img src="/${res}/bbs_forum/img/back.png"></a><span>密码修改</span>
+  </div>
+  <div style="width:100%;border-top:1px solid #cccccc;background-color:#fff;padding-bottom:20px;">
+    <form id="jvForm" action="pwd.jhtml" method="post">
+    <table cellspacing="15" cellpadding="0" border="0" bgcolor="#fff" width="100%" style="color:#585858;">
+      <tbody>
+        <tr>
+          <td width="30%" align="center">原密码:</td>
+          <td width="70%"><input class="comefrom" type="password" name="origPwd" autocomplete="off" maxlength="32" vld="{required:true,remote:'checkPwd.jhtml',messages:{remote:'原密码不正确'}}"/></td>
+        </tr>
+        <tr>
+          <td width="30%" align="center">新密码:</td>
+          <td width="70%"><input class="comefrom" type="password" id="newPwd" name="password" autocomplete="off" maxlength="32"/></td>
+        </tr>
+        <tr>
+          <td width="30%" align="center">确认密码:</td>
+          <td width="70%"><input class="comefrom" type="password" autocomplete="off" equalTo="#newPwd"/></td>
+        </tr>
+      </tbody>
+    </table>
+     <div style="width:90%;margin:0px auto;background-color:#fff;">
+      <input type="hidden" name="nextUrl" value="pwd.jspx"/>
+	<input class="bta" type="submit" value="提交"/>
+     </div>
+    </form>
+  </div>
+</div>
+
+
+</body>
+</html>

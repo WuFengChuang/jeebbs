@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<script src="${base}/res/common/js/jquery.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="box-positon">
+	<div class="clear"></div>
+</div>
+<div class="body-box">
+[#list tag_pagination.list as l]
+		<a href="${base}/live/front/get.jspx?id=${l.live.id}" target="_blank">${l.live.title!}</a>
+		&nbsp;${l.live.beginTime?string("yyyy-MM-dd HH:mm")}&nbsp;
+		&nbsp;${l.buyTime?string("yyyy-MM-dd HH:mm")}&nbsp;
+		&nbsp;${l.live.beginPrice!}&nbsp;
+		&nbsp;${l.live.joinUserNum!}&nbsp;<br/>
+[/#list]
+[#include "../tag/topic.html"/] 
+</div>
+</body>
+</html>

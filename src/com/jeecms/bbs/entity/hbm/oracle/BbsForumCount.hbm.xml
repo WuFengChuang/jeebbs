@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.jeecms.bbs.entity">
+	<class
+		name="BbsForumCount"
+		table="bbs_forum_count"
+	>
+		<meta attribute="sync-DAO">false</meta>
+		<cache usage="read-write"/>
+		<id
+			name="id"
+			type="integer"
+			column="id"
+		>
+			<generator class="sequence"><param name="sequence">S_BBS_FORUM_COUNT</param></generator>
+		</id>
+
+		<property
+			name="topicCount"
+			column="topic_count"
+			type="integer"
+			not-null="true"
+			length="10"
+		/>
+		<property
+			name="postCount"
+			column="post_count"
+			type="integer"
+			not-null="true"
+			length="10"
+		/>
+		<property
+			name="visitCount"
+			column="visit_count"
+			type="integer"
+			not-null="true"
+			length="10"
+		/>
+		<property
+			name="countDate"
+			column="count_date"
+			type="date"
+			not-null="true"
+			length="10"
+		/>
+		<many-to-one
+			name="forum"
+			column="forum_id"
+			class="BbsForum"
+			not-null="true"
+		>
+		</many-to-one>
+
+
+	</class>	
+</hibernate-mapping>

@@ -1,0 +1,40 @@
+<!--论坛信息-->
+<div class="message-header">
+    <div class="container clearfix">
+        <span class="bar-icon"></span>
+        <ul class="bbs-message-bar">
+			[@config_count]
+            <li>
+                <span class="gray">今日：</span>
+                <span>${configcache.postToday!}</span>
+            </li>
+            <li>
+                <span class="gray">昨日：</span>
+                <span>${configcache.postYestoday!}</span>
+            </li>
+            <li>
+                <span class="gray">最高日：</span>
+                <span>${configcache.postMax!}</span>
+                <span class="gray">于</span>
+                <span>${configcache.postMaxDate?string("yyyy-MM-dd")!}</span>
+            </li>
+            <li>
+                <span class="gray">主题：</span>
+                <span>${configcache.topicTotal!}</span>
+            </li>
+            <li>
+                <span class="gray">帖子：</span>
+                <span>${configcache.postTotal!}</span>
+            </li>
+            <li>
+                <span class="gray">会员：</span>
+                <span>${configcache.userTotal!}</span>
+            </li>
+            <li>
+                <span class="gray">欢迎新会员：</span>
+                <span>[#if configcache.lastUser??]${configcache.lastUser.username!}[#else]无[/#if]</span>
+            </li>
+            [/@config_count]
+        </ul>
+    </div>
+</div>

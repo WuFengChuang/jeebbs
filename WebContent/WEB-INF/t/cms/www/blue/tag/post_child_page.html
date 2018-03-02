@@ -1,0 +1,68 @@
+[#if parentId??]
+<ul class="page" id="pagePost${parentId}">
+[#assign p=tag_pagination/]
+[#if !p.firstPage]
+      <li>
+	<a  [#if p.prePage gt 1]onclick="getPostChildInner('${base}','${parentId}',${p.prePage})"[#else] onclick="getPostChildInner('${base}','${parentId}',1)"[/#if] > 上一页 </a>
+      </li>
+[/#if]
+[#if pageNo-5 gt 1]
+	[#if p.totalPage gt pageNo+4]
+		[#list pageNo-5..pageNo+4 as i]
+			[#if i = pageNo]
+				<li class="on">
+					<a>${i}</a>
+				</li>
+			[#else]
+				<li>
+					<a   onclick="getPostChildInner('${base}','${parentId}',${i})" >${i}</a>
+				</li>
+			[/#if]
+		[/#list]
+	[#else]
+		[#list p.totalPage-9..p.totalPage as i]
+			[#if i = pageNo]
+				<li class="on">
+					<a >${i}</a>
+				</li>
+			[#else]
+				<li>
+					<a onclick="getPostChildInner('${base}','${parentId}',${i})">${i}</a>
+				</li>
+			[/#if]
+		[/#list]
+	[/#if]
+[#else]
+	[#if p.totalPage gt 10]
+		[#list 1..10 as i]
+			[#if i = pageNo]
+				<li class="on">
+					<a >${i}</a>
+				</li>
+			[#else]
+				<li>
+					<a onclick="getPostChildInner('${base}','${parentId}',${i})">${i}</a>
+				</li>
+			[/#if]
+		[/#list]
+	[#else]
+		[#list 1..p.totalPage as i]
+			[#if i = pageNo]
+				<li class="on">
+					<a >${i}</a>
+				</li>
+			[#else]
+				<li>
+					<a onclick="getPostChildInner('${base}','${parentId}',${i})">${i}</a>
+				</li>
+			[/#if]
+		[/#list]
+	[/#if]
+[/#if]
+[#if !p.lastPage]
+	<li>
+		<a  onclick="getPostChildInner('${base}','${parentId}',${p.nextPage})"> 下一页 </a>
+	</li>
+[/#if]
+</ul>
+[/#if]

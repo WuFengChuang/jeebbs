@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>${site.name} - JEECMS官方论坛|开源java cms,jsp cms,jsp bbs</title>
+<meta name="keywords" content="java,cms,jsp,cms,jsp bbs,开源网站内容管理系统,网站群,站群,多站点,jeecms" />
+<meta name="description" content="讨论jsp cms、jsp bbs相关资讯，struts,hibernate,spring,freemarker最新技术研究" /> 
+<script src="/${res}/bbs_forum/js/jquery1.9.1.js" type="text/javascript"></script>
+<script src="${resSys}/front.js" type="text/javascript"></script>
+<script src="/${res}/bbs_forum/js/blocksit.min.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/main.css" />
+</head>
+<body>
+<div class="main" id="main">
+  <div class="login-head" style="background-color:#008cdc;">
+    <a href="javascript:history.go(-1)"><img src="/${res}/bbs_forum/img/back-white.png"></a><span style="color:#fff;">搜索</span>
+  </div>
+    <div class="clear10"></div>
+  <div class="search-box">
+    <form action="${base}/topic/search.jhtml" name="jvForm" method="post">
+    <input type="text" name="keywords" value="${keywords!}" class="searchCon"/>
+    <input type="submit" value="搜索" class="searchMenu"/>
+    </form>
+  </div>
+  <div class="jht-list">
+     <ul id="thelist">
+     </ul>
+   </div>
+</div>
+<script>
+var first=0;
+var count=10;
+content="";
+var keyword="${keywords!}";
+function getContent(){
+  if(keyword!=null&&keyword!=""){
+     $.post("${base}/topic/v_list_json.jspx", {
+                keywords:keyword,
+		first:first,
+		count:count
+	   }, function(data) {
+                content="";
+                for (var i=0;i<data.length;i++){
+			content = content + "<li><a href='"+data[i].url+"'>";
+			content = content +"<p>"+ data[i].title+"</p>";
+			content = content +"<img src='/${res}/bbs_forum/img/pl_pic03.png'><span>"+ data[i].replyCount+"</span></a></li>";
+		}
+                setTimeout(function () { $('#thelist').append(content); first=first+count;}, 100);
+	   }, "json");       
+  }  
+}
+$(function(){
+var lastTime=new Date();
+getContent();
+$(window).scroll(function(){
+               var time=new Date();
+               if((time.getTime()-lastTime.getTime())/1000>=0.5){
+                // 当滚动到最底部以上50像素时， 加载新内容
+		if ($(document).height() - $(this).scrollTop() - $(this).height()<50){
+                      lastTime=time;
+                      getContent();
+			$('#main').BlocksIt({
+				numOfCol:5,
+				offsetX: 8,
+				offsetY: 8
+			});
+		}
+               }
+});
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>会员中心 - ${site.name} - Powered by JEECMS</title>
+<script src="${resSys}/jquery.js" type="text/javascript"></script>
+<script src="${resSys}/front.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/base.css" />
+<script type="text/javascript" src="/${res}/bbs_forum/js/jquery-1.11.0.js"></script>
+<script type="text/javascript" src="/${res}/bbs_forum/js/base.js"></script>
+  <script type="text/javascript">
+$(function() {
+	$("#jvForm").validate();
+});
+</script>
+<style>
+.form-box .sm-input{width:130px;}
+.form-box .form-yz {width:150px;}
+.btn-primary{margin-right: 150px;}
+.form-group label {
+    font-size: 14px !important;
+   color: #999 !important;
+  position: relative !important; 
+    bottom: 0 !important;
+    left: 0 !important;
+    margin-right: 10px;
+    width: 80px;
+}
+</style>
+</head>
+
+<body>
+[#include "../include/页头.html"/]
+[#include "../include/论坛信息.html"/]
+<div class="bbs-main clearfix">
+			<div class="right-panel clearfix" style="width: 100%;">
+				<!--帖子类型切换-->
+				<div class="main-header clearfix">
+					<div class="channl-name">
+						<span>忘记密码</span>
+					</div>
+				</div>
+				<div class="form-box">
+					<form id="jvForm" action="forgot_password.jspx" method="post">
+						<div class="form-group">
+							<label>用户名</label>
+							<input type="text" id="username" name="username" class="form-input" />
+						</div>
+						<div class="form-group">
+							<label>注册邮箱</label>
+							<input type="text" id="email" name="email" class="form-input" />
+						</div>
+						<div class="form-group">
+							<label>验证码</label>
+							<div class="form-inline" style="width: 320px;">
+								<input type="text" id="captcha" name="captcha" maxlength="20" class="form-input sm-input"/> 
+                     <img src="${base}/captcha.svl" onclick="this.src='${base}/captcha.svl?d='+new Date()*1" class="form-yz" />
+							</div>
+						</div>
+						<input type="hidden" name="token"  value="${token!}" />
+			<input type="submit" name="register" value="提 交" class="btn-primary" />
+					</form>
+				</div>
+			</div>
+		</div>
+[#include "../include/页脚.html"/]
+</body>
+</html>

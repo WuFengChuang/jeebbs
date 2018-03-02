@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+	default-lazy-init="true">
+	
+	<bean id="liveAct" class="com.jeecms.plug.live.action.admin.BbsLiveAct"/>
+	<bean id="liveApplyAct" class="com.jeecms.plug.live.action.admin.BbsLiveApplyAct"/>
+	<bean id="liveChapterAct" class="com.jeecms.plug.live.action.admin.BbsLiveChapterAct"/>
+	<bean id="liveMessageAct" class="com.jeecms.plug.live.action.admin.BbsLiveMessageAct"/>
+	<bean id="liveConfigAct" class="com.jeecms.plug.live.action.admin.BbsLiveConfigAct"/>
+	<bean id="liveRateAct" class="com.jeecms.plug.live.action.admin.BbsLiveRateAct"/>
+	<bean id="liveProfitAct" class="com.jeecms.plug.live.action.admin.BbsLiveProfitAct"/>
+	<bean id="liveHostAct" class="com.jeecms.plug.live.action.admin.BbsLiveHostAct"/>
+</beans>

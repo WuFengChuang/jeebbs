@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+function getTableForm() {
+	return document.getElementById('tableForm');
+}
+function optExport() {
+	var f = getTableForm();
+	f.action="incomeExport.do";
+	f.submit();
+}
+</script>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos"><@s.m "global.position"/>: 收益统计 - <@s.m "global.list"/></div>
+	<form class="ropt">
+		<input name="begin" value="${begin!}" style="width:140px" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate" />
+		<input name="end" value="${end!}" style="width:140px" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate" />
+		<input type="submit" value="<@s.m "global.query"/>" onclick="this.form.action='incomestatistic.do';"/>
+	</form>
+	<div class="clear"></div>
+</div>
+<form id="tableForm" method="post">
+<input type="hidden" name="pageNo" value="${pageNo!}"/>
+<input type="hidden" name="begin" value="${begin!}"/>
+<input type="hidden" name="end" value="${end!}"/>
+<@p.table value=pagination listAction="incomestatistic.do";bbsIncomeStatistic,i,has_next><#rt/>
+	<@p.column title="日期">${bbsIncomeStatistic.incomeDate?string("yyyy-MM-dd")!}</@p.column><#t/>
+	<@p.column title="总收益">${bbsIncomeStatistic.totalIncomeAmount!}</@p.column><#t/>
+	<@p.column title="广告收益">${bbsIncomeStatistic.adIncomeAmount!}</@p.column><#t/>
+	<@p.column title="礼物收益">${bbsIncomeStatistic.giftIncomeAmount!}</@p.column><#t/>
+	<@p.column title="道具收益">${bbsIncomeStatistic.magicIncomeAmount!}</@p.column><#t/>
+	<@p.column title="直播收益">${bbsIncomeStatistic.liveIncomeAmount!}</@p.column><#t/>
+	<@p.column title="帖子收益">${bbsIncomeStatistic.postIncomeAmount!}</@p.column><#t/>
+	
+</@p.table>
+<div><input type="button" value="导出表格" onclick="optExport();"/></div>
+</form>
+</div>
+<#include "/common/alert_message.html"/>
+</body>
+</html>

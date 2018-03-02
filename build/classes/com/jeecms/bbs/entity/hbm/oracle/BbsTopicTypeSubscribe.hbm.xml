@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.jeecms.bbs.entity">
+	<class
+		name="BbsTopicTypeSubscribe"
+		table="bbs_topic_type_subscribe"
+	>
+		<meta attribute="sync-DAO">false</meta>
+		<cache usage="read-write"/>
+		<id
+			name="id"
+			type="integer"
+			column="id"
+		>
+			<generator class="identity"/>
+		</id>
+		<many-to-one
+			name="user"
+			column="user_id"
+			class="BbsUser"
+			not-null="true"
+		>
+		</many-to-one>
+		<many-to-one
+			name="type"
+			column="type_id"
+			class="BbsTopicType"
+			not-null="true"
+		>
+		</many-to-one>
+
+
+	</class>	
+</hibernate-mapping>

@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>话题 - ${site.name} - Powered by JEECMS</title>
+<script src="${resSys}/jquery.js" type="text/javascript"></script>
+<script src="${resSys}/front.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/base.css" />
+<script src="/${res}/bbs_forum/js/viewer-jquery.min.js"  type="text/javascript" ></script>
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/viewer.min.css" />
+<script type="text/javascript" src="/${res}/bbs_forum/js/base.js"></script>
+<script type="text/javascript">
+	function subscribe(typeId,operate){
+		$.post("${base}/topicType/subscribe.jspx", 
+			{typeId:typeId,operate:operate},
+		    function(data){
+				var result=data.statu;
+				if(result=="1"){
+					if(operate==1){
+						$("#subscribeBtn"+typeId).val("取消订阅");
+						$("#subscribeBtn"+typeId).one("click", function(){
+							subscribe(0);
+						});
+					}else{
+						$("#subscribeBtn"+typeId).val("订阅");
+						$("#subscribeBtn"+typeId).one("click", function(){
+							subscribe(1);
+						});
+					}
+				}
+		   },"json");
+	}
+	</script>
+</head>
+
+<body style="background: #fff;">
+[#include "../include/页头.html"/]
+[#include "../include/论坛信息.html"/]
+    <!--右侧内容-->
+    <div class="bbs-main clearfix">
+		   <div class="topic-square">
+		   	   	<a href="#"><img src="/${res}/bbs_forum/images/icon-square.png"/>话题广场</a>
+		   </div>
+		   <h2 class="choice-topic">精选话题</h2>
+		<div class="square-left clearfix">
+					<ul class="topic-square-items">
+[#if type??]
+			[#assign typeId=type.id]
+		[#else]
+			[#assign typeId=1]
+		[/#if]
+                          [@topic_type_list orderBy='7' count='10']
+     	                         [#list tag_list as t]
+						<li>
+							  <div class="topic-pic"><a href="${t.url!}"><img src="${t.typeLog!}"/></a></div>
+							   <div class="topic-desc">
+							   	  <p><a href="${t.url!}" class="topic-name">${t.name!}</a></p>
+							   	  <p class="topic-guanzhu">${t.subscribeCount!}</p>
+							   	  <p class="topic-jianjie">[@text_cut s=t.description?html len=50 append="..."/]</p>
+
+[#if user??]
+	[#if user.subscribeIds??]
+		[#if user.subscribeIds?seq_contains('${t.id}')]  
+			<a href="" class="close-atten" id="subscribeBtn${t.id}" onclick="subscribe(${t.id},0)">- 取消关注</a>
+		[#else]
+			<a href="" class="add-atten" id="subscribeBtn${t.id}" onclick="subscribe(${t.id},1)">+ 关注</a>
+		[/#if]
+	[#else]
+		<a href="" class="add-atten">+ 关注</a>
+	[/#if]
+[#else]
+ <a href="" class="add-atten">+ 关注</a>
+[/#if]							   	  	 
+							   </div>
+						</li>
+						[/#list]
+                                     [/@topic_type_list]
+					
+		</div>
+		<div class="square-right clearfix">
+                         [@topic_type_list]
+                           [#list tag_list as t]
+			   <dl class="right-topic-items">
+			   	<dt><a href="${t.url!}">${t.name!}</a></dt>
+                              [#if t.child?size gt 0]
+                               [@topic_type_list parentId=t.id]
+                                	[#list tag_list as tc]
+			   	<dd><a href="${tc.url!}">${tc.name!}</a></dd>
+                              			    [/#list]
+                                 [/@topic_type_list]
+			      [/#if]
+			   </dl>
+			    [/#list]
+                   [/@topic_type_list]
+		</div>
+	</div>
+[#include "../include/页脚.html"/]
+</body>
+</html>

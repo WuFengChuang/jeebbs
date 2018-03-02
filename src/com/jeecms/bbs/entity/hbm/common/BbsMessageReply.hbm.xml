@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.jeecms.bbs.entity">
+	<class name="BbsMessageReply" table="jb_message_reply">
+		<meta attribute="sync-DAO">false</meta>
+		<cache usage="read-write"/>
+		<id name="id" type="integer" column="reply_id"><generator class="identity"/></id>
+		<property name="content" type="string" not-null="false"></property>
+	    <property name="status" column="is_read" type="java.lang.Boolean" not-null="true"></property>
+	    <property name="createTime" column="create_time" type="timestamp" not-null="true"></property>
+		<many-to-one name="message" lazy="false" column="msg_id" class="BbsMessage" not-null="true"></many-to-one>
+		<many-to-one name="sender" lazy="false" class="BbsUser"></many-to-one>
+		<many-to-one name="receiver" lazy="false" class="BbsUser" not-null="true"></many-to-one>
+	</class>
+</hibernate-mapping>

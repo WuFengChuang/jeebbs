@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>高亮显示 - ${site.name} - powered by jeebbs</title>
+<link href="${resSys}/front.css" rel="stylesheet" type="text/css"/>
+<script src="${resSys}/jquery.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/whole.css" />
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/layout.css" />
+<script src="${base}/thirdparty/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+<script type="text/javascript">
+	$("#jvForm").validate($.validator.AlertError);
+</script>
+<style type="text/css">
+.highlight {display:block;float:left;margin-left:10px;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    padding: 3px;
+}
+.highlight input{display:block;float:left;}
+.highlight em{width:17px;height:17px;display:block;}
+.highlight-box{
+	width: 450px;
+	height: 265px;
+	background: #fff;
+	padding: 30px 35px 0 35px;
+}
+.label-gray{
+	color: #999;
+	font-size: 16px;
+	float: left;
+}
+.highlight-margin{
+	font-size: 16px;
+	color: #353535;
+	overflow: hidden;
+	margin-bottom: 25px;
+}
+
+.highlight-margin .radio{
+	display: none;
+}
+.highlight-margin .radio:checked +label{
+	border:1px solid #9dd9ff ;
+	border-radius: 4px;
+}
+
+
+.highlight-margin
+
+.highlight-check{
+	width: 17px;
+	height: 17px;
+}
+.highlight-check-label{
+	margin-right: 20px;
+	margin-left: 9px;
+}
+</style>
+</head>
+
+<body>
+	<div class="highlight-box">
+			<form id="jvForm" action="${base}/topic/o_highlightSubmit.jspx" method="post">
+		 <div class="highlight-margin">
+		 	<label for="" class="label-gray" style="margin-right: 12px;">字体</label>
+		 	 <input type="checkbox" id="bold" name="bold" value="true" class="highlight-check"/><label for="bold" class="highlight-check-label" ><strong>粗体</strong></label>
+			<input type="checkbox" id="italic" name="italic" value="true" class="highlight-check"/><label for="italic" class="highlight-check-label"><em>斜体</em></label>
+		 </div>
+		 <div class="highlight-margin">
+		 	<label for=""  class="label-gray">颜色</label>
+		 			<input class="radio" type="radio" name="color" value="262626" id="c1"/>
+				<label class="highlight" for="c1">
+					<em style="background: #262626;"></em>
+					</label>
+				<input class="radio" type="radio" name="color" value="FF0000"  id="c2"/>
+				<label class="highlight" for="c2">
+					<em style="background: #FF0000;"></em></label>
+					<input class="radio" type="radio" name="color" value="FFA500"  id="c3"/>
+				<label class="highlight"  for="c3">
+					<em style="background: #FFA500;"></em></label>
+						<input class="radio" type="radio" name="color" value="FFFF00"  id="c4"/>
+				<label class="highlight"  for="c4">
+					<em style="background: #FFFF00;"></em></label>
+				<input class="radio" type="radio" name="color" value="008000" id="c5"/>
+				<label class="highlight"  for="c5">
+					<em style="background: #008000;"></em></label>
+					<input class="radio" type="radio" name="color" value="00FFFF"  id="c6"/>
+				<label class="highlight"  for="c6">
+					<em style="background: #00FFFF;"></em></label>
+					<input class="radio" type="radio" name="color" value="0000FF"  id="c7"/>
+				<label class="highlight"  for="c7">
+					<em style="background: #0000FF;"></em></label>
+						<input class="radio" type="radio" name="color" value="800080"  id="c8"/>
+				<label class="highlight"  for="c8">
+					<em style="background: #800080;"></em></label>
+				<input class="radio" type="radio" name="color" value="808080"  id="c9"/>
+				<label class="highlight" for="c9">
+					<em style="background: #808080;"></em></label>	
+					
+		 </div>   
+	 <div class="highlight-margin">
+		 	<label for=""  class="label-gray" style="margin-right: 12px;">有效期</label>
+		 	  <input type="text" name="time" readonly="readonly" size="25" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" class="Wdate"
+		 	  	style="height: 44px; line-height: 44px;border: 1px solid #dde7ed; border-radius: 4px;background: none;
+		 	  	width: 296px;"
+		 	  	/>	
+		</div>
+	   <input type="hidden" name="ids" value="${ids!}"/>
+		<input type="hidden" name="url" value="../indexModerator.jhtml"/>
+	    <!--<input type="hidden" name="forumId" value="${forumId!}" />-->
+	    
+	       <div  style="text-align: center;">
+		<input type="submit" class="blue-btn "  value="确定" style="width: 64px; height: 32px;line-height: 32px;"/>
+			<input type="button" class="blue-btn"  value="取消" style="width: 64px; background: #999999;height: 32px;line-height: 32px;" onclick="closeModel()"/>
+    </div>
+   </form>
+		
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+	default-lazy-init="true">
+	<!--定时begin -->
+	<bean id="executor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"> 
+	<property name="corePoolSize" value="10" /> 
+	<property name="maxPoolSize" value="100" /> 
+	<property name="queueCapacity" value="500" />
+	</bean>
+	<!--清除今日主题帖子 -->
+	<bean id="bbsJob" class="com.jeecms.bbs.schedule.BbsJob"></bean>
+	<bean id="bbsJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="bbsJob" />
+		<property name="targetMethod" value="execute" />
+	</bean>
+	<bean id="bbsTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="bbsJobDetail" />
+		<property name="cronExpression" value="0 0 0 * * ?" />
+	</bean>
+	<bean id="taskTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"> 
+	<property name="jobDetail" ref="bbsJobDetail" /> 
+	<property name="startDelay" value="10000" /> 
+	<property name="repeatInterval" value="60000" />
+	</bean>
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean"> 
+	<property name="triggers">  
+		<list>   
+			<ref bean="bbsTrigger" />   
+		</list> 
+	</property> 
+	<property name="taskExecutor" ref="executor" />
+	</bean>
+	<!--定时end -->
+</beans>

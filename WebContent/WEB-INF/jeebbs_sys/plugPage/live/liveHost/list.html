@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+function getTableForm() {
+	return document.getElementById('tableForm');
+}
+function optDelete() {
+	if(Pn.checkedCount('ids')<=0) {
+		alert("<@s.m 'error.checkRecord'/>");
+		return;
+	}
+	if(!confirm("<@s.m 'global.confirm.delete'/>")) {
+		return;
+	}
+	var f = getTableForm();
+	f.action="o_delete.do";
+	f.submit();
+}
+function optPriority() {
+	var f = getTableForm();
+	f.action="o_priority.do";
+	f.submit();
+}
+function queryModeChange(){
+	$("#queryForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos"><@s.m "global.position"/>: <@s.m "bbsLiveUserAccount.function"/> - <@s.m "global.list"/></div>
+	<form id="queryForm" class="ropt" method="post" action="v_list.do">
+		<select name="queryMode" onchange="queryModeChange()">
+			<option value="0" >待审核</option>
+			<option value="1" selected="selected">已审核</option>
+		</select>
+	    用户名：<input type="text" name="username" value="${username!}" size="10"/>
+	    <select name="orderBy"">
+	    <option value="1" <#if orderBy??><#if orderBy==1>selected="selected"</#if></#if> >总收益降序 </option>
+	    <option value="3" <#if orderBy??><#if orderBy==3>selected="selected"</#if></#if> >年收益降序</option>
+	    <option value="5" <#if orderBy??><#if orderBy==5>selected="selected"</#if></#if> >月收益降序</option>
+	    <option value="7" <#if orderBy??><#if orderBy==7>selected="selected"</#if></#if> >日收益降序</option>
+	    <option value="11" <#if orderBy??><#if orderBy==9>selected="selected"</#if></#if> >账户余额降序</option>
+	    <option value="13" <#if orderBy??><#if orderBy==11>selected="selected"</#if></#if> >总门票降序</option>
+	    <option value="15" <#if orderBy??><#if orderBy==13>selected="selected"</#if></#if> >总礼物数降序</option>
+	    <option value="17" <#if orderBy??><#if orderBy==15>selected="selected"</#if></#if> >置顶降序</option>
+	    <option value="2" <#if orderBy??><#if orderBy==2>selected="selected"</#if></#if> >总收益升序</option>
+	    <option value="4" <#if orderBy??><#if orderBy==4>selected="selected"</#if></#if> >年收益升序</option>
+	    <option value="6" <#if orderBy??><#if orderBy==6>selected="selected"</#if></#if> >月收益升序 </option>
+	    <option value="8" <#if orderBy??><#if orderBy==8>selected="selected"</#if></#if> >日收益升序</option>
+	    <option value="12" <#if orderBy??><#if orderBy==10>selected="selected"</#if></#if> >账户余额升序 </option>
+	    <option value="14" <#if orderBy??><#if orderBy==12>selected="selected"</#if></#if> >总门票升序</option>
+	    <option value="16" <#if orderBy??><#if orderBy==14>selected="selected"</#if></#if> >总礼物数升序</option>
+	    <option value="18" <#if orderBy??><#if orderBy==16>selected="selected"</#if></#if> >置顶升序</option>
+	    </select>
+	   <input type="submit" value="<@s.m 'global.query'/>" onclick="this.form.action='v_list.do';"/>
+	</form>
+	<a href="../order/commissionStatic.do"><@s.m "bbsLivePlatAccount.function"/></a>
+	<div class="clear"></div>
+</div>
+<form id="tableForm" method="post">
+<input type="hidden" name="pageNo" value="${pageNo!}"/>
+<input type="hidden" name="username" value="${username!}"/>
+<input type="hidden" name="orderBy" value="${orderBy!}"/>
+<@p.table value=pagination;host,i,has_next><#rt/>
+	<@p.column title="<input type='checkbox' onclick='Pn.checkbox(\"ids\",this.checked)'/>" width="20">
+		<input type='checkbox' name='ids' value='${host.id}'/><#t/>
+	</@p.column><#t/>	
+	<@p.column code="bbsLiveUserAccount.priority" align="center"><input type="text" name="priority" value="${host.topPriority!}" style="width:40px;"/></@p.column><#t/>
+	<@p.column code="主播">${host.user.realname!host.user.username}</@p.column><#t/>
+	<@p.column title="通过时间">${host.checkTime!?string("yyyy-MM-dd HH:mm")}</@p.column><#t/>
+	<@p.column code="bbsLiveUserAccount.ticketNum">${host.ticketNum!}</@p.column><#t/>
+	<@p.column code="bbsLiveUserAccount.totalAmount">${host.totalAmount!}</@p.column><#t/>
+	<@p.column code="bbsLiveUserAccount.giftNum">${host.giftNum!}</@p.column><#t/>
+	<@p.column code="操作"><a href="o_delete.do?ids=${host.id}&pageNo=${pageNo!}&username=${username!}&orderBy=${orderBy!}" onclick="if(!confirm('<@s.m "global.confirm.delete"/>')) {return false;}">删除</a></@p.column><#t/>
+</@p.table>
+<div>
+	<input type="button" value="<@s.m "global.delete"/>" onclick="optDelete();"/>
+	<input type="button" value="<@s.m "global.saveOrder"/>" onclick="optPriority();" class="bcplxx-button"/ style="float:left;"/>
+</div>
+</form>
+</div>
+<#include "/common/alert_message.html"/>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+$(function() {
+	$("#jvForm").validate();
+});
+</script>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos"><@s.m "global.position"/>: 版块 - <@s.m "global.add"/></div>
+	<form class="ropt">
+		<input type="submit" value="<@s.m "global.backToList"/>" onclick="this.form.action='v_list.do';"/>
+	</form>
+	<div class="clear"></div>
+</div>
+<@p.form id="jvForm" action="o_save.do">
+<@p.text colspan="1" width="50" label="板块名称" size="25" name="title" required="true" class="required" maxlength="150"/>
+<@p.select colspan="1" width="50" label="所属分区" name="categoryId" value=categoryId list=categoryList listKey="id" listValue="title"/>
+<@p.tr/>
+<@p.text colspan="1" width="50" label="访问路径" name="path" required="true" class="required" maxlength="20"/>
+<@p.text colspan="1" width="50" label="keywords" name="keywords" maxlength="255" help="关键字，用于搜索引擎优化"/>
+<@p.tr/>
+<@p.textarea colspan="1" width="50" label="板块介绍" rows="4" cols="40" name="description" maxlength="255"/>
+<@p.textarea colspan="1" width="50" label="板块规则" rows="4" cols="40" name="forumRule" maxlength="255"/>
+<@p.tr/>
+<@p.td colspan="2" label="积分规则">
+	发主题：<@p.text name="pointTopic" size="10" value="5" class="required digits"/>
+&nbsp; 回复：<@p.text name="pointReply" size="10" value="0" class="required digits"/>
+&nbsp; 加精华：<@p.text name="pointPrime" size="10" value="100" class="required digits"/>
+</@p.td>
+<@p.tr/>
+<@p.td colspan="2" label="威望规则">
+	发主题：<@p.text name="prestigeTopic" size="10" value="1" class="required digits"/>
+&nbsp; 回复：<@p.text name="prestigeReply" size="10" value="0" class="required digits"/>
+&nbsp; 解除精华（减威望）：<@p.text name="prestigePrime0" size="10" value="0" class="required digits"/>
+&nbsp; 加精华：<@p.text name="prestigePrime1" size="10" value="1" class="required digits"/>
+</@p.td>
+<@p.tr/>
+<@p.text width="50" colspan="1" label="版主" name="moderators" size="40"/>
+<@p.radio width="50" colspan="1" label="是否支持打赏配置" name="supportReward" value=true list={"true":"global.true","false":"global.false"}/>
+<@p.tr/>
+<@p.text colspan="1" width="50" label="外部链接" size="25" name="outerUrl" maxlength="255" help="指向外部url"/>
+<@p.text colspan="1" width="50" label="排列顺序" name="priority" value="10" required="true" class="required digits"/>
+<@p.tr/>
+
+<@p.select headerKey="" headerValue="global.default" list=forumTplList  label="主题列表模板" name="tplForum" colspan="1" width="50"/>
+<@p.select headerKey="" headerValue="global.default" list=mobileForumTplList  label="手机主题列表模板" name=tplMobileForum colspan="1" width="50"/>
+<@p.tr/>
+<@p.select headerKey="" headerValue="global.default" list=topicTplList  label="主题详细模板" name="tplTopic" colspan="1" width="50"/>
+<@p.select headerKey="" headerValue="global.default" list=mobileTopicTplList  label="手机主题详细模板" name="tplMobileTopic" colspan="1" width="50"/>
+<@p.tr/>
+<@p.radio width="50" colspan="1" label="发帖是否需要审核" name="topicNeedCheck" value=false list={"true":"global.true","false":"global.false"}/>
+<@p.radio width="50" colspan="1" label="回帖是否需要审核" name="postNeedCheck" value=false list={"true":"global.true","false":"global.false"}/>
+<@p.tr/>
+<@p.td colspan="2"><@p.submit code="global.submit"/> &nbsp; <@p.reset code="global.reset"/></@p.td>
+</@p.form>
+</div>
+</body>
+</html>

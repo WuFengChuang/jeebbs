@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>回复主题 - ${site.name} - JEECMS官方论坛|开源java cms,jsp cms,jsp bbs</title>
+<meta name="keywords" content="java,cms,jsp,cms,jsp bbs,开源网站内容管理系统,网站群,站群,多站点,jeecms" />
+<meta name="description" content="讨论jsp cms、jsp bbs相关资讯，struts,hibernate,spring,freemarker最新技术研究" /> 
+<link href="${resSys}/front.css" rel="stylesheet" type="text/css"/>
+<script src="${resSys}/jquery.js" type="text/javascript"></script>
+<script src="${resSys}/front.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/main.css" />
+</head>
+<body>
+<div class="main">
+  <div class="login-head" style="background-color:#008cdc;">
+    <a href="javascript:history.go(-1)"><img src="/${res}/bbs_forum/img/back-white.png"></a><span style="color:#fff;">回复主题</span>
+  </div>
+   <form id="jvForm" action="${base}/post/o_save.jspx" method="post" enctype="multipart/form-data" validate="true" onsubmit="return checkContent();">
+    <div style="width:100%;overflow:hidden;border-bottom:1px solid #c4c4c4;background-color:#fff;">
+<textarea id="_editor_textarea" rows="10" cols="80" vld="{rangelength:[2,4096]}" class="required_zt" name="content">[#if otype??&&post??][#if otype==1][quote]${post.quoteContent!}[/quote][#else]回复第${post.indexCount!}楼[/#if][/#if]</textarea></div>
+    <div style="width:94%;margin:20px auto;margin-bottom:20px;">
+      <input type="hidden" name="forumId" value="${forumId!}"/>
+      <input type="hidden" name="topicId" value="${topicId!}"/>
+      <input name="parentId" type="hidden" value="${parentId!}"/>
+	<input class="bta" type="submit" value="回复"/>
+     </div>    
+    </form>
+  
+</div>
+
+
+</body>
+</html>

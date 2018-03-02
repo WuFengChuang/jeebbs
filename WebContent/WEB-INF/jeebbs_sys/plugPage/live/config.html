@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+$(function() {
+	$("#submitForm").validate();
+});
+</script>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos">当前位置： 扩展 - live配置 - 修改</div>
+	<a href="../liveRate/v_list.do"><@s.m "bbsLiveRate.function"/></a>
+	<div class="clear"></div>
+</div>
+<@p.form id="submitForm" action="config_update.do" labelWidth="12">
+<@p.radio colspan="2" label="live是否需要审核" name="liveCheck" value=cmsConfig.liveCheck list={"true":"global.true","false","global.false"} required="true" class="required"/><@p.tr/>
+<@p.radio colspan="2" label="直播平台" name="livePlat" value=cmsConfig.livePlat list={"tencent":"腾讯云","baidu","百度云"} required="true" class="required"/><@p.tr/>
+<@p.td label="推流KEY"><input name="tencentPushFlowKey"  />留空则不修改</@p.td><@p.tr/>
+<@p.td label="腾讯直播码"><input name="tencentBizId"  /> 留空则不修改</@p.td><@p.tr/>
+<@p.td label="Api鉴权KEY"><input name="tencentApiAuthKey"  />留空则不修改</@p.td><@p.tr/>
+<@p.td label="腾讯直播APPId"><input name="tencentAppId"  />留空则不修改</@p.td><@p.tr/>
+
+<@p.td label="百度云直播推流域名"><input name="baiduPushDomain"  value="${cmsConfig.baiduPushDomain!}"/></@p.td><@p.tr/>
+<@p.td label="百度云直播播放域名"><input name="baiduPlayDomain"  value="${cmsConfig.baiduPlayDomain!}"/></@p.td><@p.tr/>
+<@p.td label="百度云直播Access Key ID"><input name="baiduAccessKeyId"  />留空则不修改</@p.td><@p.tr/>
+<@p.td label="百度云直播Secret Access Key"><input name="baiduSecretAccessKey"  />留空则不修改</@p.td><@p.tr/>
+<@p.td label="百度云直播安全策略密钥"><input name="baiduStreamSafeKey"  />留空则不修改</@p.td><@p.tr/>
+
+<@p.td><@p.submit code="global.submit"/> &nbsp; <@p.reset code="global.reset"/></@p.td>
+</@p.form>
+</div>
+</body>
+</html>

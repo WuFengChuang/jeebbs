@@ -1,0 +1,295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>引用 - ${site.name} - Powered by JEECMS</title>
+<script src="${resSys}/jquery.js" type="text/javascript"></script>
+<script src="${resSys}/front.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/base.css" />
+<script type="text/javascript" src="/${res}/bbs_forum/js/base.js"></script>
+    <script src="/${res}/bbs_forum/js/pony.js" type="text/javascript"></script>
+    <script src="/${res}/bbs_forum/js/PnEditor.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/whole.css" />
+     <script type="text/javascript">
+$(function() {
+//创建发帖编辑器
+new PnEditor();
+$("#jvForm").validate($.validator.AlertError);
+});
+ 
+function checkContent(){
+  if($("#_editor_textarea").val()==""){
+     alert("内容不能为空");
+     return false;
+  }
+  return true;
+}
+</script>
+<style type="text/css">
+#_editor_controls{text-align:left;}
+#_editor_controls ._menu{font-size:12px;padding:0 10px;}
+._controls_normal{border:1px solid #F5F5F0;}
+._controls_hover{border:1px solid #9DB3C5;background-color:#E8F3FD;}
+
+#_pop_container{font-size:12px;}
+#_pop_container ul{list-style-type:none;margin:0px;padding:10px 7px;}
+#_pop_container li{padding:1px;cursor:pointer}
+#_pop_container > div{position:absolute;border:1px solid #CCC;border-bottom-style:solid;background-color:#FFF}
+
+#_forecolor_pop{padding:5px;}
+#_forecolor_pop td{width:12px;height:12px;}
+#_forecolor_pop td div{width:10px;height:10px;cursor:pointer;}
+._forecolor_normal{border:1px solid #FFF;}
+._forecolor_hover{border:1px solid #000;}
+
+._center{width:100%; text-align:center;}
+.blue-btn{width:320px; cursor:pointer;}
+._pop_input{width:270px;padding:10px 10px;}
+._pop_input input[type=text]{width:260px;}
+._pop_input div{padding:1px 0;}
+._pop_input hr{height:1px;padding-top:0px; margin-top:0px;}
+
+._editor_local_img{border:1px solid #CCC;padding:10px;background-color:#FFF}
+#smile{overflow:hidden;}
+#smile img{cursor:pointer;}
+
+.ftwidth{width:100%;}
+.edit-topic-body .topic-area{height:192px;}
+.editortoolbar{margin-bottom:10px;}
+.editortoolbar a{margin-right:10px; font-size:12px; height:24px; line-height:24px; display:inline-block; float:left; cursor:pointer; text-decoration:none;}
+.editortoolbar a:hover{border:1px solid #C1C1C1;}
+.ft-box{border:1px solid #f0f0f0; margin-top:24px;}
+.edit-topic-body .ft-select{width:170px; border-radius: 4px;border: 1px solid #dde7ed;padding-left: 16px;font-size: 14px;height: 44px;line-height: 44px;margin-bottom: 20px;}
+
+#_file_container{margin-top:20px;}
+._pop_input input[type=text]{border:1px solid #999; width:100%; border-radius:3px; height:24px; text-indent:6px;}
+._pop_input ._center{margin-top:6px; text-align:right;}
+._pop_input #_email_ok, ._pop_input #_image_ok, ._pop_input #_link_ok{padding:3px 6px; background:#188ae2; border-radius:3px; color:#fff; font-size:12px; cursor:pointer;}
+._pop_input ._input_cancel{padding:3px 6px; background:#999; border-radius:3px; color:#fff; font-size:12px; cursor:pointer;}
+
+</style>
+
+</head>
+
+<body>
+[#include "../include/页头.html"/]
+[#include "../include/论坛信息.html"/]
+<div class="bbs-main clearfix ft-box">
+    <!--右侧内容-->
+    <div class="right-main right-panel clearfix ftwidth">
+        <!--发帖-->
+    <div class="edit-topic-header">
+    	<span class="fatie pull-left"><i class="iconfont icon-fatie1"></i>引用</span>
+    </div>
+    <!--发帖内容-->
+     <div class="edit-topic-body">
+		<form id="jvForm" action="${base}/post/o_save.jspx" method="post" enctype="multipart/form-data" validate="true" onsubmit="return checkContent();">
+
+        <div class="editortoolbar" id="_editor_controls">
+   <a id="_bold_cmd" title="粗体" onclick="PnEditor.bbstyle('[b]','[/b]');"><img alt="" src="/${res}/bbs_forum/img/btn/bold.gif" /> </a><a id="_italic_cmd" title="斜体" onclick="PnEditor.bbstyle('[i]','[/i]');"><img alt="" src="/${res}/bbs_forum/img/btn/italic.gif" /> </a><a id="_underline_cmd" title="下划线" onclick="PnEditor.bbstyle('[u]','[/u]');"><img alt="" src="/${res}/bbs_forum/img/btn/underline.gif" /> </a><a class="_menu" id="_fontname_menu" title="字体" unselectable="on"><span id="posteditor_font_out">字体</span> </a><a class="_menu" id="_fontsize_menu" title="大小" unselectable="on">大小</a> <a class="_menu" id="_forecolor_menu" title="颜色" unselectable="on">颜色</a> <a id="_justifyleft_cmd" title="居左" onclick="PnEditor.bbstyle('[align=left]','[/align]');"><img alt="" src="/${res}/bbs_forum/img/btn/left.gif" /> </a><a id="_justifycenter_cmd" title="居中" onclick="PnEditor.bbstyle('[align=center]','[/align]');"><img alt="" src="/${res}/bbs_forum/img/btn/center.gif" /> </a><a id="_justifyright_cmd" title="居右" onclick="PnEditor.bbstyle('[align=right]','[/align]');"><img alt="" src="/${res}/bbs_forum/img/btn/right.gif" /> </a><a id="_link_menu" title="插入链接"><img alt="" src="/${res}/bbs_forum/img/btn/url.gif" /> </a><a id="_email_menu" title="插入邮箱链接"><img alt="" src="/${res}/bbs_forum/img/btn/email.gif" /> </a><a id="_image_menu" title="插入图片"><img alt="" src="/${res}/bbs_forum/img/btn/image.gif" /> </a><a id="_quote_cmd" title="插入引用" onclick="PnEditor.bbstyle('[quote]','[/quote]');"><img alt="" src="/${res}/bbs_forum/img/btn/quote.gif" /> </a><a id="_code_cmd" title="插入代码" onclick="PnEditor.bbstyle('[code]','[/code]');"><img alt="" src="/${res}/bbs_forum/img/btn/code.gif" /> </a><a id="_orderedlist_cmd" title="排序的列表" onclick="PnEditor.bbstyle('[list=1]\n','\n[/list]','[*]');"><img alt="" src="/${res}/bbs_forum/img/btn/orderedlist.gif" /> </a><a id="_unorderedlist_cmd" title="未排序列表" onclick="PnEditor.bbstyle('[list]\n','\n[/list]','[*]');"><img alt="" src="/${res}/bbs_forum/img/btn/unorderedlist.gif" /> </a><a id="_indent_cmd" title="增加缩进" onclick="PnEditor.bbstyle('[indent]','[/indent]');"><img alt="" src="/${res}/bbs_forum/img/btn/indent.gif" /> </a><a id="_floatleft_cmd" title="左浮动" onclick="PnEditor.bbstyle('[float=left]','[/float]');"><img alt="" src="/${res}/bbs_forum/img/btn/floatleft.gif" /> </a><a id="_floatright_cmd" title="右浮动" onclick="PnEditor.bbstyle('[float=right]','[/float]');"><img alt="" src="/${res}/bbs_forum/img/btn/floatright.gif" /> </a><a id="_hide_cmd" title="隐藏" onclick="PnEditor.bbstyle('[hide]','[/hide]');"><img alt="" src="/${res}/bbs_forum/img/btn/hide.gif" /> </a>
+            <div style="clear: both"></div>
+            </div>
+            <div><textarea id="_editor_textarea" rows="10" cols="80" vld="{rangelength:[2,4096]}" placeholder="内容" class="topic-area" name="content">[#if otype??&&post??][#if otype==1][quote]${post.quoteContent!}[/quote][#else]回复第${post.indexCount!}楼[/#if][/#if]</textarea></div>
+		<div id="_file_container"></div>
+        <div class="upload-box">
+			<div id="_file_selecter">插入图片或附件：
+			<input id="_editor_file" type="file" onchange="PnEditor.selectFile();" name="allattachments" />
+			</div>
+        </div>
+     <div class="_center">
+		<input type="hidden" name="forumId" value="${forumId!}"/>
+            <input name="parentId" type="hidden" value="${parentId!}"/>
+      <input type="hidden" name="topicId" value="${topicId!}"/>
+        <input type="submit" name="" id="" value="提交" class="blue-btn"/>
+    </div>
+        </form>
+     </div>
+    <div id="_pop_container">
+    <div class="popupmenu_popup fontname_menu" id="_fontname_pop" style="display: none">
+    <ul unselectable="on">
+      <li unselectable="on">仿宋_GB2312</li>
+      <li unselectable="on">黑体</li>
+      <li unselectable="on">楷体_GB2312</li>
+      <li unselectable="on">宋体</li>
+      <li unselectable="on">新宋体</li>
+      <li unselectable="on">微软雅黑</li>
+      <li unselectable="on">Trebuchet MS</li>
+      <li unselectable="on">Tahoma</li>
+      <li unselectable="on">Arial</li>
+      <li unselectable="on">Impact</li>
+      <li unselectable="on">Verdana</li>
+      <li unselectable="on">Times New Roman</li>
+    </ul>
+    </div>
+    <div id="_fontsize_pop" style="display: none">
+    <ul unselectable="on">
+      <li unselectable="on" fontsize="10">较小</li>
+      <li unselectable="on" fontsize="18">较大</li>
+      <li unselectable="on" fontsize="6">极细字</li>
+      <li unselectable="on" fontsize="8">细字</li>
+      <li unselectable="on" fontsize="10">小字体</li>
+      <li unselectable="on" fontsize="14">中字体</li>
+      <li unselectable="on" fontsize="20">大字体</li>
+      <li unselectable="on" fontsize="25">加大字</li>
+      <li unselectable="on" fontsize="100">特大字</li>
+    </ul>
+    </div>
+    <div id="_forecolor_pop" style="display: none">
+    <table cellspacing="4" cellpadding="0" border="0">
+      <tbody>
+        <tr>
+          <td col="Black">
+          <div unselectable="on"></div>
+          </td>
+          <td col="Sienna">
+          <div unselectable="on"></div>
+          </td>
+          <td col="DarkOliveGreen">
+          <div unselectable="on"></div>
+          </td>
+          <td col="DarkGreen">
+          <div unselectable="on"></div>
+          </td>
+          <td col="DarkSlateBlue">
+          <div unselectable="on"></div>
+          </td>
+          <td col="Navy">
+          <div unselectable="on"></div>
+          </td>
+          <td col="Indigo">
+          <div unselectable="on"></div>
+          </td>
+          <td col="DarkSlateGray">
+          <div unselectable="on"></div>
+          </td>
+        </tr>
+        <tr>
+          <td col="DarkRed">
+          <div unselectable="on"></div>
+          </td>
+          <td col="DarkOrange">
+          <div unselectable="on"></div>
+          </td>
+          <td col="Olive">
+          <div unselectable="on"></div>
+          </td>
+          <td col="Green">
+          <div unselectable="on"></div>
+          </td>
+          <td col="Teal">
+          <div unselectable="on"></div>
+          </td>
+          <td col="Blue">
+          <div unselectable="on"></div>
+          </td>
+          <td col="SlateGray">
+          <div unselectable="on"></div>
+          </td>
+          <td col="DimGray">
+          <div unselectable="on"></div>
+          </td>
+        </tr>
+        <tr>
+          <td col="Red">
+          <div unselectable="on"></div>
+          </td>
+          <td col="SandyBrown">
+          <div unselectable="on"></div>
+          </td>
+          <td col="YellowGreen">
+          <div unselectable="on"></div>
+          </td>
+          <td col="SeaGreen">
+          <div unselectable="on"></div>
+          </td>
+          <td col="MediumTurquoise">
+          <div unselectable="on"></div>
+          </td>
+          <td col="RoyalBlue">
+          <div unselectable="on"></div>
+          </td>
+          <td col="Purple">
+          <div unselectable="on"></div>
+          </td>
+          <td col="Gray">
+          <div unselectable="on"></div>
+          </td>
+        </tr>
+        <tr>
+          <td col="Magenta">
+          <div unselectable="on"></div>
+          </td>
+          <td col="Orange">
+          <div unselectable="on"></div>
+          </td>
+          <td col="Yellow">
+          <div unselectable="on"></div>
+          </td>
+          <td col="Lime">
+          <div unselectable="on"></div>
+          </td>
+          <td col="Cyan">
+          <div unselectable="on"></div>
+          </td>
+          <td col="DeepSkyBlue">
+          <div unselectable="on"></div>
+          </td>
+          <td col="DarkOrchid">
+          <div unselectable="on"></div>
+          </td>
+          <td col="Silver">
+          <div unselectable="on"></div>
+          </td>
+        </tr>
+        <tr>
+          <td col="Pink">
+          <div unselectable="on"></div>
+          </td>
+          <td col="Wheat">
+          <div unselectable="on"></div>
+          </td>
+          <td col="LemonChiffon">
+          <div unselectable="on"></div>
+          </td>
+          <td col="PaleGreen">
+          <div unselectable="on"></div>
+          </td>
+          <td col="PaleTurquoise">
+          <div unselectable="on"></div>
+          </td>
+          <td col="LightBlue">
+          <div unselectable="on"></div>
+          </td>
+          <td col="Plum">
+          <div unselectable="on"></div>
+          </td>
+          <td col="White">
+          <div unselectable="on"></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="_pop_input" id="_link_pop" style="display: none">
+    <div><label for="_link_url">链接地址：</label></div>
+    <div><input id="_link_url" type="text" /></div>
+    <div><label for="_link_label">链接标题：</label></div>
+    <div><input id="_link_label" type="text" /></div>
+    <div class="_center"><input id="_link_ok" type="button" onclick="PnEditor.insertUrl($('#_link_url').val(),$('#_link_label').val(),'link');$('#_link_pop').hide();$('#_link_url').val('');$('#_link_label').val('');" value="确定" /> <input class="_input_cancel" type="button" value="取消" /></div>
+    </div>
+    <div class="_pop_input" id="_email_pop" style="display: none">
+    <div><label for="_email_url">邮箱地址：</label></div>
+    <div><input id="_email_url" type="text" /></div>
+    <div class="_center"><input id="_email_ok" type="button" onclick="PnEditor.insertUrl($('#_email_url').val(),null,'email');$('#_email_pop').hide();$('#_email_url').val('');" value="确定" /> <input class="_input_cancel" type="button" value="取消" /></div>
+    </div>
+    <div class="_pop_input" id="_image_pop" style="display: none">
+    <div><label for="_image_url">图片地址：</label></div>
+    <div><input id="_image_url" type="text" /></div>
+    <div class="_center"><input id="_image_ok" type="button" onclick="PnEditor.insertUrl($('#_image_url').val(),null,'img');$('#_image_pop').hide();$('#_image_url').val('');" value="确定" /> <input class="_input_cancel" type="button" value="取消" /></div>
+    </div>
+    </div>
+    </div>
+</div>
+[#include "../include/页脚.html"/]
+</body>
+</html>

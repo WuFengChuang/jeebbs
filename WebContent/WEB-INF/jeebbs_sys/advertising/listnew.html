@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>jeebbs</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="jeebbs">
+		<meta name="author" content="jeebbs">
+		<#include "/jeebbs_sys/head.html"/>
+	</head>
+	<body class="overflow-hidden">
+		<div class="wrapper preload">
+			<#include "/jeebbs_sys/top.html"/>
+			<!--左侧-->
+			<#include "/jeebbs_sys/left.html"/>
+			<!--右侧内容-->
+			<div class="main-container">
+				<div class="padding-md">
+					<!--面包屑-->
+					<div class="row">
+						<div class="col-sm-6">
+							<ol class="breadcrumb">
+								<li><span class=" block  iconfont bbs-home"></span></li>
+								<li>
+									<a href="#">论坛</a>
+								</li>
+								<li>
+									<a href="#">广告管理</a>
+								</li>
+							</ol>
+						</div>
+					</div>
+					<!--版块模块-->
+					<div class="forum-module">
+						<div class="forum-header">
+							<span class="forum-name">编辑广告</span>
+						</div>
+						<!--top-bar通用-->
+						<div class="table-top-bar">
+							<form action="v_list.do">
+								<a href="v_add.do" class="add-Class">添加</a>
+								<div class="search-box">
+									<input type="text" name="queryTitle" value="${queryTitle!}" class="top-search" placeholder="输入关键词"/>
+									<input type="submit" class="top-sub"  value="" />
+								</div>
+								<select name="orderBy" class="select">
+									<option value="1">按到期顺序降序</option>
+								</select>
+								<select name="queryChargeMode" class="select">
+									<option value="">选择付费方式</option>
+									<option value="0" <#if queryChargeMode??><#if queryChargeMode==0>selected="selected"</#if></#if>>周期付费</option>
+									<option value="1" <#if queryChargeMode??><#if queryChargeMode==1>selected="selected"</#if></#if>>点击付费</option>
+									<option value="2" <#if queryChargeMode??><#if queryChargeMode==2>selected="selected"</#if></#if>>展现付费</option>
+								</select>
+							</form>
+						</div>
+						<div class="table-responsive">
+							<form class="form-horizontal no-margin"  id="tableForm" method="post">
+								<table class="bbs-table table-striped">
+									<tr class="table-header">
+										<th></th>
+										<th>ID</th>
+										<th>广告位置</th>
+										<th>展现方式</th>
+										<th>计费方式</th>
+										<th>开始时间</th>
+										<th>结束时间</th>										
+										<th>操作</th>
+									</tr>	
+									<#list pagination.list as cmsAdvertising>														
+										<tr>
+											<td class="td-7">
+												<input type="checkbox" name='ids' value='${cmsAdvertising.id}' />
+											</td>
+											<td>${cmsAdvertising.id}</td>
+											<td>${cmsAdvertising.adspace.name!}</td>
+											<td><@s.m "cmsAdvertising.category.${cmsAdvertising.category}"/></td>
+											<td><@s.m "cmsAdvertising.chargeMode.${cmsAdvertising.chargeMode}"/></td>
+											<td><#if cmsAdvertising.startTime??>${cmsAdvertising.startTime?string("yyyy-MM-dd")}</#if></td>
+											<td class="red"><#if cmsAdvertising.endTime??>${cmsAdvertising.endTime?string("yyyy-MM-dd")}</#if></td>
+											<td>
+												<a href="v_edit.do?id=${cmsAdvertising.id}&pageNo=${pageNo!}" class="t-edit iconfont bbs-edit" title="编辑"></a>
+												<a href="o_delete.do?ids=${cmsAdvertising.id}&pageNo=${pageNo!}" class="t-del iconfont bbs-delete" title="删除"></a>
+											</td>
+										</tr>
+									</#list>
+								</table>
+								<!--通用-->
+								<@p.page value=pagination/>
+								<input type="hidden" name="queryTitle" value="${queryTitle!}"/>
+								<input type="hidden" name="orderBy" value="${orderBy!}"/>
+								<input type="hidden" name="queryChargeMode" value="${queryChargeMode!}"/>
+								<input type="hidden" name="pageNo" value="${pageNo!}"/>
+							</form>
+						</div>
+					</div>
+
+				</div>
+				<!-- ./padding-md -->
+			</div>
+			<!-- /main-container -->
+
+			<!--<footer class="footer">
+				<p class="no-margin">
+					Powered by JeeCms Copyright © 2007-2017 www.jeecms.com, All Rights Reserved
+				</p>
+			</footer>-->
+		</div>
+		<!-- /wrapper -->
+
+		<!--返回顶部-->
+		<a href="#" class="scroll-to-top hidden-print"><i class="fa fa-chevron-up fa-lg"></i></a>
+
+		
+	</body>
+
+</html>

@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.jeecms.plug.live.entity">
+	<class
+		name="BbsLiveUserAccount"
+		table="bbs_live_user_account"
+	>
+		<meta attribute="sync-DAO">false</meta>
+		<cache usage="read-write"/>
+		<id name="id" type="java.lang.Integer" column="user_id">
+			<generator class="foreign"><param name="property">user</param></generator>
+		</id>
+
+		<property
+			name="totalAmount"
+			column="total_amount"
+			type="java.lang.Double"
+			not-null="false"
+			length="15"
+		/>
+		<property
+			name="noPayAmount"
+			column="no_pay_amount"
+			type="java.lang.Double"
+			not-null="false"
+			length="15"
+		/>
+		<property
+			name="yearAmount"
+			column="year_amount"
+			type="java.lang.Double"
+			not-null="true"
+			length="15"
+		/>
+		<property
+			name="monthAmount"
+			column="month_amount"
+			type="java.lang.Double"
+			not-null="true"
+			length="15"
+		/>
+		<property
+			name="dayAmount"
+			column="day_amount"
+			type="java.lang.Double"
+			not-null="true"
+			length="15"
+		/>
+		<property
+			name="buyCount"
+			column="buy_count"
+			type="integer"
+			not-null="false"
+			length="10"
+		/>
+		<property
+			name="drawCount"
+			column="draw_count"
+			type="integer"
+			not-null="false"
+			length="10"
+		/>
+		<property
+			name="topPriority"
+			column="top_priority"
+			type="integer"
+			not-null="false"
+			length="10"
+		/>
+		<property
+			name="lastDrawTime"
+			column="last_draw_time"
+			type="timestamp"
+			not-null="false"
+			length="19"
+		/>
+		<property
+			name="lastBuyTime"
+			column="last_buy_time"
+			type="timestamp"
+			not-null="false"
+			length="19"
+		/>
+		<property
+			name="ticketNum"
+			column="ticket_num"
+			type="integer"
+			not-null="false"
+			length="10"
+		/>
+		<property
+			name="giftNum"
+			column="gift_num"
+			type="integer"
+			not-null="false"
+			length="10"
+		/>
+		<property
+			name="checkTime"
+			column="check_time"
+			type="timestamp"
+			not-null="true"
+			length="19"
+		/>
+		<one-to-one name="user" class="com.jeecms.bbs.entity.BbsUser" constrained="true"/>
+
+
+	</class>	
+</hibernate-mapping>

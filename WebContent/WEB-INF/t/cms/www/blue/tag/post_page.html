@@ -1,0 +1,389 @@
+<script src="${resSys}/jquery.js" type="text/javascript"></script>
+<script type="text/javascript" src="/${res}/plug/pic_show/js/public.js"></script>
+<script type="text/javascript" src="/${res}/bbs_box/wbox.js"></script> 
+
+<script type="text/javascript">
+function checkContent(){
+  if($("#atc_content").val()==""){
+     alert("内容不能为空");
+     return false;
+  }
+  return true;
+}
+
+function checkedCount(name) {
+	var batchChecks = document.getElementsByName(name);
+	var count = 0;
+	for (var i = 0;i < batchChecks.length; i++) {
+		if (batchChecks[i].checked) {
+			count++;
+		}
+	}
+	return count;
+}
+
+function vote(name, tid){
+	var itemNum = checkedCount(name);
+	if(itemNum == 0){
+		alert("请至少选择一项");
+		return;
+	}
+	var items = document.getElementsByName(name);
+	var itemIds = new Array();
+	var count = 0;
+	for(var i=0; i<items.length; i++){
+		if(items[i].checked){
+			itemIds[count] = items[i].value;
+			count++;
+		}
+	}
+	$.post('${base}/topic/vote.jspx', {
+		'itemIds':itemIds,
+		'tid':tid
+	}, function(data) {
+		if(data.success){
+			VoteResult();
+		}else{
+			alert(data.message);
+		}
+	},"json");
+}
+function showMagicUL(pid){
+	$("#magicUL"+pid).show();
+}
+function showUserMagicUL(pid){
+	$("#user-magic-"+pid).show();
+}
+function hideMagicUL(pid){
+	$("#magicUL"+pid).hide();
+}
+function hideUserMagicUL(pid){
+	$("#user-magic-"+pid).hide();
+}
+function apply(id, val,pid){
+	$.post("${base}/member/applyJson.jhtml",{"u": val},function(data){
+		$("#u"+id+"_"+pid).html(data.message);
+	});
+	alert("发出好友邀请成功!");
+}
+function attent(userId,operate){
+	$.post("${base}/member/attent.jhtml",{
+		"userId": userId
+	},function(data){
+		if(data.status==0){
+			$("a[id^='attent"+userId+"_']").html("取消关注");
+		}else if(data.status==1){
+			$("a[id^='attent"+userId+"_']").html("关注");
+		}
+	},"json");
+}
+function forBidden(userId,forumId){
+	$.post("${base}/user/forbidden.jspx",{
+		"userId": userId,
+		"forumId":forumId
+	},function(data){
+		if(data.status==1){
+			alert("解除禁用成功!");
+		}else if(data.status==2){
+			alert("禁用成功!");
+		}else if(data.status==0){
+			alert("禁用失败!");
+		}
+	},"json");
+}
+</script>
+[#if topic.category==101||topic.category==102]
+<script type="text/javascript">
+$(function(){
+	VoteResult();
+});
+
+function VoteResult(){
+	$.post("${base}/topic/vote_result.jspx",{tid: "${topic.id}"},function(data){
+		$(".vote").html(data);
+	});
+}
+</script>
+[/#if]
+
+    
+    <ul class="bbs-content-card">
+        <!--楼主贴
+            <!--用户信息-->
+        <li>
+            <div class="user-header clearfix">
+            	[#if !topic.firstPost.anonymous]
+                <img class="user-img" [#if topic.avatar??][#if topic.avatar?contains('user/images')]src="${topic.avatar!}"[#else]src="/${res}/bbs_member/img/face/${(topic.avatar)!'none.gif'}"[/#if][#else]src="/${res}/bbs_member/img/face/${(topic.avatar)!'none.gif'}"[/#if] [#if magic_switch] onmouseout="hideUserMagicUL('${topic.firstPost.id}')"  onmouseover="showUserMagicUL('${topic.firstPost.id}')" [/#if] />
+                [/#if]
+                <div class="user-info ask-info">
+                    <p>
+                        <span class="user-name ask-user">[#if topic.firstPost.anonymous]匿名[#else]${topic.firstPost.creater.username!}[/#if]</span>
+                        <img src="/${res}/bbs_forum/images/level.png" class="level" />
+                    </p>
+                </div>
+                <div class="time-box ask-time">
+                    <span>${topic.createTimeHtml!}</span>
+                </div>
+                <div class="friend-bar ask-friend">
+                    <!--通讯录-->
+                    [#if user??&&user.id!=topic.creater.id]
+                    [#if !user.friendship?seq_contains('${topic.creater.id}')]
+                    <a id="u${creater.id}_${topic.firstPost.id}" href="javascript:apply('${creater.id}','${creater.username}','${topic.firstPost.id}')" class="iconfont icon-tongxunlu1 green" title="添加通讯录"></a>
+                    [#else]
+                    <a id="cancelAttentTopic" onclick="Cms.topicOp('${base}','${topicId!}',5,'attentCountSpan','cancelAttentTopic','attentTopic')" class="iconfont  icon-tongxunlu green" title="取消通讯录"></a>
+                    [/#if]
+                    [/#if]
+                    
+                    <!--关注-->
+                    [#if user??&&user.id!=topic.creater.id]
+                    [#if !user.myAttentionIds?seq_contains('${topic.creater.id}')]
+                    <a id="attentTopic" onclick="Cms.topicOp('${base}','${topicId!}',2,'attentCountSpan','cancelAttentTopic','attentTopic')" class="iconfont icon-guanzhu yellow" title="添加关注"></a>
+                    [#else]
+                    <a id="cancelAttentTopic" onclick="Cms.topicOp('${base}','${topicId!}',5,'attentCountSpan','cancelAttentTopic','attentTopic')" class="iconfont icon-yiguanzhu yellow" title="取消关注"></a>
+                    [/#if]
+                    [/#if]
+                </div>
+                <!--楼层操作-->
+                <div class="floor-info">
+                    <p class="floor-num">${topic.firstPost.indexCount}#</p>
+                </div>
+            </div>
+			
+            [#if topic.firstPost.shield]
+              [#if user??&&user.moderator]
+              该贴已经被屏蔽，仅版主可见<p class="theme-desc">${topic.firstPost.contentHtml!}</p>
+              [#else]
+              该帖子已被屏蔽，仅版主可见
+              [/#if]
+              
+              [#else]
+              
+              [#if topic.firstPost.hidden]
+              [#if user??]
+              [#if topic.firstPost.creater.id==user.id||user.moderator]
+              <p class="theme-desc">${topic.firstPost.contentHtml}</p>
+              [#else]
+              [#if !post.topic.haveReply?contains(','+user.id+',')]
+              <p class="theme-desc">${topic.firstPost.hideContent}</p>
+              [#else]
+              <p class="theme-desc">${topic.firstPost.contentHtml}</p>
+              [/#if]
+              [/#if]
+              [#else]
+              <p class="theme-desc">${topic.firstPost.hideContent}</p>
+              [/#if]
+              [#else]
+              <p class="theme-desc">${topic.firstPost.contentHtml}</p>
+              [/#if]
+              [/#if]
+            
+            <div class="theme-bottom-bar clearfix">
+                <!--赞回复-->
+                <div class="theme-operation">
+                    <a href="" class="operation-btn" title="赞"><i class="icon-zan"></i>
+                        <span>${topic.firstPost.ups!}</span>
+                    </a>
+                    <a href="" class="operation-btn" title="回复数"><i class="icon-mes"></i>
+                        <span>${topic.firstPost.replys!}</span>
+                    </a>
+                </div>
+                
+                <div class="floor-info">
+                    <p class="floor-opts">
+                        [#if createrId??]
+                        <a href="${topic.url}">显示全部</a>
+                        [#else]
+                        <a href="${base}/topic/postListByAuthor.jspx?topicId=${topic.id}&createrId=${topic.firstPost.creater.id}">只看该作者</a>
+                        [/#if]
+                    </p>
+                </div>
+            </div>
+        </li>
+        
+        
+        
+        [#list tag_pagination.list as post]
+        [#if post.checkStatus||moderators]
+        [#assign creater=post.creater/] 
+        <a name="pid${post.id}"></a>
+        <li>
+            <!--用户信息-->
+            
+            <div class="user-header clearfix">
+            	[#if !post.anonymous]
+                <img class="user-img" [#if topic.avatar??][#if topic.avatar?contains('user/images')]src="${topic.avatar!}"[#else]src="/${res}/bbs_member/img/face/${(topic.avatar)!'none.gif'}"[/#if][#else]src="/${res}/bbs_member/img/face/${(topic.avatar)!'none.gif'}"[/#if] [#if magic_switch] onmouseout="hideUserMagicUL('${post.id}')"  onmouseover="showUserMagicUL('${post.id}')" [/#if] />
+                [/#if]
+                <div class="user-info ask-info">
+                    <p>
+                        <span class="user-name ask-user">[#if post.anonymous]匿名[#else]${creater.username!}[/#if]</span>
+                        <img src="/${res}/bbs_forum/images/level.png" class="level" />
+                    </p>
+                </div>
+                <div class="time-box ask-time">
+                    <span>${topic.createTimeHtml!}</span>
+                </div>
+                <div class="friend-bar ask-friend">
+                    <!--通讯录-->
+                    [#if user??&&user.id!=topic.creater.id]
+                    [#if !user.friendship?seq_contains('${topic.creater.id}')]
+                    <a id="u${creater.id}_${post.id}" href="javascript:apply('${creater.id}','${creater.username}','${post.id}')" class="iconfont icon-tongxunlu1 green" title="添加通讯录"></a>
+                    [#else]
+                    <a id="cancelAttentTopic" onclick="Cms.topicOp('${base}','${topicId!}',5,'attentCountSpan','cancelAttentTopic','attentTopic')" class="iconfont  icon-tongxunlu green" title="取消通讯录"></a>
+                    [/#if]
+                    [/#if]
+                    
+                    <!--关注-->
+                    [#if user??&&user.id!=topic.creater.id]
+                    [#if !user.myAttentionIds?seq_contains('${topic.creater.id}')]
+                    <a id="attentTopic" onclick="Cms.topicOp('${base}','${topicId!}',2,'attentCountSpan','cancelAttentTopic','attentTopic')" class="iconfont icon-guanzhu yellow" title="添加关注"></a>
+                    [#else]
+                    <a id="cancelAttentTopic" onclick="Cms.topicOp('${base}','${topicId!}',5,'attentCountSpan','cancelAttentTopic','attentTopic')" class="iconfont icon-yiguanzhu yellow" title="取消关注"></a>
+                    [/#if]
+                    [/#if]
+                </div>
+                <!--楼层操作-->
+                <div class="floor-info">
+                    <p class="floor-num">${post.indexCount}#</p>
+                </div>
+            </div>
+			
+            [#if post.shield]
+              [#if user??&&user.moderator]
+              该贴已经被屏蔽，仅版主可见<p class="theme-desc">${post.contentHtml!}</p>
+              [#else]
+              该帖子已被屏蔽，仅版主可见
+              [/#if]
+              
+              [#else]
+              
+              [#if post.hidden]
+              [#if user??]
+              [#if post.creater.id==user.id||user.moderator]
+              <p class="theme-desc">${post.contentHtml}</p>
+              [#else]
+              [#if !post.topic.haveReply?contains(','+user.id+',')]
+              <p class="theme-desc">${post.hideContent}</p>
+              [#else]
+              <p class="theme-desc">${post.contentHtml}</p>
+              [/#if]
+              [/#if]
+              [#else]
+              <p class="theme-desc">${post.hideContent}</p>
+              [/#if]
+              [#else]
+              <p class="theme-desc">${post.contentHtml}</p>
+              [/#if]
+              [/#if]
+              
+              [#if post_index==0]
+          
+          [/#if]
+            
+            <div class="theme-bottom-bar clearfix">
+                <!--赞回复-->
+                <div class="theme-operation">
+                    <a href="" class="operation-btn" title="赞"><i class="icon-zan"></i>
+                        <span>${topic.ups!}</span>
+                    </a>
+                    <a href="" class="operation-btn" title="回复数"><i class="icon-mes"></i>
+                        <span>${topic.replyCount!}</span>
+                    </a>
+                </div>
+                
+                <div class="floor-info">
+                    <p class="floor-opts">
+                        [#if createrId??]
+                        <a href="${topic.url}">显示全部</a>
+                        [#else]
+                        <a href="${base}/topic/postListByAuthor.jspx?topicId=${topic.id}&createrId=${post.creater.id}">只看该作者</a>
+                        [/#if]
+                    </p>
+                </div>
+            </div>
+        </li>
+        [/#if]
+        [/#list]
+    </ul>
+      
+<script type="text/javascript">
+var totalPage="${tag_pagination.totalPage!}";
+var pageNo=2;
+var count=5;
+	function getContent(){
+		if(pageNo<=totalPage){
+			$("#topicposts").load("${base}/topic/getPostList.jspx",
+		{pageNo: pageNo,topicId:"${topic.id}"}, 
+		function(){
+			$("#topicTable").append($("#topicposts").html());
+			pageNo++;
+			});
+		}else{
+			$("#topicTable").append("<span>暂无更多内容!</span>");
+			$("#moreSpan").prop("disabled","disabled");
+		}
+}
+</script>  
+<div id="topicTable"></div>
+<table id="topicposts" style="display: none;"> </table>
+<div>
+<button onclick="getContent()" id="moreSpan" [#if tag_pagination.totalPage<=1]disabled="disabled"[/#if] style="border:0; background:none;" class="more-ask">更多回复</button>
+</div>
+   
+<!--图库弹出层 开始
+<div class="mskeLayBg"></div>
+<div class="mskelayBox">
+  <div class="mske_html">
+  	<img id="originalImg" alt="" src="">
+  </div>
+  <img class="mskeClaose" src="/${res}/plug/pic_show/images/mke_close.png" width="27" height="27" />
+</div>-->
+<!--图库弹出层 结束-->
+<script type="text/javascript"> 
+var id;
+var strs=new Array();
+$("a[id^='magica']").each(function(){
+	id=$(this).attr("id");
+	strs=id.split("_");
+	if(strs.length>=5){
+		$(this).wBox({title: "使用道具",requestType:"iframe",iframeWH:{width:400,height:200},target:"${base}/magic/getmagicpage.jspx?pid="+strs[1]+"&ppid="+strs[2]+"&mid="+strs[3]+"&username="+strs[4]});
+		}else{
+			$(this).wBox({title: "使用道具",requestType:"iframe",iframeWH:{width:400,height:200},target:"${base}/magic/getmagicpage.jspx?pid="+strs[1]+"&ppid="+strs[2]+"&mid="+strs[3]});
+			}
+	});
+$("a[id^='msgSendA']").each(function(){
+	id=$(this).attr("id");
+	strs=id.split("_");
+	$(this).wBox({title: "打招呼",requestType:"iframe",iframeWH:{width:320,height:50},target:"${base}/getsendmsgpage.jhtml?username="+strs[2]});
+});
+$("a[id^='reportA']").each(function(){
+	id=$(this).attr("id");
+	strs=id.split("_");
+	$(this).wBox({title: "举报",requestType:"iframe",iframeWH:{width:320,height:50},target:"${base}/getreportpage.jspx?pid="+strs[2]+"&&url="+strs[1]});
+});
+</script>
+
+
+<script type="text/javascript">
+$(function() {
+	Cms.collectCsi("${base}","collectCsiDiv","collect_csi","${topic.id}");
+	[#if user??&&user.upTopicIds??&&user.upTopicIds?seq_contains("${topic.id}")]
+		$("#cancelUpTopic").show();
+		$("#upTopic").hide();
+	[#else]
+		$("#cancelUpTopic").hide();
+		$("#upTopic").show();
+	[/#if]
+	[#if user??&&user.attentTopicIds??&&user.attentTopicIds?seq_contains("${topic.id}")]
+		$("#cancelAttentTopic").show();
+		$("#attentTopic").hide();
+	[#else]
+		$("#cancelAttentTopic").hide();
+		$("#attentTopic").show();
+	[/#if]
+	<!--点击缩略图查看原图-->
+	$(".tpc_content  img").click(function(){
+		 $("#originalImg").prop("src",$(this).prev().prop("href"));$(".mskeLayBg").show();
+		 $(".mskelayBox").fadeIn(300);
+	});
+});
+</script>

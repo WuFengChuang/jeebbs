@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+$(function() {
+	$("#jvForm").validate();
+});
+</script>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+	  <div class="rpos"><@s.m "global.position"/>: <@s.m "cmsConfig.function"/> > <@s.m "configCharge.function"/> > <@s.m "global.edit"/></div>
+	<div class="clear"></div>
+</div>
+<@p.form id="jvForm" action="o_charge_update.do" labelWidth="15" class="formDefStyle">
+<@p.text  width="50" colspan="1"  label="configCharge.weixinAppId" name="weixinAppId" value=configCharge.weixinAppId required="true" class="required" maxlength="100"/>
+<@p.password  width="50" colspan="1" label="configCharge.weixinSecret" name="weixinSecret" maxlength="100" help="configCharge.weixinPassword.help"/><@p.tr/>
+
+<@p.text  width="50" colspan="1" label="configCharge.weixinAccount" name="weixinAccount" value=configCharge.weixinAccount required="true" class="required" maxlength="100"/>
+<@p.password  width="50" colspan="1" label="configCharge.weixinPassword" name="weixinPassword"   maxlength="100" help="configCharge.weixinPassword.help" /><@p.tr/>
+<@p.password  width="50" colspan="1" label="configCharge.transferApiPassword" name="transferApiPassword"   maxlength="100" help="configCharge.weixinPassword.help"/>
+<@p.password  width="50" colspan="1" label="configCharge.transferPassword" name="payTransferPassword"   maxlength="100" help="configCharge.weixinPassword.help"/><@p.tr/>
+
+<@p.radio width="100" colspan="2" label="reward.default.set"  name="rewardPattern" value=configCharge.rewardPattern list={"true":"topic.reward.pattern.1","false":"topic.reward.pattern.0"} required="true"/><@p.tr/>
+<@p.td label="topic.reward.pattern.1" colspan="2" noHeight="true">
+<div>
+<a href="javascript:void(0);" onclick="addFixLine()" class="pn-opt"><@s.m "global.add"/></a>
+</div>
+<#list fixMap?keys?sort as fix>
+<table id="fixTable${fix_index+1}" border="0" style="float:left;">
+<tr>
+	<td>
+		<div><input type="text" id="attr_reward_fix_${fix_index+1}" name="attr_reward_fix_${fix_index+1}" value="${fixMap[fix]!}" required="true" class="required number" style="width:160px"/> <a href="javascript:void(0);" onclick="$('#fixTable${fix_index+1}').remove();" class="pn-opt"><@s.m "global.delete"/></a></div>
+	</td>
+</tr>
+</table>
+</#list>
+<div id="fixBefore" style="clear:both"></div>
+<textarea id="fixTable" style="display:none;">
+<table id="fixTable{0}" border="0" style="float:left;">
+<tr>
+	<td>
+		<div><input type="text" id="attr_reward_fix_{0}" name="attr_reward_fix_{0}" required="true" class="required number" style="width:160px"/> <a href="javascript:void(0);" onclick="$('#fixTable{0}').remove();" class="pn-opt"><@s.m "global.delete"/></a></div>
+	</td>
+</tr>
+</table>
+</textarea>
+<script type="text/javascript">
+var fixIndex = ${fixMap?keys?size+1};
+var fixTpl = $.format($("#fixTable").val());
+function addFixLine() {
+	$('#fixBefore').before(fixTpl(fixIndex++));
+}
+</script>
+</@p.td><@p.tr/>
+<@p.text  width="50" colspan="1" label="configCharge.rewardMin" name="rewardMin" value=configCharge.rewardMin required="true" class="required number" vld="{min:0.01}" maxlength="11"/>
+<@p.text  width="50" colspan="1" label="configCharge.rewardMax" name="rewardMax" value=configCharge.rewardMax required="true" class="required number" vld="{min:0.01}" maxlength="11"/><@p.tr/>
+
+<@p.text  width="50" colspan="1" label="configCharge.alipayPartnerId" name="alipayPartnerId" value=configCharge.alipayPartnerId maxlength="100"/>
+<@p.text  width="50" colspan="1" label="configCharge.alipayAccount" name="alipayAccount" value=configCharge.alipayAccount required="true" class="required" maxlength="100"/><@p.tr/>
+<@p.password  width="50" colspan="1" label="configCharge.alipayKey" name="alipayKey"   maxlength="100" help="configCharge.weixinPassword.help"/>
+
+<@p.text  width="50" colspan="1" label="configCharge.alipayAppId" name="alipayAppId" value=configCharge.alipayAppId   maxlength="100"/><@p.tr/>
+<@p.textarea  width="100" colspan="2" label="configCharge.alipayPublicKey"  name="alipayPublicKey"   maxlength="1000" cols="70" rows="5" help="configCharge.weixinPassword.help"/><@p.tr/>
+<@p.textarea  width="100" colspan="2" label="configCharge.alipayPrivateKey" name="alipayPrivateKey"   maxlength="1000" cols="70" rows="5" help="configCharge.alipayPrivateKey.help"/><@p.tr/>
+
+
+<@p.text  width="50" colspan="1" label="configCharge.chargeRatio" name="chargeRatio" value=configCharge.chargeRatio required="true" class="required number" maxlength="5" help="configCharge.chargeRatio.help"/>
+<@p.text  width="50" colspan="1" label="configCharge.minDrawAmount" name="minDrawAmount" value=configCharge.minDrawAmount required="true" class="required number" maxlength="11" /><@p.tr/>
+
+<@p.text  width="100" colspan="2" label="configCharge.giftChargeRatio" name="giftChargeRatio" value=configCharge.giftChargeRatio required="true" class="required number" maxlength="5" help="configCharge.giftChargeRatio.help"/>
+
+<@p.td width="100" colspan="2"><@p.hidden name="id" value=configCharge.id/><@p.submit code="global.submit"  class="submit" /> &nbsp; <@p.reset code="global.reset" class="cancel"/></@p.td>
+</@p.form>
+</div>
+</body>
+</html>

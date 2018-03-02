@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	    <title>个人中心 - JEECMS官方论坛|开源java cms,jsp cms,jsp bbs</title>
+	    <meta content="java,cms,jsp,cms,jsp bbs,开源网站内容管理系统,网站群,站群,多站点,jeecms" name="keywords" />
+	    <meta content="讨论jsp cms、jsp bbs相关资讯，struts,hibernate,spring,freemarker最新技术研究" name="description" />
+	    <link href="${resSys}/front.css" rel="stylesheet" type="text/css"/>
+		<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/base.css" />
+		<link rel="stylesheet" type="text/css" href="/${res}/bbs_member/css/l-member.css" />
+		<script src="${resSys}/jquery.js" type="text/javascript"></script>
+		<script type="text/javascript" src="/${res}/bbs_forum/js/base.js"></script>
+		<script type="text/javascript" src="/${res}/bbs_member/js/l-member.js"></script>
+<style>
+.has-ad{font-size:12px; margin-bottom:16px;}
+.has-ad span{display:inline-block;}
+.has-ad-name{width:170px;}
+.has-adspace-name{color:#3989c6; width:190px;}
+.has-ad-time{width:150px;}
+.has-ad-count{width:100px;}
+</style>
+	</head>
+	<body>
+		<!--include-header-->
+		[#include "../include/页头.html"/]
+		<!--论坛信息-->
+		[#include "../include/论坛信息.html"/]
+	  <!--main-->
+	<div class="bbs-main clearfix">
+			<!--左侧 include-->
+			<div class="left-main">
+				<!--版块-->
+				[#include "会员中心页_导航.html"/]
+				
+			</div>
+			<!--右侧内容-->
+                        <div class="right-main clearfix" style="min-height: 592px;">
+				<div class="right-panel">
+					<div class="main-header clearfix">
+						<div class="channl-name">
+							<span>广告</span>
+						</div>
+					</div>
+					<div class="warpbox">
+						<div class="yu-e">
+							<span>广告余额</span>
+							<span class="money">${user.adAccountMount!}</span>
+							<a href="${base}/member/adRechargeInput.jspx"><img src="/${res}/bbs_member/images/chongzhi.png"/></a>
+						</div>
+						<div class="wdgg">
+							<div class="wode">
+								我的广告
+								<span class="iconfont icon-xiajiantou"></span>
+							</div>
+						</div>
+                                                [#if tag_list?size gt 0]
+	[#list tag_list as ad]
+	  <div class="has-ad">
+	    <span class="has-ad-name"> ${ad.name!}</span>
+	    <span class="has-adspace-name"> ${ad.adspace.name!}</span>
+	    <span class="has-ad-time">开始时间：[#if ad.startTime??]${ad.startTime!?string("yyyy-MM-dd")}[/#if]</span>
+	    <span class="has-ad-time">结束时间：[#if ad.endTime??]${ad.endTime!?string("yyyy-MM-dd")}[/#if]</span>
+	    <span class="has-ad-count">点击：${ad.clickCount!}次</span>
+	    <span class="has-ad-count">展现：${ad.displayCount!}次</span>
+	  </div>
+	[/#list]
+	[#else]
+<div class="lianxi">
+							<span class="kaitong">暂无广告，立即联系商务开通 ></span>
+							<a href="" style=" margin-left: 20px;"><img src="/${res}/bbs_member/images/qq_online.png" style="vertical-align: middle;"/></a>
+							<span class="tel">
+								0791-86538070 &nbsp; 13576281815
+							</span>
+						</div>
+	[/#if]
+						
+					</div>
+				</div>
+				<div class="right-panel" style="margin-top: 20px; padding: 0 30px;">
+					<div class="gg-column clearfix">
+						<span class="title">广告版位列表</span>
+					</div>
+					<ul class="gg-list clearfix">
+                                       [@adspace_list]
+		                         [#list tag_list as g]
+		 				<li>
+							<div class="imgbox">
+								<img src="${g.previewImg!}"/>
+							</div>
+							<span>${g.name!}</span>
+						</li>
+						[/#list]
+	[/@adspace_list]
+					</ul>
+				</div>
+				
+			</div>
+		</div>
+		<!--footer-->
+		[#include "../include/页脚.html"/]
+	</body>
+
+</html>

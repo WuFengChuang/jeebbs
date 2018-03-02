@@ -1,0 +1,216 @@
+<script>
+	var topicTypeIndex = 1;
+	var topicTypeTpl;
+	$(function () {
+       [#if !user??]   
+	    $('#loadbox').load('${base}/login.jspx');
+       [/#if]
+	 topicTypeTpl= $.format($("#topicTypeTpl").val());
+	})
+	function getloginTab(that,url) {
+	   $('.login-tab span').each(function(){
+		$(this).removeClass('active');
+	   });
+       $(that).addClass('active');
+	   $('#loadbox').load(url);
+	}
+	function getloginTabOut() {
+	   $('.login-tab span').each(function(){
+		$(this).removeClass('active');
+	   });
+       $("#loginSpan").addClass('active');
+	   $('#loadbox').load('${base}/login.jspx');
+	}
+	function addtopicTypeLine() {
+		$('#topicTypeAppend').append(topicTypeTpl(topicTypeIndex++));
+	}
+	function selectHotType(typeId){
+			var len=$("#topicTypeAppend .Tag").length;
+			
+			
+			console.log(len);
+			
+		
+		
+			
+		var liClass=$("#hottypeli"+typeId).prop("class");
+		if(liClass!=null&&liClass!=""){
+			$("#hottypeli"+typeId).removeClass("active");
+			topicTypeDel(typeId);
+		}else{
+			$('.topic-wrapper').addClass('large-wrapper');
+			$("#hottypeli"+typeId).addClass("active");
+			addtopicTypeLine();
+			var index = topicTypeIndex - 1;
+			$("#topicTypeNames"+index).html($("#hottypeli"+typeId).html());
+			$("#topicTypeIds"+index).val($("#hottypeli"+typeId).prop("id").split("hottypeli")[1]);
+		}
+	}
+	function createTopicTypeTag(){
+		$('.topic-wrapper').addClass('large-wrapper');
+		$("#topicTypeAppend").html("");
+		$.post("${base}/topic/o_generateTags.jspx", 
+			{title:$("#topicTypeText").val()},
+			function(data){
+				var ids=data.ids;
+				var names=data.names;
+				for(var i=0;i<names.length;i++){
+					addtopicTypeLine();
+					var index = topicTypeIndex - 1;
+					$("#topicTypeNames"+index).html(names[i]);
+					$("#topicTypeIds"+index).val(ids[i]);
+				}
+		   },"json");
+	}
+	function topicTypeTplDel(typeId){
+		$("#topicTypeRow"+typeId).remove();
+		var len=$("#topicTypeAppend .Tag").length;
+		if(len==0){
+			$('.topic-wrapper').removeClass('large-wrapper');
+		}
+		
+	}
+	function topicTypeDel(typeId){
+		$("input[name='topicTypeIds']").each(function(){
+			var tid=$(this).val();
+			if(tid==typeId){
+				$(this).parent().remove();
+			}
+		});
+	}
+</script>
+[#if !user??]
+<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="${site.config.qqID!}" data-redirecturi="http://${site.domain}/public_auth.jspx" charset="utf-8"></script>
+[/#if]
+<style>
+.login-box{position:relative;}
+#loginMsg{font-size:10px; color:#ff0000; position:absolute; top:45px; left:32px;}
+.form-group{position:relative;}
+.form-group label{font-size:10px; color:#ff0000; position:absolute; bottom:-16px; left:0;}
+.nav .nav-bar li { margin-right: 38px;}
+.nav-fun-bar .user-logo img{float:left; margin-right:6px;}
+.nav-fun-bar .user-logo span{height:33px; line-height:33px; font-size:12px; color:#fff;}
+</style>
+<!--include-header-->
+<header class="header">
+    <div class="container header-inner">
+        <div class="header-logo">
+            <a href="${base}/"><img src="/${res}/bbs_forum/images/logo.png" /></a>
+        </div>
+        <div class="nav clearfix">
+            <ul class="nav-bar">
+                <li [#if location?ends_with('/')]class="active"[/#if]>
+                    <a href="${base}/">首页</a>
+                </li>
+                <li>
+                    <a href="http://www.jeecms.com">官网</a>
+                </li>
+                <li>
+                    <a href="http://www.jeecms.com/goumai.htm">购买</a>
+                </li>
+                <li>
+                    <a href="http://www.jeecms.com/service/index.htm">服务</a>
+                </li>
+            </ul>
+            <!--功能区-->
+            <ul class="nav-fun-bar">
+                <li>
+                    <a href="${base}/topic/search.jhtml" title="搜索" class="iconfont icon-search"></a>
+                </li>
+                [#if site.config.ssoEnable]
+                <script type="text/javascript">
+                Cms.loginSSO('${base}');
+                </script>
+                [/#if]
+                <script type="text/javascript">
+                [#if user??]
+                Cms.loginAdmin('${base}');
+                [#else]
+                Cms.logoutAdmin('${base}');
+                [/#if]
+                </script>
+                
+                [#if user??]
+                <!--已登录-->
+                <li class="user-logo">
+                    [#if user.avatar??]<img src="${user.avatar}" />[#else]<img src="/${res}/bbs_forum/images/userImg-all.png" />[/#if]
+                    <div class="tooltip">
+                        <ul>
+                            <li>
+                                <a href="${base}/member/index.jhtml">个人中心</a>
+                            </li>
+                            <li>
+                                [#if returnUrl?? && returnUrl?length gt 0]
+                                <a href="${base}/logout.jspx?returnUrl=${returnUrl!}">退出登录</a>
+                                [#else]
+                                <a href="${base}/logout.jspx?returnUrl=/">退出登录</a>
+                                [/#if]
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                [#else]
+                <!--未登录-->
+                <li  class="user-logo">
+                    <a title="登录" class="iconfont icon-denglu" onclick="showModel('#login')"></a>
+                </li>
+                [/#if]
+                [#if user??][#if forum??]
+                <li>
+                    <a href="${base}/topic/v_add${forum.id!}.jspx" title="发帖" class="post">发帖</a>
+                </li>
+                [/#if][/#if]
+            </ul>
+        </div>
+    </div>
+</header>
+<!--login-->
+<div class="model-panel login-panel"  id="login">
+    <div class="login-header">
+        <a href="#" class="iconfont icon-Delete pull-right" title="关闭"  onclick="closeModel()"></a>
+    </div>
+    <div class="login-tab clearfix">
+        <span class="pull-left active" id="loginSpan" onclick="getloginTab(this,'${base}/login.jspx')">登录</span>
+		<span class="pull-right"  onclick="getloginTab(this,'${base}/register.jspx')">注册</span>
+    </div>
+    <div id="loadbox"></div>
+</div>
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/stop.css" />
+<div class="model-panel" id="noPerm">
+	<div class="stop_img">
+    	<img src="/${res}/bbs_forum/images/stop.jpg" alt="">
+    </div>
+    <div class="stop_txt">
+    	<div class="stop_txtbox">
+    		<p>${msg!}</p>
+    		<a href="javascript:history.back();" id="close-noPerm">返回上一页</a>
+    	</div>
+    </div>
+</div>
+<div class="model-panel" id="intervalShort">
+    <div class="stop_txt">
+    	<div class="stop_txtbox">
+    		<p>不能发帖过快!</p>
+    		<a href="javascript:history.back();" id="close-noPerm">返回上一页</a>
+    	</div>
+    </div>
+</div>
+<div class="model-panel" id="uploadError">
+    <div class="stop_txt">
+    	<div class="stop_txtbox">
+    		<p>上传文件错误!</p>
+    		<a href="javascript:history.back();" id="close-noPerm">返回上一页</a>
+    	</div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+  $("#close-noPerm").click(function(){
+  $("#noPerm").hide();
+  $("#intervalShort").hide();
+  $("#uploadError").hide();
+  $(".cover").hide();
+  });
+});
+</script>

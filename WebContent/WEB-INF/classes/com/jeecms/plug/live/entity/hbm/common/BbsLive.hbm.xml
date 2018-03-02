@@ -1,0 +1,207 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.jeecms.plug.live.entity">
+	<class
+		name="BbsLive"
+		table="bbs_live"
+	>
+		<meta attribute="sync-DAO">false</meta>
+		<cache usage="read-write"/>
+		<id
+			name="id"
+			type="integer"
+			column="live_id"
+		>
+			<generator class="identity"/>
+		</id>
+
+		<property
+			name="title"
+			column="title"
+			type="string"
+			not-null="true"
+			length="255"
+		/>
+		<property
+			name="description"
+			column="description"
+			type="string"
+			not-null="false"
+			length="2000"
+		/>
+		<property
+			name="liveLogo"
+			column="live_logo"
+			type="string"
+			not-null="false"
+			length="255"
+		/>
+		<property
+			name="createTime"
+			column="create_time"
+			type="timestamp"
+			not-null="true"
+			length="19"
+		/>
+		<property
+			name="beginTime"
+			column="begin_time"
+			type="timestamp"
+			not-null="true"
+			length="19"
+		/>
+		<property
+			name="endTime"
+			column="end_time"
+			type="timestamp"
+			not-null="true"
+			length="19"
+		/>
+		<property
+			name="beginPrice"
+			column="begin_price"
+			type="java.lang.Double"
+			not-null="true"
+			length="11"
+		/>
+		<property
+			name="afterPrice"
+			column="after_price"
+			type="java.lang.Double"
+			not-null="true"
+			length="11"
+		/>
+		<property
+			name="limitUserNum"
+			column="limit_user_num"
+			type="integer"
+			not-null="true"
+			length="10"
+		/>
+		<property
+			name="commissionRate"
+			column="commission_rate"
+			type="java.lang.Double"
+			not-null="true"
+			length="5"
+		/>
+		<property
+			name="checkStatus"
+			column="check_status"
+			type="java.lang.Short"
+			not-null="true"
+		/>
+		<property
+			name="joinUserNum"
+			column="join_user_num"
+			type="integer"
+			not-null="true"
+			length="10"
+		/>
+		<property
+			name="inliveUserNum"
+			column="inlive_user_num"
+			type="integer"
+			not-null="true"
+			length="10"
+		/>
+		<property
+			name="liveUrl"
+			column="live_url"
+			type="string"
+			not-null="false"
+			length="255"
+		/>
+		<property
+			name="demandUrl"
+			column="demand_url"
+			type="string"
+			not-null="false"
+			length="255"
+		/>
+		<property
+			name="demandImageUrl"
+			column="demand_image_url"
+			type="string"
+			not-null="false"
+			length="255"
+		/>
+		<property
+			name="liveMobileUrl"
+			column="live_mobile_url"
+			type="string"
+			not-null="false"
+			length="255"
+		/>
+		<property
+			name="livePlat"
+			column="live_plat"
+			type="java.lang.Short"
+			not-null="true"
+		/>
+		<property
+			name="livePlatKey"
+			column="live_plat_key"
+			type="string"
+			not-null="false"
+			length="255"
+		/>
+		<property
+			name="totalAmount"
+			column="total_amount"
+			type="java.lang.Double"
+			not-null="true"
+			length="11"
+		/>
+		<property
+			name="reason"
+			column="reject_reason"
+			type="string"
+			not-null="false"
+			length="1000"
+		/>
+		<many-to-one
+			name="user"
+			column="user_id"
+			class="com.jeecms.bbs.entity.BbsUser"
+			not-null="true"
+		>
+		</many-to-one>
+		<many-to-one
+			name="chapter"
+			column="chapter_id"
+			class="BbsLiveChapter"
+			not-null="true"
+		>
+		</many-to-one>
+		<many-to-one
+			name="site"
+			column="site_id"
+			class="com.jeecms.core.entity.CmsSite"
+			not-null="true"
+			>
+		</many-to-one>
+
+		<set name="messages" inverse="true" lazy="true" cascade="delete">
+			<cache usage="read-write"/>
+			<key column="live_id"/>
+			<one-to-many class="BbsLiveMessage"/>
+		</set>
+		
+		<set name="joinUsers" inverse="true" lazy="true" cascade="delete">
+			<cache usage="read-write"/>
+			<key column="live_id"/>
+			<one-to-many class="BbsLiveUser"/>
+		</set>
+
+		<set name="chargeSet" inverse="true" cascade="delete-orphan">
+			<cache usage="read-write"/>
+			<key column="live_id"/>
+			<one-to-many class="BbsLiveCharge"/>
+		</set>
+
+	</class>	
+</hibernate-mapping>

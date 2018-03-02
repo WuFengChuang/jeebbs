@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>${site.name} - JEECMS官方论坛|开源java cms,jsp cms,jsp bbs</title>
+<meta name="keywords" content="java,cms,jsp,cms,jsp bbs,开源网站内容管理系统,网站群,站群,多站点,jeecms" />
+<meta name="description" content="讨论jsp cms、jsp bbs相关资讯，struts,hibernate,spring,freemarker最新技术研究" /> 
+<script src="/${res}/bbs_forum/js/jquery1.9.1.js" type="text/javascript"></script>
+<script src="${resSys}/front.js" type="text/javascript"></script>
+<script src="/${res}/bbs_forum/js/blocksit.min.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/main.css" />
+</head>
+<body>
+<div class="main" id="main">
+  [#include "../include/页头.html"/]
+  <div class="member">
+    <div class="member-txt">
+      <img src="/${res}/bbs_forum/img/user_pic.jpg">
+      <div class="member-m">
+        <div style="width:100%;overflow:hidden;"><h1>${user.username!}</h1><div class="member-r"><a href="${base}/member/information.jhtml">编辑资料</a></div></div>
+        <div style="width:100%;overflow:hidden;"><h2>等级:<span>${user.group.name!}</span>&nbsp;&nbsp;积分:<span>${user.point!}</span></h2></div>
+      </div> 
+    </div>
+    <div class="login-out"><a href="${base}/logout.jspx?returnUrl=/">退出登录</a><img src="/${res}/bbs_forum/img/jiantou_right.png"></div>
+  </div>
+  <div class="member-main">
+    <div class="member-main-nav">
+      <ul>
+        <li [#if location?contains('member/mytopic')]style="border-bottom:1px solid #008cdc;"[/#if]><a href="${base}/member/mytopic.jhtml">我的主题</a></li>
+        <li [#if location?contains('member/mypost')]style="border-bottom:1px solid #008cdc;"[/#if]><a href="${base}/member/mypost.jhtml">我的回复</a></li>
+      </ul>
+    </div>
+    <div class="member-main-list">
+      <ul id="thelist">
+      </ul>
+    </div>
+  </div>
+</div>
+<script>
+var first=0;
+var count=10;
+content="";
+function getContent(){
+   [#if user??]
+     $.get("${base}/topic/v_list_json.jspx", {
+                myreply:true,
+		first:first,
+		count:count
+	   }, function(data) {
+                content="";
+                for (var i=0;i<data.length;i++){
+                        var title=data[i].title;
+                        if(title.length>12){
+                            title=title.substring(0,12)+"..";
+                        }
+			content = content + "<li><a href='"+data[i].url+"'>";
+			content = content +"<span style='margin-left:4%;float:left;'>"+ title+"</span>";
+			content = content +"<span style='margin-right:4%;color:#858585;float:right;'>"+ data[i].createTime+"</span></a></li>";
+		}
+                setTimeout(function () { $('#thelist').append(content); first=first+count;}, 100);
+	   }, "json");       
+  [/#if]
+}
+$(function(){
+var lastTime=new Date();
+getContent();
+$(window).scroll(function(){
+               var time=new Date();
+               if((time.getTime()-lastTime.getTime())/1000>=0.5){
+                // 当滚动到最底部以上50像素时， 加载新内容
+		if ($(document).height() - $(this).scrollTop() - $(this).height()<50){
+                      lastTime=time;
+                      getContent();
+			$('#main').BlocksIt({
+				numOfCol:5,
+				offsetX: 8,
+				offsetY: 8
+			});
+		}
+               }
+});
+});
+</script>
+</body>
+</html>

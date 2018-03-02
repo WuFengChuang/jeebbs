@@ -1,0 +1,24 @@
+<div class="left-panel">
+					<ul class="forum-items">
+						<li [#if location?contains('live/host/index.jspx')]class="active"[/#if] >
+							<a href="${base}/live/host/index.jspx">
+								<i class="iconfont icon-zhibo font"></i>我的直播
+							</a>
+						</li>
+						<li [#if location?contains('live/host/load.jspx')]class="active"[/#if] >
+							<a href="${base}/live/host/load.jspx">
+								<i class="iconfont  icon-shouyezixun  font"></i>直播章节
+							</a>
+						</li>
+						<li [#if location?contains('live/host/statistic.jspx')||location?contains('live/host/draw.jspx')]class="active"[/#if] >
+							<a href="${base}/live/host/statistic.jspx">
+								<i class="iconfont icon-ccgl-tuihuosunyi-5 font"></i>直播收益
+							</a>
+						</li>
+					</ul>
+				</div>
+<!--
+<div class="left-panel cjzb-panel">
+					<a href=""><img src="/${res}/bbs_member/images/cjzb.png" /></a>
+				</div>
+-->

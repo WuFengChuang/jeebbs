@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<script src="${base}/res/plug/echarts/echarts.min.js" type="text/javascript"></script>
+<script src="${base}/res/plug/echarts/dataTool.min.js"  type="text/javascript" ></script>
+<script src="${base}/res/plug/echarts/china.js"  type="text/javascript" ></script>
+<script src="${base}/res/plug/echarts/world.js"  type="text/javascript" ></script>
+<script src="${base}/res/plug/echarts/bmap.min.js"  type="text/javascript" ></script>
+<script  type="text/javascript">
+$(function() {
+	var totalIncome = [],adIncome=[],magicIncome=[],giftIncome=[],liveIncome=[],postIncome=[];
+	var xdata=[];
+	<#list list as s>
+		totalIncome.push(${s[0]!});
+		adIncome.push(${s[1]!});
+		giftIncome.push(${s[2]!});
+		magicIncome.push(${s[3]!});
+		liveIncome.push(${s[4]!});
+		postIncome.push(${s[5]!});
+		xdata.push(${s[6]!});
+	</#list>
+	//基于准备好的dom，初始化echarts实例
+	var myChart = echarts.init(document.getElementById('placeholder'));
+	// 指定图表的配置项和数据
+	var option = {	
+	 title: {
+	     text: '收益统计',
+	 },
+	 tooltip: {
+	     trigger: 'axis'
+	 },
+	 legend: {
+	     data:['总收益','广告收益','道具收益','礼物收益','直播收益','帖子收益']
+	 },
+	 grid: {
+	     left: '1%',
+	     right: '1%',
+	     bottom: '1%',
+	     containLabel: true
+	 },
+	 toolbox: {
+	     feature: {
+	         saveAsImage: {}
+	     }
+	 },
+	 xAxis: {
+	     type: 'category',
+	     boundaryGap: false,
+	     data: xdata
+	 },
+	 yAxis: {
+	     type: 'value'
+	 },
+	 series: [
+	     {
+	         name:'总收益',
+	         type:'line',
+	         stack: '总收益',
+	         data:totalIncome
+	     },
+	     {
+	         name:'广告收益',
+	         type:'line',
+	         stack: '广告收益',
+	         data:adIncome
+	     },
+	     {
+	         name:'道具收益',
+	         type:'line',
+	         stack: '道具收益',
+	         data:magicIncome
+	     },
+	     {
+	         name:'礼物收益',
+	         type:'line',
+	         stack: '礼物收益',
+	         data:giftIncome
+	     },
+	     {
+	         name:'直播收益',
+	         type:'line',
+	         stack: '直播收益',
+	         data:liveIncome
+	     },
+	     {
+	         name:'帖子收益',
+	         type:'line',
+	         stack: '帖子收益',
+	         data:postIncome
+	     }
+	 ]
+	};
+	// 使用刚指定的配置项和数据显示图表。
+	if (option && typeof option === "object") {
+	    myChart.setOption(option, true);
+	}
+});
+</script>
+</head>
+<body>
+<div class="statistic">
+  <div class="sta-tab" style="margin-top:0px;">
+    <div class="sta-tab-nav">
+    	<a  href="income/indexStatistic.do?flag=1"><span></span>本月</a>
+    	<a  href="income/indexStatistic.do?flag=2"><span></span>今年</a>
+    	<a  href="income/indexStatistic.do?flag=3"><span></span>全部</a>
+    </div>
+    <div class="tab-con">
+      <div class="tab-main">
+        <div>
+			<div id="placeholder" class="demo-placeholder" style="float:left; width:99%; height:380px;"></div>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

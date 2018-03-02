@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.jeecms.plug.live.entity">
+	<class
+		name="BbsLiveApply"
+		table="bbs_live_apply"
+	>
+		<meta attribute="sync-DAO">false</meta>
+		<cache usage="read-write"/>
+		<id
+			name="id"
+			type="integer"
+			column="apply_id"
+		>
+			<generator class="sequence"><param name="sequence">S_BBS_LIVE_APPLY</param></generator>
+		</id>
+
+		<property
+			name="intro"
+			column="intro"
+			type="string"
+			not-null="false"
+			length="1000"
+		/>
+		<property
+			name="brief"
+			column="brief"
+			type="string"
+			not-null="true"
+			length="1000"
+		/>
+		<property
+			name="experience"
+			column="experience"
+			type="string"
+			not-null="false"
+		/>
+		<property
+			name="mobile"
+			column="mobile"
+			type="string"
+			not-null="false"
+			length="20"
+		/>
+		<property
+			name="address"
+			column="address"
+			type="string"
+			not-null="false"
+			length="255"
+		/>
+		<property
+			name="applyTime"
+			column="apply_time"
+			type="timestamp"
+			not-null="true"
+			length="19"
+		/>
+		<property
+			name="checkTime"
+			column="check_time"
+			type="timestamp"
+			not-null="false"
+			length="19"
+		/>
+		<property
+			name="status"
+			column="status"
+			type="java.lang.Short"
+			not-null="true"
+		/>
+		<list name="pictures" table="bbs_live_apply_picture">
+			<cache usage="read-write"/>
+			<key column="apply_id"/>
+			<list-index column="priority"/>
+			<composite-element class="BbsLiveApplyPicture">
+				<property name="imgPath" column="img_path" type="string" length="100" not-null="true"/>
+				<property name="description" column="description" type="string" length="255" not-null="false"/>
+			</composite-element>
+		</list>
+		<many-to-one
+			name="checkUser"
+			column="check_user_id"
+			class="com.jeecms.bbs.entity.BbsUser"
+			not-null="false"
+		>
+		</many-to-one>
+		<many-to-one
+			name="applyUser"
+			column="apply_user_id"
+			class="com.jeecms.bbs.entity.BbsUser"
+			not-null="true"
+		>
+		</many-to-one>
+
+	</class>	
+</hibernate-mapping>

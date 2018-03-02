@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+function getTableForm() {
+	return document.getElementById('tableForm');
+}
+function optDelete() {
+	if(Pn.checkedCount('ids')<=0) {
+		alert("<@s.m 'error.checkRecord'/>");
+		return;
+	}
+	if(!confirm("<@s.m 'global.confirm.delete'/>")) {
+		return;
+	}
+	var f = getTableForm();
+	f.action="o_delete.do";
+	f.submit();
+}
+</script>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos"><@s.m "global.position"/>: <@s.m "bbsMessage.function"/> - <@s.m "global.list"/></div>
+	<form class="ropt" method="post" action="v_list.do">
+	    发送者：<input type="text" name="sender" value="${sender!}" size="10"/>
+	   接收者： <input type="text" name="receiver" value="${receiver!}" size="10"/>
+	  内容： <input type="text" name="content" value="${content!}" size="15"/>  
+		<input type="submit" value="查询" />
+	</form>
+	<div class="clear"></div>
+</div>
+<form id="tableForm" method="post">
+<input type="hidden" name="pageNo" value="${pageNo!}"/>
+<input type="hidden" name="sender" value="${sender!}"/>
+<input type="hidden" name="receiver" value="${receiver!}"/>
+<input type="hidden" name="content" value="${content!}"/>
+<input type="hidden" name="sys" value="false"/>
+<@p.table value=pagination;message,i,has_next><#rt/>
+	<@p.column title="<input type='checkbox' onclick='Pn.checkbox(\"ids\",this.checked)'/>" width="20">
+		<input type='checkbox' name='ids' value='${message.message.id}'/><#t/>
+	</@p.column><#t/>
+	<@p.column title="ID">${message.id}</@p.column><#t/>
+	<@p.column code="bbsMessage.user">${message.sender.username}</@p.column><#t/>
+	<@p.column code="bbsMessage.receiver.user">${message.receiver.username}</@p.column><#t/>
+	<@p.column code="bbsMessage.sendTime">${message.createTime!?string("yyyy-MM-dd HH:mm:ss")}</@p.column><#t/>
+	<@p.column code="bbsMessage.content"><span title="${message.content!?html}"><@text_cut s=message.content!?html len=25 append="..."/></span></@p.column><#t/>
+	<@p.column code="global.operate" align="center">
+		<a href="o_delete.do?sys=false&sender=${sender!}&receiver=${receiver!}&content=${content!}&ids=${message.message.id}&pageNo=${pageNo!}" onclick="if(!confirm('<@s.m "global.confirm.delete"/>')) {return false;}"><@s.m "global.delete"/></a><#t/>
+	</@p.column><#t/>
+</@p.table>
+<div><input type="button" value="<@s.m "global.delete"/>" onclick="optDelete();"/></div>
+</form>
+</div>
+<#include "/common/alert_message.html"/>
+</body>
+</html>

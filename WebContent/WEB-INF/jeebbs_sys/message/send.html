@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+$(function() {
+	$("#jvForm").validate();
+});
+function selectToAll(){
+	var toAll=$('input:radio[name="toAll"]:checked').val();
+	if(toAll=="false"){
+		$("#groupDive").show();
+		$("#userDive").show();
+	}else{
+		$("#groupDive").hide();
+		$("#userDive").hide();
+	}
+}
+function selectGroup(){
+	var groupId=$("#groupId").val();
+	if(groupId!=0){
+		$("#userDive").hide();
+	}else{
+		$("#userDive").show();
+	}
+}
+</script>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos"><@s.m "global.position"/>: <@s.m "cmsMember.function"/> - <@s.m "global.add"/></div>
+	<form class="ropt">
+		<input type="submit" value="<@s.m "global.backToList"/>" onclick="this.form.action='v_list.do';"/>
+	</form>
+	<div class="clear"></div>
+</div>
+<@p.form id="jvForm" action="o_sendSys.do" labelWidth="12">
+<div>
+	发给所有人
+	是:<input name="toAll" id="f1" type="radio" value="true" checked="checked" onclick="selectToAll()"/>
+	否:<input name="toAll" id="f2" type="radio" value="false" onclick="selectToAll()"/>
+</div>
+<div id="groupDive" style="display: none">
+选择分组
+<select name="groupId" id="groupId" onchange="selectGroup()">
+    <option value="0">选择用户</option>
+    <#list groupList as group>
+    <option value="${group.id!}">${group.name!}</option>
+    </#list>
+</select>
+</div>
+<div id="userDive" style="display: none">
+选择人<input name="username" />
+</div>
+<div>
+内容<textarea rows="5" cols="70" name="content"></textarea>
+</div>
+<input name="pageNo" value="${pageNo!}" type="hidden"/>
+<div>
+<@p.submit code="global.submit"/> &nbsp; <@p.reset code="global.reset"/>
+</div>
+</@p.form>
+</div>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	    <title>个人中心 - JEECMS官方论坛|开源java cms,jsp cms,jsp bbs</title>
+	    <meta content="java,cms,jsp,cms,jsp bbs,开源网站内容管理系统,网站群,站群,多站点,jeecms" name="keywords" />
+	    <meta content="讨论jsp cms、jsp bbs相关资讯，struts,hibernate,spring,freemarker最新技术研究" name="description" />
+	    <link href="${resSys}/front.css" rel="stylesheet" type="text/css"/>
+		<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/base.css" />
+		<link rel="stylesheet" type="text/css" href="/${res}/bbs_member/css/l-member.css" />
+		<script src="${resSys}/jquery.js" type="text/javascript"></script>
+		<script type="text/javascript" src="/${res}/bbs_forum/js/base.js"></script>
+		<script type="text/javascript" src="/${res}/bbs_member/js/l-member.js"></script>
+<script  type="text/javascript">
+$(function() {
+  	[#if gift??]
+		$("#wcode").load("${base}/order/giftSelectPay.jspx?giftId=${gift.id!}&buyNum=${buyNum!}&orderNumber=${orderNumber!}&payMethod=1&returnUrl=${returnUrl!}");
+		$("#acode").load("${base}/order/giftSelectPay.jspx?giftId=${gift.id!}&buyNum=${buyNum!}&orderNumber=${orderNumber!}&payMethod=4&returnUrl=${returnUrl!}");
+	[#elseif magic??]
+		$("#wcode").load("${base}/order/magicSelectPay.jspx?mid=${magic.identifier!}&buyNum=${buyNum!}&orderNumber=${orderNumber!}&payMethod=1");
+		$("#acode").load("${base}/order/magicSelectPay.jspx?mid=${magic.identifier!}&buyNum=${buyNum!}&orderNumber=${orderNumber!}&payMethod=4");
+	[#elseif ad??]
+		$("#wcode").load("${base}/order/adSelectPay.jspx?amount=${amount!}&orderNumber=${orderNumber!}&payMethod=1");
+		$("#acode").load("${base}/order/adSelectPay.jspx?amount=${amount!}&orderNumber=${orderNumber!}&payMethod=4");
+	[/#if]
+});
+</script>
+<style>
+.register-box {width: 700px;height: 480px;padding: 30px 50px 56px 50px; background:#fff;}
+.reward-money{margin:40px 0 56px; font-size:18px; color:#333333;}
+.reward-money span{color:#19afd4; margin-right:64px;}
+.reward-pay{margin-bottom:30px; font-size:18px; color:#939393;}
+.reward-paylist{text-align:center;}
+.reward-paylist > div{width:150px; display:inline-block; margin:0 50px; color:#333333; font-size:16px;}
+.reward-paylist > div img{width:150px;}
+</style>
+	</head>
+	<body>
+       [#if !location?contains('/gift/buy.jspx')]
+		<!--include-header-->
+		[#include "../include/页头.html"/]
+		<!--论坛信息-->
+		[#include "../include/论坛信息.html"/]
+		[/#if]
+	  <!--main-->
+	  
+		[#if !location?contains('/gift/buy.jspx')]
+		<div class="bbs-main clearfix">
+		[/#if]
+			<!--左侧 include-->
+			[#if !location?contains('/gift/buy.jspx')]
+			<div class="left-main">
+				<!--版块-->
+					[#include "../member/会员中心页_导航.html"/]
+			</div>
+			[/#if]
+			<!--右侧内容-->
+             [#if !location?contains('/gift/buy.jspx')]<div class="right-main clearfix" style="min-height: 592px;">[/#if]
+                     [#if !location?contains('/gift/buy.jspx')]
+				<div class="right-panel">
+                   [/#if]
+                      [#if !location?contains('/gift/buy.jspx')]
+					<div class="main-header clearfix">
+						<div class="channl-name">
+							<span>广告</span>
+						</div>
+					</div>
+                   [/#if]
+					<div class="register-box">
+					   [#if gift??]
+					   <div class="reward-money">单价：<span>${gift.price!}</span>数量：<span>${buyNum!}</span>总价：<span>${(buyNum*gift.price)!}</div>
+					   [#elseif magic??]
+						<div class="reward-money">单价：<span>${magic.price!}</span>数量： <span>${buyNum!}</span>总价：<span>${(buyNum*magic.price)!}</span></div>
+					   [#elseif ad??]
+					   <div class="reward-money">金额：<span>${amount!}</span></div>
+					   [/#if]
+					   <div class="reward-pay">支付方式</div>
+					   <div class="reward-paylist"><div><span id="wcode"></span>微信扫码支付</div><div><span id="acode"></span>支付宝扫码支付</div></div>
+					</div>
+                  [#if !location?contains('/gift/buy.jspx')]
+				</div>
+                  
+			</div>
+	
+		</div>
+		[/#if]
+		<!--footer-->
+		[#if !location?contains('/gift/buy.jspx')]
+		[#include "../include/页脚.html"/]
+		[/#if]
+	</body>
+
+</html>

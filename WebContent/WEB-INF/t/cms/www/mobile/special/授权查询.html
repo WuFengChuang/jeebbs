@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>授权查询 - ${site.name} - powered by jeecms</title>
+	<link href="${resSys}/front.css" rel="stylesheet" type="text/css"/>
+    <script src="${resSys}/jquery.js" type="text/javascript"></script>
+    <script src="${resSys}/front.js" type="text/javascript"></script>
+    <script src="/${res}/bbs_forum/js/pony.js" type="text/javascript"></script>
+    <script src="/${res}/bbs_forum/js/PnEditor.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/whole.css" />
+    <link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/layout.css" />
+    <script type="text/javascript">
+    $(function() {
+    	$("#queryForm").validate();
+    });
+	function checkInput(){
+		var code=$("#code").val();
+		var domain=$("#domain").val();
+		var sitename=$("#sitename").val();
+		if(code==""&&domain==""&&sitename==""){
+			alert("查询条件必须输入其中的一个！");
+			return false;
+		}else{
+			return true;
+		}
+	}
+	</script>
+<style type="text/css">
+</style>
+  </head>
+  <body>
+    <!--header-->[#include "../include/页头.html"/]<!--/header-->
+    <!--main-->
+    <div class="main-wrap">
+    <div id="main">
+    <div class="c"></div>
+    <div class="t z">
+    <form id="queryForm" action="${base}/authorize/query.jspx" method="post">
+      <table cellspacing="0" cellpadding="0" width="100%" align="center">
+        <tbody>
+          <tr style="color: #666; line-height: 23px; height: 23px">
+            <td>
+            <select id="queryField" name="queryField" >
+             <option value="1" [#if queryField??][#if queryField==1]selected="selected"[/#if][/#if]>授权码</option>
+             <option value="2" [#if queryField??][#if queryField==2]selected="selected"[/#if][/#if]>域名</option>
+             <option value="3" [#if queryField??][#if queryField==3]selected="selected"[/#if][/#if]>网站全称</option>
+             </select>
+            <input name="input" value="${input!}" id="input"  vld="{required:true}"></input>
+                               验证码*：<input name="captcha" type="text" title="请填写验证码" vld="{required:true}">
+            <img id="captcha"  src="${base}/captcha.svl" onclick="this.src='${base}/captcha.svl?d='+new Date()"/>
+            <input type="submit" id="submit" value="查询" onclick="return checkInput();"></input></td>
+          </tr>
+          [#if query??]
+	          [#if authorize??]
+		          <tr style="color: #666; line-height: 23px; height: 23px">
+			          <td>
+			          	授权码:${authorize.authorizeCode!}&nbsp;<br/>
+			          	域名:${authorize.domain!}&nbsp;<br/>
+			          	网站全称:${authorize.siteName!}&nbsp;<br/>
+			          	持有人:${authorize.authorize.unitName!}&nbsp;<br/>
+			          	服务起止日期:${authorize.authorize.serviceStart!?string("yyyy-MM-dd")}&nbsp;
+			          	至:&nbsp;${authorize.authorize.serviceEnd!?string("yyyy-MM-dd")}&nbsp;<br/>
+			          	系统版本:${authorize.version!}&nbsp;<br/>
+			          </td>
+		          </tr>
+		      [#else]
+		      	<tr style="color: #666; line-height: 23px; height: 23px">
+			          <td>
+			          	[#if status==1]
+			          	验证码错误！
+			          	[#elseif status==2]
+			          	请选择查询范畴！
+			          	[#elseif status==3]
+			          	请输入查询条件！
+			          	[#elseif status==0]
+			          	未查询到授权！
+			          	[/#if]
+			          </td>
+		          </tr>
+	          [/#if]
+          [/#if]
+        </tbody>
+      </table>
+    </form>
+    </div>
+    </div>
+    </div>
+    <!--/main-->
+    <!--footer-->[#include "../include/页脚.html"/]<!--footer-->
+  </body>
+</html>

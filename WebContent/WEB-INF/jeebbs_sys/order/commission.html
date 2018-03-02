@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+$(function() {
+	$("#jvForm").validate();
+});
+</script>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+  <div class="rpos"><@s.m "global.position"/>: <@s.m "order.plat.static.function"/></div>
+	<div class="clear"></div>
+</div>
+<div class="box-positon ck">
+	<form class="ropt">
+		<input type="submit" value="<@s.m "global.backToList"/>" onclick="window.history.go(-1);" class="return-button"/>
+	</form>
+	<div class="clear"></div>
+</div>
+<@p.form id="jvForm"  labelWidth="15" class="formDefStyle">
+<@p.td colspan="1" width="50" label="configCharge.commissionTotal" >${config.commissionTotal!}</@p.td>
+<@p.td colspan="1" width="50" label="configCharge.commissionYear" >${config.commissionYear!}</@p.td><@p.tr/>
+<@p.td colspan="1" width="50" label="configCharge.commissionMonth" >${config.commissionMonth!}</@p.td>
+<@p.td colspan="1" width="50" label="configCharge.commissionDay" >${config.commissionDay!}</@p.td><@p.tr/>
+</@p.form>
+</div>
+</body>
+</html>

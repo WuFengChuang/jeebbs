@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>${live.title!}-JEECMS官方论坛|开源java cms,jsp cms,jsp bbs</title>
+    <meta content="${live.title!},java,cms,jsp,cms,jsp bbs,开源网站内容管理系统,网站群,站群,多站点,jeecms" name="keywords" />
+    <meta content="${live.title!},讨论jsp cms、jsp bbs相关资讯，struts,hibernate,spring,freemarker最新技术研究" name="description" />
+    <script src="${resSys}/jquery.js" type="text/javascript"></script>
+    <script src="${resSys}/front.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/base.css" />
+   
+	<script type="text/javascript" src="/${res}/bbs_forum/js/base.js"></script>
+	
+    <script type="text/javascript">
+    	$(function () {
+    			$("#jvForm").validate($.validator.AlertError);
+	$('body').on("click",".buy-gift",function(){
+		   $("#buyBox").load('${base}/live/front/buy.jspx?liveId=${live.id}&self=1',function () {
+	   	        showModel('#buyBox');
+	   })
+	})
+   })   	
+    </script>
+    <style>
+    	.buy-panel{
+    		background: #fff;
+    		width: 700px;
+    	}
+    </style>
+  </head>
+  <body>
+ [#include "../include/页头.html"/]
+   [#include "../include/论坛信息.html"/]
+
+    <div class="bbs-main clearfix">
+		<!--直播标题-->
+		<div class="live-header">
+			<div class="live-header-left">
+				<img src="/${res}/bbs_forum/images/profile3.jpg" class="live-logo" />
+				<div class="live-info">
+					<p class="live-title">${live.title!}</p>
+					<p>
+						<span class="live-name">${live.user.username!}</span>
+						<span class="live-gray-info">总门票数: ${live.user.liveTicketNum!}</span>
+						<span class="live-gray-info">收到礼物: ${live.user.liveGiftNum!}</span>
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="live-left-layout p20">
+			<!--播放器-->
+			<div class="live-player">
+				  [#if user??]
+    	<!-- 主持人或已购买或直播免费 -->
+		[#if user.id==live.user.id|live.joinUserIds?seq_contains("${user.id}")||!live.charge]
+			<!-- 直播未开始或未结束 -->
+		    [#if live.hasBegin&&!live.hasOver]
+		    [#if live.livePlat==1]
+    		<!-- 百度云 -->
+		    <div id="playercontainer"></div>
+			<script type="text/javascript" src="${resSys}/cyberplayer.js"></script>
+			<script type="text/javascript">
+			    var player = cyberplayer("playercontainer").setup({
+			        width: 823,
+			        height: 505,
+			        file: "${live.liveUrl!}", // <—rtmp直播地址
+			        fallbackfile: "${live.liveMobileUrl!}", // <— 备用播放地址，为了电脑上用rtmp流播放，手机上播放设置hls流
+			        autostart: true,
+			        stretching: "uniform",
+			        volume: 100,
+			        controls: true,
+			        ak: '${config.baiduSecretAccessKey!}' // 公有云平台注册即可获得accessKey
+			    });
+			</script>
+			[#elseif live.livePlat==2]
+			<!-- 腾讯云 -->
+		    <script src="//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer-2.2.0.js" charset="utf-8"></script>;
+		    <div id="playercontainer" style="width:100%; height:auto;"></div>
+			<script type="text/javascript">
+		    	var player =  new TcPlayer('playercontainer', {
+		    	"m3u8": "${live.liveMobileUrl!}",
+		    	"flv": "${live.demandUrl!}", //增加了一个flv的播放地址，用于PC平台的播放 请替换成实际可用的播放地址
+		    	"autoplay" : true,      //iOS下safari浏览器，以及大部分移动端浏览器是不开放视频自动播放这个能力的
+		    	"coverpic" : "${live.demandImageUrl!}",
+		    	"width" :  '823',//视频的显示宽度，请尽量使用视频分辨率宽度
+		    	"height" : '505'//视频的显示高度，请尽量使用视频分辨率高度
+		    	});
+			</script>
+			[/#if]
+			[/#if]
+		[#else]
+			<div class="player-none">
+					<div class="center">
+						<p>请先购买门票</p>
+						<p><img src="/${res}/bbs_forum/images/icon-time.png" />开始时间 :${live.beginTime!?string("yyyy-MM-dd HH:mm")}</p>
+							<p><img src="/${res}/bbs_forum/images/icon-time.png" />	结束时间 :${live.endTime!?string("yyyy-MM-dd HH:mm")}</p>
+					</div>
+				</div>
+		[/#if]
+	[/#if]
+				
+			</div>
+			<div class="live-bottom-bar clearfix">
+				<!--left-->
+				<div class="live-bottom-left">
+					<div class="live-man"><i class="iconfont  icon-renshu"></i>参与人数: <span class="live-num">${live.joinUserNum!}</span> </div>
+					<div class="live-tick">门票：${live.beginPrice!}元</div>
+					  [#if user??]
+	    [#if user.id!=live.user.id&&!live.joinUserIds?seq_contains("${user.id}")]
+		[#if live.charge&&!live.hasOver]
+			<a  class="buy-gift">购买</a>
+		[/#if]
+		[/#if]
+		<!-- 主持人或已购买 -->
+	[#else]
+		[#if live.charge&&!live.hasOver]
+			<a  class="buy-gift">购买</a>	
+		
+		[/#if]
+	[/#if]
+	[#if live.hasOver]
+	<a href="${base}/live/message/list.jspx?liveId=${live.id}" style="display: none;">查看历史消息</a>
+	[/#if]
+				</div>	
+				
+				<!--购买弹窗-->
+				   <div class="model-panel buy-panel" id="buyBox">
+				   	<div class="edit-topic-header">
+					<a href="javascript:void(0)" class="iconfont icon-Delete pull-right" title="关闭"  onclick="closeModel()"></a>
+					</div>
+                                          
+				   </div>
+				
+					<!-- 礼物赠送区开始 -->
+		<script type="text/javascript">
+			function sendGiftToHost(giftId,numId){	
+				var num=$("#"+numId).val();
+				if(num==null||num==0){
+					num=1;
+				}
+				$.ajax({
+					url:'${base}/live/front/sendGiftToHost.jspx',
+					type:"post",
+					data:{
+						liveId:"${live.id}",
+						giftId:giftId,
+						num:num
+					},
+					dataType:"json",
+					success:function(data){
+						if(data.status==2){
+							alert("您不是live参与者");
+						}else if(data.status==3){
+							//礼物不足
+							$("#giftBuyBox").load("${base}/gift/buy.jspx?giftId="+giftId+"&buyNum="+num+"&self=1&returnUrl=${live.urlWhole!}",function () {
+		 						showModel('#giftBuyBox');
+							});
+						}
+					}
+				});
+			}
+		</script>			
+				<!--right-->
+				<div class="live-bottom-right">
+					<!--礼物循环-->
+			[#list gifts as g]
+					<div class="gift-box">
+						<img  src="${g.picPath!}" alt="${g.name!}" class="gift-pic" />
+						<div class="gift-inner" style="z-index: 9999;">
+									<img src="${g.picPath!}" alt="${g.name!}" class="inner-pic" />
+									<div class="gift-content">
+										<div class="clearfix">
+											<span class="gift-name">${g.name!}</span>
+											<span class="gift-num">拥有:</span>
+										</div>
+										<div style="margin-top: 30px;">
+											<div class="gift-price">售价：<span>${g.price!}</span>元</div>
+											<div class="check-num pull-left">
+												<a href="#" class="sub">-</a>
+												<input type="text" value="1"   id="giftNum${g.id}" />
+												<a href="#" class="add">+</a>
+											</div>
+											<a href="javascript:void(0)" class="gift-btn pull-right" title="赠送"  onclick="sendGiftToHost('${g.id}','giftNum${g.id}')"></a>
+										</div>
+									</div>
+						</div>
+					</div>
+		     [/#list]
+				</div>
+			</div>
+		</div>		
+			<!-- 在线聊天区开始 --> 
+
+
+	<div id="msgTpl" style="display: none">
+		<li class="mes-item"> 
+        					<img src="/${res}/bbs_forum/images/level.png" alt=""  title="等级" class="user-level"/>
+		        				<div class="mes-info">
+		        					  <span class="mes-user" id="msgUserName">: </span>
+		        					  <span id="msgText"></span>
+		        				</div>
+        			</li>
+	</div>
+	
+	
+	<!-- 在线聊天区结束 -->
+			[#if user??]
+    <script>
+		var path = '${site.domain}:${site.port}';
+		[#if site.contextPath??]
+			path+="${base}";
+		[/#if]
+		var uid="${user.id!}";
+		var liveId="${live.id!}";
+		var websocket;
+		if ('WebSocket' in window) {
+			websocket = new WebSocket("ws://" + path + "/ws?uid="+uid+"&liveId="+liveId);
+		} else if ('MozWebSocket' in window) {
+			websocket = new MozWebSocket("ws://" + path + "/ws"+uid+"&liveId="+liveId);
+		} else {
+			websocket = new SockJS("http://" + path + "/ws/sockjs"+uid+"&liveId="+liveId);
+		}
+		websocket.onopen = function(event) {
+			console.log("WebSocket:已连接");
+			console.log(event);
+		};
+		websocket.onmessage = function(event) {
+			var data=JSON.parse(event.data);
+			console.log("WebSocket:收到一条消息",data);
+			if("_liveStop"==data.text){
+				//window.close();
+				//closeWindows();
+			}else{
+				var textCss=data.from==-1?"sfmsg_text":"fmsg_text";
+				$("#msgTpl #msgUserName").html(data.fromName);
+				$("#msgTpl #msgTime").html(data.date);
+				$("#msgTpl #msgText").html(data.text);
+				if(data.fromName=="${user.username!}"){
+					$("#msgTpl .fmsg").css("text-align","right");
+				}else{
+					$("#msgTpl .fmsg").css("text-align","left");
+				}
+				$("#content").append($("#msgTpl").html());
+				scrollToBottom();
+			}
+		};
+		websocket.onerror = function(event) {
+			console.log("WebSocket:发生错误 ");
+			console.log(event);
+			//window.close();
+			//closeWindows();
+		};
+		websocket.onclose = function(event) {
+			console.log("WebSocket:已关闭");
+			console.log(event);
+			//window.close();
+			//closeWindows();
+		}
+		function sendMsg(){
+			var text=$("#msg").val();
+			if(text==""){
+				return;
+			}else{
+				$.ajax({
+					url:'${base}/live/message/sayToAll.jspx',
+					type:"post",
+					data:{
+						liveId:"${live.id}",
+						text:$("#msg").val()
+					},
+					dataType:"json",
+					success:function(data){
+						//alert("发送成功");
+					}
+				});
+				scrollToBottom();
+				$("#msg").val("");
+			}
+		}		
+		function scrollToBottom(){
+			var div = document.getElementById('content');
+			div.scrollTop = div.scrollHeight;
+		}
+		
+		Date.prototype.Format = function (fmt) { //author: meizz 
+		    var o = {
+		        "M+": this.getMonth() + 1, //月份 
+		        "d+": this.getDate(), //日 
+		        "h+": this.getHours(), //小时 
+		        "m+": this.getMinutes(), //分 
+		        "s+": this.getSeconds(), //秒 
+		        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+		        "S": this.getMilliseconds() //毫秒 
+		    };
+		    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+		    for (var k in o)
+		    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+		    return fmt;
+		}	
+		function send(event){
+			var code;
+			 if(window.event){
+				 code = window.event.keyCode; // IE
+			 }else{
+				 code = e.which; // Firefox
+			 }
+			if(code==13){ 
+				sendMsg();            
+			}
+		}
+		
+		function clearAll(){
+			$("#content").empty();
+		}
+		function closeWindows() {
+	         var browserName = navigator.appName;
+	         var browserVer = parseInt(navigator.appVersion);
+	         //alert(browserName + " : "+browserVer);
+
+	         //document.getElementById("flashContent").innerHTML = "<br>&nbsp;<font face='Arial' color='blue' size='2'><b> You have been logged out of the Game. Please Close Your Browser Window.</b></font>";
+
+	         if(browserName == "Microsoft Internet Explorer"){
+	             var ie7 = (document.all && !window.opera && window.XMLHttpRequest) ? true : false;  
+	             if (ie7)
+	             {  
+	               //This method is required to close a window without any prompt for IE7 & greater versions.
+	               window.open('','_parent','');
+	               window.close();
+	             }
+	            else
+	             {
+	               //This method is required to close a window without any prompt for IE6
+	               this.focus();
+	               self.opener = this;
+	               self.close();
+	             }
+	        }else{  
+	            //For NON-IE Browsers except Firefox which doesnt support Auto Close
+	            try{
+	                this.focus();
+	                self.opener = this;
+	                self.close();
+	            }
+	            catch(e){
+
+	            }
+
+	            try{
+	                window.open('${base}/','_self','');
+	                window.close();
+	            }
+	            catch(e){
+
+	            }
+	        }
+	    }
+	</script>
+	[/#if]
+        <div class="live-right-layout h619" style="position: relative;">
+        		<a onclick="clearAll()" style="position: absolute; bottom: 70px; z-index: 99; right: 20px; color: #c7c7c7; font-size: 12px; cursor:pointer;">清空</a>
+        			<div class="live-interact"><img src="/${res}/bbs_forum/images/interact.png"/></div>
+        			<!--聊天列表-->
+        			<ul class="mes-items" id="content"></ul>
+        			<!--发送聊天信息-->
+        			<div  class="edit-mes">   	
+        					  <input type="text"  placeholder="请输入内容" class="mes-input" id="msg" [#if user??]onkeydown="send(event)"[/#if]/>
+        					<input type="button" value="发送" class="mes-sub"  [#if user??]onclick="sendMsg()"[/#if]/>  
+        			</div>
+        </div>
+		<!--layout-->
+		<div class="live-left-layout h306">
+			<div  class="live-recom-header">
+				<span>直播推荐</span>
+				<a href="${base}/live/front/index.jspx"><i class="iconfont icon-gengduo"></i></a>
+			</div>
+			<ul class="recom-lists">
+				[@live_list  orderBy='1' count='3' ]				
+	[#list tag_list as l]
+	[#if l.hasBegin&&!l.hasOver||!l.hasBegin]
+				
+				<li ><a href="${base}/live/front/get.jspx?id=${l.id}">
+					<img src="${l.liveLogo!}" style="background: url(/${res}/bbs_forum/images/zb-zwtp.jpg) no-repeat;background-size: cover;/ >
+					 <p class="recom-title">${l.title!}</p>
+					 <div class="recom-live-info">
+					 	<span title="主播" class="pull-left"><i class="iconfont icon-xingmingyonghumingnicheng"></i>${l.user.username!}</span>
+					 	<span title="观看人数" class="pull-right"><i class="iconfont icon-renshu" style="font-size: 20px;"></i>${l.joinUserNum!}  </span>
+					 </div>
+				</a></li>
+					[/#if]
+						[/#list]		
+			</ul>
+				[/@live_list]
+		</div>
+	   <!--热门主播-->
+	   <div class="live-right-layout h306">
+	    	   <div  class="live-recom-header">
+				<span>热门主播</span>
+			</div>
+			  <div class="text-align">
+			  		 [@live_host_list  orderBy='1' count='3' ]	
+			  	<ul class="hot-liver-items clearfix">
+		[#list tag_list as host]
+			  		<li [#if host_index==0]class="first"[#elseif host_index==1]class="second"[#else]class="three"[/#if]>
+			  			<a>
+			  [#if host.user.avatar??]<img src="${host.user.avatar}" class="hot-liver"/>[#else]<img src="/${res}/bbs_member/images/profile3.jpg" class="hot-liver"/>[/#if]
+			  					<span class="l-name">${host.user.realname!host.user.username!}</span>
+			  			</a>
+			  		</li>
+			  		[/#list]
+			  	</ul>
+[/@live_host_list]
+			  	[#if user??][#if user.liveHost][#else]<a href="${base}/live/host/apply.jspx" class="liver-btn">我要当主播</a>[/#if][/#if]		    	
+			  </div>
+	    </div>
+	</div>
+	<!-- 礼物赠送区结束-->
+	<!-- 礼物购买二维码弹窗-->
+   <div class="model-panel buy-panel" id="giftBuyBox">
+	<div class="edit-topic-header">
+	<a href="javascript:void(0)" class="iconfont icon-Delete pull-right" title="关闭"  onclick="closeModel()"></a>
+	</div>
+ </div>
+    <!--/main-->
+    <!--footer-->[#include "../include/页脚.html"/]<!--footer-->
+  </body>
+</html>

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.jeecms.bbs.entity">
+	<class
+		name="BbsLimit"
+		table="bbs_limit"
+	>
+		<meta attribute="sync-DAO">false</meta>
+		<id
+			name="id"
+			type="integer"
+			column="limit_id"
+		>
+			<generator class="sequence"><param name="sequence">S_BBS_LIMIT</param></generator>
+		</id>
+
+		<property
+			name="ip"
+			column="ip"
+			type="string"
+			not-null="false"
+			length="50"
+		/>
+		<property
+			name="userId"
+			column="user_id"
+			type="integer"
+			not-null="false"
+			length="10"
+		/>
+
+
+	</class>	
+</hibernate-mapping>

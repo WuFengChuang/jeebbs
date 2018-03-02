@@ -1,0 +1,227 @@
+	
+	<#assign mc="frame:maintain_main,frame:maintain_left,frame:maintain_right"/>
+	<#assign uc="frame:user_main,frame:user_left,frame:user_right"/>
+	<#assign ec="frame:expand_left,frame:expand_main,frame:expand_right"/>
+	<#assign configc="frame:config_main,frame:config_left,frame:config_right"/>
+	<#assign tc="template:template_main,template:v_left,template:v_tree,template:v_list"/>
+	<#assign rc="resource:resource_main,resource:v_left,resource:v_tree,resource:v_list"/>
+	<#assign ssc="site:site_main,site:v_left,site:v_tree,site:v_list,site:v_checkDomain,site:v_checkAccessPath,site:v_checkMaster"/>
+	<SCRIPT type="text/javascript">
+		var setting = {
+			check: {
+				enable: true
+			},
+			data: {
+				simpleData: {
+					enable: true
+				}
+			}
+		};
+		var zNodes =[
+            { id:1, pId:0, name:"<@s.m 'global.selectall'/>", open:true,perm:"index,top,main,left,right"},
+			{ id:11, pId:1, name:"<@s.m 'global.admin.home'/>",perm:"index,top,main,left,right"},
+
+			{ id:111, pId:11, name:"<@s.m 'cmsPersonal.function'/>"},
+			{ id:1111, pId:111, name:"<@s.m 'global.view'/>",perm:"personal:v_profile,personal:v_checkPwd"},
+			{ id:1112, pId:111, name:"<@s.m 'global.edit'/>",perm:"personal:o_profile"},
+			
+			
+			{ id:145, pId:14, name:"<@s.m 'cmsFriendlink.function'/>"},
+			{ id:1450, pId:145, name:"<@s.m 'global.list'/>",perm:"friendlink:v_list,${mc}"},
+			{ id:1451, pId:145, name:"<@s.m 'global.add'/>",perm:"friendlink:v_add,${mc}"},
+			{ id:1452, pId:145, name:"<@s.m 'global.save'/>",perm:"friendlink:o_save,${mc}"},
+			{ id:1453, pId:145, name:"<@s.m 'global.edit'/>",perm:"friendlink:v_edit,${mc}"},
+			{ id:1454, pId:145, name:"<@s.m 'global.update'/>",perm:"friendlink:o_update,${mc}"},
+			{ id:1455, pId:145, name:"<@s.m 'global.delete'/>",perm:"friendlink:o_delete,${mc}"},
+			{ id:1456, pId:145, name:"<@s.m 'global.saveOrder'/>",perm:"friendlink:o_priority,${mc}"},
+
+			{ id:146, pId:14, name:"<@s.m 'cmsFriendlinkCtg.function'/>"},
+			{ id:1460, pId:146, name:"<@s.m 'global.list'/>",perm:"friendlink_ctg:v_list,${mc}"},
+			{ id:1461, pId:146, name:"<@s.m 'global.save'/>",perm:"friendlink_ctg:o_save,${mc}"},
+			{ id:1462, pId:146, name:"<@s.m 'global.update'/>",perm:"friendlink_ctg:o_update,${mc}"},
+			{ id:1463, pId:146, name:"<@s.m 'global.delete'/>",perm:"friendlink_ctg:o_delete,${mc}"},
+
+			{ id:147, pId:14, name:"<@s.m 'cmsAdvertising.function'/>"},
+			{ id:1470, pId:147, name:"<@s.m 'global.list'/>",perm:"advertising:v_list,${mc}"},
+			{ id:1471, pId:147, name:"<@s.m 'global.add'/>",perm:"advertising:v_add,${mc}"},
+			{ id:1472, pId:147, name:"<@s.m 'global.save'/>",perm:"advertising:o_save,advertising:o_upload_flash,${mc}"},
+			{ id:1473, pId:147, name:"<@s.m 'global.edit'/>",perm:"advertising:v_edit,${mc}"},
+			{ id:1474, pId:147, name:"<@s.m 'global.update'/>",perm:"advertising:o_update,advertising:o_upload_flash,${mc}"},
+			{ id:1475, pId:147, name:"<@s.m 'global.delete'/>",perm:"advertising:o_delete,${mc}"},
+
+			{ id:148, pId:14, name:"<@s.m 'cmsAdvertisingSpace.function'/>"},
+			{ id:1480, pId:148, name:"<@s.m 'global.list'/>",perm:"advertising_space:v_list,${mc}"},
+			{ id:1481, pId:148, name:"<@s.m 'global.add'/>",perm:"advertising_space:v_add,${mc}"},
+			{ id:1482, pId:148, name:"<@s.m 'global.save'/>",perm:"advertising_space:o_save,${mc}"},
+			{ id:1483, pId:148, name:"<@s.m 'global.edit'/>",perm:"advertising_space:v_edit,advertising_space:v_ajax_edit,${mc}"},
+			{ id:1484, pId:148, name:"<@s.m 'global.update'/>",perm:"advertising_space:o_update,${mc}"},
+			{ id:1485, pId:148, name:"<@s.m 'global.delete'/>",perm:"advertising_space:o_delete,${mc}"},
+			
+			
+			{ id:15, pId:1, name:"<@s.m 'cms.function.user'/>"},
+			
+			{ id:151, pId:15, name:"<@s.m 'cmsMember.function'/>"},
+			{ id:1510, pId:151, name:"<@s.m 'global.list'/>",perm:"member:v_list,member:v_check_username,${uc}"},
+			{ id:1511, pId:151, name:"<@s.m 'global.add'/>",perm:"member:v_add,${uc}"},
+			{ id:1512, pId:151, name:"<@s.m 'global.save'/>",perm:"member:o_save,${uc}"},
+			{ id:1513, pId:151, name:"<@s.m 'global.edit'/>",perm:"member:v_edit,${uc}"},
+			{ id:1514, pId:151, name:"<@s.m 'global.update'/>",perm:"member:o_update,${uc}"},
+			{ id:1515, pId:151, name:"<@s.m 'global.delete'/>",perm:"member:o_delete,${uc}"},
+			{ id:1516, pId:151, name:"<@s.m 'global.check'/>",perm:"member:o_check,${uc}"},
+			
+			{ id:152, pId:15, name:"<@s.m 'cmsGroup.function'/>"},
+			{ id:1520, pId:152, name:"<@s.m 'global.list'/>",perm:"group:v_list,group:v_site_list,group:v_site_contri_list,group:v_channels_add,group:v_channels_edit,${uc}"},
+			{ id:1521, pId:152, name:"<@s.m 'global.add'/>",perm:"group:v_add,${uc}"},
+			{ id:1522, pId:152, name:"<@s.m 'global.save'/>",perm:"group:o_save,group:v_check_name,${uc}"},
+			{ id:1523, pId:152, name:"<@s.m 'global.edit'/>",perm:"group:v_edit,${uc}"},
+			{ id:1524, pId:152, name:"<@s.m 'global.update'/>",perm:"group:o_update,group:v_check_name,${uc}"},
+			{ id:1525, pId:152, name:"<@s.m 'global.delete'/>",perm:"group:o_delete,${uc}"},
+			{ id:1527, pId:152, name:"<@s.m 'global.saveOrder'/>",perm:"group:o_priority,${uc}"},
+
+			
+			{ id:155, pId:15, name:"<@s.m 'cmsRole.function'/>"},
+			{ id:1550, pId:155, name:"<@s.m 'global.list'/>",perm:"role:v_list,role:v_tree,${uc}"},
+			{ id:1551, pId:155, name:"<@s.m 'global.add'/>",perm:"role:v_add,${uc}"},
+			{ id:1552, pId:155, name:"<@s.m 'global.save'/>",perm:"role:o_save,${uc}"},
+			{ id:1553, pId:155, name:"<@s.m 'global.edit'/>",perm:"role:v_edit,${uc}"},
+			{ id:1554, pId:155, name:"<@s.m 'global.update'/>",perm:"role:o_update,${uc}"},
+			{ id:1555, pId:155, name:"<@s.m 'global.delete'/>",perm:"role:o_delete,${uc}"},
+			
+			
+			{ id:16, pId:1, name:"<@s.m 'cms.function.extend'/>"},
+			
+			{ id:160, pId:16, name:"<@s.m 'plug.function'/>"},
+			{ id:1600, pId:160, name:"<@s.m 'global.list'/>",perm:"plug:v_list,${ec}"},
+			{ id:1601, pId:160, name:"<@s.m 'global.add'/>",perm:"plug:v_add,${ec}"},
+			{ id:1602, pId:160, name:"<@s.m 'global.save'/>",perm:"plug:o_save,plug:o_upload,${ec}"},
+			{ id:1603, pId:160, name:"<@s.m 'global.edit'/>",perm:"plug:v_edit,${ec}"},
+			{ id:1604, pId:160, name:"<@s.m 'global.update'/>",perm:"plug:o_update,${ec}"},
+			{ id:1605, pId:160, name:"<@s.m 'global.delete'/>",perm:"plug:o_delete,${ec}"},
+			{ id:1606, pId:160, name:"<@s.m 'plug.install'/>",perm:"plug:o_install,${ec}"},
+			{ id:1607, pId:160, name:"<@s.m 'plug.uninstall'/>",perm:"plug:o_uninstall,${ec}"},
+			
+			<#list  tops?keys as k>
+			{ id:16${k}, pId:16, name:"<@s.m '${tops[k]}'/>"},
+				<#list menuNames[k]?keys as p>
+	        	{ id:16${k}${p}, pId:16${k}, name:"<@s.m '${menuNames[k][p]}'/>"},
+		            <#if menuChildSets[p]??>
+			        <#list menuChildSets[p] as c>
+			        { id:16${k}${p}${c_index}, pId:16${k}${p}, name:"<@s.m '${c?split("@")[0]}'/>",perm:"${c?split("@")[1]},${menuPerms[p]},${ec}"},
+			        </#list>
+			        </#if>
+		        </#list>
+			</#list>
+
+			
+			{ id:18, pId:1, name:"<@s.m 'cms.function.template'/>"},
+			{ id:1800, pId:18, name:"<@s.m 'template.addDir'/>",perm:"template:o_create_dir,${tc}"},
+			{ id:1801, pId:18, name:"<@s.m 'global.add'/>",perm:"template:v_add,${tc}"},
+			{ id:1802, pId:18, name:"<@s.m 'global.save'/>",perm:"template:o_save,${tc}"},
+			{ id:1803, pId:18, name:"<@s.m 'global.edit'/>",perm:"template:v_edit,${tc}"},
+			{ id:1804, pId:18, name:"<@s.m 'global.update'/>",perm:"template:o_update,template:o_ajaxUpdate,${tc}"},
+			{ id:1805, pId:18, name:"<@s.m 'global.delete'/>",perm:"template:o_delete,template:o_delete_single,${tc}"},
+			{ id:1806, pId:18, name:"<@s.m 'template.rename'/>",perm:"template:v_rename,template:o_rename,${tc}"},
+			{ id:1807, pId:18, name:"<@s.m 'resource.upload'/>",perm:"template:o_swfupload,${tc}"},
+			{ id:1808, pId:18, name:"<@s.m 'template.setting'/>",perm:"template:v_setting,${tc}"},
+			{ id:1809, pId:18, name:"<@s.m 'template.setting.solution'/>",perm:"template:o_def_template,${tc}"},
+			{ id:1810, pId:18, name:"<@s.m 'template.export'/>",perm:"template:o_export,${tc}"},
+			{ id:1811, pId:18, name:"<@s.m 'template.import'/>",perm:"template:o_import,${tc}"},
+			
+			{ id:19, pId:1, name:"<@s.m 'cms.function.resource'/>"},
+			{ id:1900, pId:19, name:"<@s.m 'resource.addDir'/>",perm:"resource:o_create_dir,${rc}"},
+			{ id:1901, pId:19, name:"<@s.m 'global.add'/>",perm:"resource:v_add,${rc}"},
+			{ id:1902, pId:19, name:"<@s.m 'global.save'/>",perm:"resource:o_save,${rc}"},
+			{ id:1903, pId:19, name:"<@s.m 'global.edit'/>",perm:"resource:v_edit,${rc}"},
+			{ id:1904, pId:19, name:"<@s.m 'global.update'/>",perm:"resource:o_update,${rc}"},
+			{ id:1905, pId:19, name:"<@s.m 'global.delete'/>",perm:"resource:o_delete,resource:o_delete_single,${rc}"},
+			{ id:1906, pId:19, name:"<@s.m 'resource.rename'/>",perm:"resource:v_rename,resource:o_rename,${rc}"},
+			{ id:1907, pId:19, name:"<@s.m 'resource.upload'/>",perm:"resource:o_swfupload,${rc}"},
+
+			
+			{ id:20, pId:1, name:"<@s.m 'cms.function.config'/>"},
+			{ id:201, pId:20, name:"<@s.m 'cmsSiteConfig.function'/>"},
+			{ id:2011, pId:201, name:"<@s.m 'global.view'/>",perm:"site_config:v_base_edit,${configc}"},
+			{ id:2012, pId:201, name:"<@s.m 'global.update'/>",perm:"site_config:o_base_update,${configc}"},
+			
+			{ id:202, pId:20, name:"<@s.m 'cmsSite.function'/>"},
+			{ id:2020, pId:202, name:"<@s.m 'global.add'/>",perm:"site:v_add,${ssc},${configc}"},
+			{ id:2021, pId:202, name:"<@s.m 'global.save'/>",perm:"site:o_save,${ssc},${configc}"},
+			{ id:2022, pId:202, name:"<@s.m 'global.edit'/>",perm:"site:v_edit,${ssc},${configc}"},
+			{ id:2023, pId:202, name:"<@s.m 'global.update'/>",perm:"site:o_update,${ssc},${configc}"},
+			{ id:2024, pId:202, name:"<@s.m 'global.delete'/>",perm:"site:o_delete,${ssc},${configc}"},
+			
+			{ id:203, pId:20, name:"<@s.m 'cmsConfig.function'/>"},
+			{ id:2031, pId:203, name:"<@s.m 'cmsConfig.function.system'/>"},
+			{ id:20311, pId:2031, name:"<@s.m 'global.view'/>",perm:"config:v_system_edit,${configc}"},
+			{ id:20312, pId:2031, name:"<@s.m 'global.update'/>",perm:"config:o_system_update,${configc}"},
+			{ id:2032, pId:203, name:"<@s.m 'cmsConfig.function.login'/>"},
+			
+			{ id:204, pId:20, name:"<@s.m 'bbsWebservice.function'/>"},
+			{ id:2040, pId:204, name:"<@s.m 'cmsConfig.function.api'/>"},
+			{ id:20401, pId:2040, name:"<@s.m 'global.view'/>",perm:"config:v_api_edit,${configc}"},
+			{ id:20402, pId:2040, name:"<@s.m 'global.update'/>",perm:"config:o_aip_update,${configc}"},
+			
+			{ id:2041, pId:204, name:"<@s.m 'cmsConfig.function.sso'/>"},
+			{ id:20411, pId:2041, name:"<@s.m 'global.view'/>",perm:"config:v_sso_edit,${configc}"},
+			{ id:20412, pId:2041, name:"<@s.m 'global.update'/>",perm:"config:o_sso_edit,${configc}"},
+			
+			{ id:2042, pId:204, name:"<@s.m 'bbsWebservice.function'/>"},
+			{ id:20420, pId:2042, name:"<@s.m 'global.list'/>",perm:"webservice:v_list,${configc}"},
+			{ id:20421, pId:2042, name:"<@s.m 'global.add'/>",perm:"webservice:v_add,${configc}"},
+			{ id:20422, pId:2042, name:"<@s.m 'global.save'/>",perm:"webservice:o_save,${configc}"},
+			{ id:20423, pId:2042, name:"<@s.m 'global.edit'/>",perm:"webservice:v_edit,${configc}"},
+			{ id:20424, pId:2042, name:"<@s.m 'global.update'/>",perm:"webservice:o_update,${configc}"},
+			{ id:20425, pId:2042, name:"<@s.m 'global.delete'/>",perm:"webservice:o_delete,${configc}"},
+			
+			{ id:2043, pId:204, name:"<@s.m 'bbsWebserviceAuth.function'/>"},
+			{ id:20430, pId:2043, name:"<@s.m 'global.list'/>",perm:"webserviceAuth:v_list,${configc}"},
+			{ id:20431, pId:2043, name:"<@s.m 'global.add'/>",perm:"webserviceAuth:v_add,${configc}"},
+			{ id:20432, pId:2043, name:"<@s.m 'global.save'/>",perm:"webserviceAuth:o_save,${configc}"},
+			{ id:20433, pId:2043, name:"<@s.m 'global.edit'/>",perm:"webserviceAuth:v_edit,${configc}"},
+			{ id:20434, pId:2043, name:"<@s.m 'global.update'/>",perm:"webserviceAuth:o_update,${configc}"},
+			{ id:20435, pId:2043, name:"<@s.m 'global.delete'/>",perm:"webserviceAuth:o_delete,${configc}"},
+			
+			{ id:2044, pId:204, name:"<@s.m 'bbsWebserviceCallRecord.function'/>"},
+			{ id:20441, pId:2044, name:"<@s.m 'global.list'/>",perm:"webserviceCallRecord:v_list,${configc}"},
+			{ id:20442, pId:2044, name:"<@s.m 'global.delete'/>",perm:"webserviceCallRecord:o_delete,${configc}"},
+			
+			{ id:2045, pId:204, name:"<@s.m 'apiInfo.function'/>"},
+			{ id:20450, pId:2045, name:"<@s.m 'global.list'/>",perm:"apiInfo:v_list,${configc}"},
+			{ id:20451, pId:2045, name:"<@s.m 'global.add'/>",perm:"apiInfo:v_add,${configc}"},
+			{ id:20452, pId:2045, name:"<@s.m 'global.save'/>",perm:"apiInfo:o_save,${configc}"},
+			{ id:20453, pId:2045, name:"<@s.m 'global.edit'/>",perm:"apiInfo:v_edit,${configc}"},
+			{ id:20454, pId:2045, name:"<@s.m 'global.update'/>",perm:"apiInfo:o_update,${configc}"},
+			{ id:20455, pId:2045, name:"<@s.m 'global.delete'/>",perm:"apiInfo:o_delete,${configc}"},
+			
+			{ id:2046, pId:204, name:"<@s.m 'apiAccount.function'/>"},
+			{ id:20460, pId:2046, name:"<@s.m 'global.list'/>",perm:"apiAccount:v_list,apiAccount:v_exist,${configc}"},
+			{ id:20461, pId:2046, name:"<@s.m 'global.add'/>",perm:"apiAccount:v_add,${configc}"},
+			{ id:20462, pId:2046, name:"<@s.m 'global.save'/>",perm:"apiAccount:o_save,${configc}"},
+			{ id:20463, pId:2046, name:"<@s.m 'global.edit'/>",perm:"apiAccount:v_edit,${configc}"},
+			{ id:20464, pId:2046, name:"<@s.m 'global.update'/>",perm:"apiAccount:o_update,${configc}"},
+			{ id:20465, pId:2046, name:"<@s.m 'global.delete'/>",perm:"apiAccount:o_delete,${configc}"},
+			
+			{ id:2047, pId:204, name:"<@s.m 'apiRecord.function'/>"},
+			{ id:20470, pId:2047, name:"<@s.m 'global.list'/>",perm:"apiRecord:v_list,${configc}"},
+			{ id:20475, pId:2047, name:"<@s.m 'global.delete'/>",perm:"apiRecord:o_delete,${configc}"},
+			
+			
+			
+			{ id:208, pId:20, name:"<@s.m 'ftp.function'/>"},
+			{ id:2080, pId:208, name:"<@s.m 'global.list'/>",perm:"ftp:v_list,${configc}"},
+			{ id:2081, pId:208, name:"<@s.m 'global.add'/>",perm:"ftp:v_add,${configc}"},
+			{ id:2082, pId:208, name:"<@s.m 'global.save'/>",perm:"ftp:o_save,${configc}"},
+			{ id:2083, pId:208, name:"<@s.m 'global.edit'/>",perm:"ftp:v_edit,${configc}"},
+			{ id:2084, pId:208, name:"<@s.m 'global.update'/>",perm:"ftp:o_update,${configc}"},
+			{ id:2085, pId:208, name:"<@s.m 'global.delete'/>",perm:"ftp:o_delete,${configc}"},
+			];
+		$(document).ready(function(){
+			ztree =$.fn.zTree.init($("#tree"), setting, zNodes);
+		});
+	</SCRIPT>
+
+<div class="content_wrap">
+	<div class="zTreeDemoBackground left">
+		<ul id="tree" class="ztree"></ul>
+	</div>
+</div>

@@ -1,0 +1,30 @@
+#wrapper {
+        position:absolute;
+	top:0px; bottom:0px; left:-9999px;
+ 	width:100%;
+	overflow:auto;
+}
+
+#scroller {
+       position:absolute;
+/*	-webkit-touch-callout:none;*/
+	width:100%;
+	padding:0;
+}
+/**
+ *
+ * Pull down styles
+ *
+ */
+#pullDown {
+	height:20px;
+}
+#pullDown .pullDownIcon, #pullUp .pullUpIcon  {
+        float:left;
+	display:block; 
+ 	width:20px; height:20px;
+	background:url(../img/push.gif) 0 0 no-repeat;
+	-webkit-background-size:20px 20px; background-size:20px 20px;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:250ms;	
+}

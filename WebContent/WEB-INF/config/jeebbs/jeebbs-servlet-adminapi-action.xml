@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.1.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd"
+	
+default-lazy-init="true">
+
+
+	
+	<bean id="corsConfigurerAdapter" class="com.jeecms.bbs.web.CorsConfigurerAdapter"/> 
+	 
+	<bean id="adminForumApiAct" class="com.jeecms.bbs.api.admin.BbsForumApiAct"/>
+	<bean id="categoryApiAct" class="com.jeecms.bbs.api.admin.BbsCategoryApiAct"/>
+	<bean id="userGroupApiAct" class="com.jeecms.bbs.api.admin.BbsUserGroupApiAct"></bean>
+	<bean id="adminApiAct" class="com.jeecms.bbs.api.admin.BbsAdminApiAct"></bean>
+	<bean id="userApiAct" class="com.jeecms.bbs.api.admin.BbsUserApiAct"></bean>
+
+	<bean id="uploadApiAct" class="com.jeecms.bbs.api.admin.UploadApiAct"></bean>
+	<bean id="templateApiAct" class="com.jeecms.bbs.api.admin.BbsTemplateApiAct"></bean>
+	<bean id="resourceApiAct" class="com.jeecms.bbs.api.admin.BbsResourceApiAct"></bean>
+
+	<bean id="thirdAccountApiAct" class="com.jeecms.bbs.api.admin.BbsThirdAccountApiAct"></bean>
+	<bean id="messageApiAct" class="com.jeecms.bbs.api.admin.BbsMessageApiAct"></bean>
+	<bean id="userActiveLevelApiAct" class="com.jeecms.bbs.api.admin.BbsUserActiveLevelApiAct"></bean>
+	<bean id="topicTypeApiAct" class="com.jeecms.bbs.api.admin.BbsTopicTypeApiAct"></bean>
+	<bean id="advertisingApiAct" class="com.jeecms.bbs.api.admin.BbsAdvertisingApiAct"></bean>
+	<bean id="advertisingSpaceApiAct" class="com.jeecms.bbs.api.admin.BbsAdvertisingSpaceApiAct"></bean>
+	<bean id="commonMagicApiAct" class="com.jeecms.bbs.api.admin.BbsCommonMagicApiAct"></bean>
+	<bean id="giftApiAct" class="com.jeecms.bbs.api.admin.BbsGiftApiAct"></bean>
+	<bean id="reportApiAct" class="com.jeecms.bbs.api.admin.BbsReportApiAct"></bean>
+	<bean id="accountDrawApiAct" class="com.jeecms.bbs.api.admin.BbsAccountDrawApiAct"></bean>
+	<bean id="accountPayApiAct" class="com.jeecms.bbs.api.admin.BbsAccountPayApiAct"></bean>
+	<bean id="orderApiAct" class="com.jeecms.bbs.api.admin.BbsOrderApiAct"></bean>
+	<bean id="incomeStatisticApiAct" class="com.jeecms.bbs.api.admin.BbsIncomeStatisticApiAct"></bean>
+	<bean id="forumCountApiAct" class="com.jeecms.bbs.api.admin.BbsForumCountApiAct"></bean>
+	<bean id="webserviceApiAct" class="com.jeecms.bbs.api.admin.BbsWebserviceApiAct"></bean>
+	<bean id="webserviceAuthApiAct" class="com.jeecms.bbs.api.admin.BbsWebserviceAuthApiAct"></bean>
+	<bean id="webserviceCallRecordApiAct" class="com.jeecms.bbs.api.admin.BbsWebserviceCallRecordApiAct"></bean>
+	<bean id="limitApiAct" class="com.jeecms.bbs.api.admin.BbsLimitApiAct"></bean>
+	<bean id="plugApiAct" class="com.jeecms.bbs.api.admin.PlugApiAct"></bean>
+	<bean id="liveConfigApiAct" class="com.jeecms.bbs.api.admin.BbsLiveConfigApiAct"></bean>
+	<bean id="liveApiAct" class="com.jeecms.bbs.api.admin.BbsLiveApiAct"></bean>
+	<bean id="liveApplyApiAct" class="com.jeecms.bbs.api.admin.BbsLiveApplyApiAct"></bean>
+	<bean id="liveHostApiAct" class="com.jeecms.bbs.api.admin.BbsLiveHostApiAct"></bean>
+	
+
+	<bean id="sensitivityApiAct" class="com.jeecms.bbs.api.admin.CmsSensitivityApiAct"></bean>
+	<bean id="friendLinkApiAct" class="com.jeecms.bbs.api.admin.CmsFriendLinkApiAct"></bean>
+	<bean id="friendLinkCtgApiAct" class="com.jeecms.bbs.api.admin.CmsFriendLinkCtgApiAct"></bean>
+	<bean id="roleApiAct" class="com.jeecms.bbs.api.admin.CmsRoleApiAct"></bean>
+	<bean id="siteConfigApiAct" class="com.jeecms.bbs.api.admin.CmsSiteConfigApiAct"></bean>
+	
+	<bean id="apiInfoApiAct" class="com.jeecms.bbs.api.admin.ApiInfoApiAct"></bean>
+	<bean id="apiAccountApiAct" class="com.jeecms.bbs.api.admin.ApiAccountApiAct"></bean>
+	<bean id="apiRecordApiAct" class="com.jeecms.bbs.api.admin.ApiRecordApiAct"></bean>
+	<bean id="welcomeApiAct" class="com.jeecms.bbs.api.admin.WelcomeApiAct"></bean>
+	<bean id="personalApiAct" class="com.jeecms.bbs.api.admin.PersonalApiAct"></bean>
+	
+	
+</beans>

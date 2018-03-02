@@ -1,0 +1,210 @@
+<link href="/${res}/bbs_forum/css/thickbox.css" type="text/css" rel="stylesheet" />
+<link href="/${res}/bbs_forum/js/jquery-latest.pack.js" type="text/css" rel="stylesheet" />
+<link href="/${res}/bbs_forum/js/thickbox.js" type="text/css" rel="stylesheet" />
+<div class="t" style="border-bottom-width: 0pt; margin-bottom: 0pt">
+    <table cellspacing="0" cellpadding="0" width="100%" style="border-bottom: rgb(169,213,233) 1px solid">
+      <tbody>
+        <tr>
+          <td class="tal h b">主题 : ${topic.title?html}</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+<script type="text/javascript">
+function checkContent(){
+  if($("#atc_content").val()==""){
+     alert("内容不能为空");
+     return false;
+  }
+  return true;
+}
+function showMagicUL(){
+	$("#magicUL").show();
+}
+function hideMagicUL(){
+	$("#magicUL").hide();
+}
+</script>
+
+[#list tag_pagination.list as post]
+[#assign creater=post.creater/] 
+    <a name="pid${post.id}"></a>
+    <div class="t5" style="border-top-width: 0pt">
+    <table cellspacing="0" cellpadding="0" width="100%" style="table-layout: fixed">
+      <tbody>
+        <tr class="tr1">
+          <th class="r_two" rowspan="2" style="padding-right: 0pt; padding-left: 0pt; padding-bottom: 2em; width: 185px; padding-top: 0pt">
+          <div style="padding-right: 5px; padding-left: 12px; padding-bottom: 0pt; line-height: 24px; padding-top: 5px"><b class="fl black"><a target="_blank" href="#">${creater.username!}</a></b>
+          <div class="c"></div>
+          </div>
+          <div class="user-pic">
+          <table style="border-top-width: 0pt; border-left-width: 0pt; border-bottom-width: 0pt; border-right-width: 0pt">
+            <tbody>
+              <tr>
+                <td width="1"><img class="pic" alt="" border="0" src="/${res}/bbs_member/img/face/${(creater.avatar)!'none.gif'}" /></td>
+                <td style="vertical-align: top"></td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+          <div style="padding-left: 12px; padding-bottom: 8px">级别: ${creater.group.name}<br />
+          <img alt="" style="display: block; margin: 0.2em 0pt" src="/${res}/bbs_forum/img/level/${creater.group.imgPath}.gif" /> <span class="user-info2" id="showface_0"><span class="user-infoWrap2">
+          <div class="c" style="width: 120px; height: 5px"></div>
+          积分:${creater.point!}<br />
+          UID: <span class="f12">${creater.id}</span><br />
+          精华: ${creater.primeCount!} <br />
+          主题:<span class="s1 f12">${creater.topicCount!}</span><br />
+          回复:<span class="s2 f12">${creater.replyCount!}</span><br />
+          注册时间:<span class="gray">${creater.registerTime?string('yyyy-MM-dd')}</span><br />
+          </span></span></div>
+          </th>
+          <th class="r_one" id="td_tpc" valign="top" height="100%" style="border-top-width: 0pt; padding-right: 0px; padding-left: 0px; border-left-width: 0pt; border-bottom-width: 0pt; padding-bottom: 0px; overflow: hidden; padding-top: 0px; border-right-width: 0pt">
+          <div class="tiptop"><span class="fl"><span class="b">${post.indexCount}#</span></span> <span class="fl gray" style="white-space: nowrap">&nbsp; 发表于:${post.createTime?string('yyyy-MM-dd HH:mm:ss')}&nbsp; IP:[#if user??&&user.moderator]${post.posterIp!}[#else][#list post.posterIp?split('.') as x][#if x_index%2==0]${x}.[/#if][/#list]*.*[/#if]
+		  </span>
+          <div class="fr black" style="overflow: hidden"><a href="${topic.url}">显示全部</a> <a href="#">只看该作者</a></div>
+          <div class="c"></div>
+          </div>
+          <div class="c"></div>
+          [#if post.shield]
+          [#if user??&&user.moderator]
+          <div class="blockquote">
+			<div class="tal s3">该贴已经被屏蔽，仅版主可见</div>
+			<div class="tal f12">
+			${post.contentHtml!}
+			</div>
+          </div>
+          [#else]
+          <div class="blockquote">该帖子已被屏蔽，仅版主可见</div>
+          [/#if]
+          </div>
+          [#else]
+          [#if post.hidden] [#if user??] [#if post.creater.id==user.id||user.moderator]
+          <div class="tpc_content f14">${post.contentHtml}</div>
+          [#else] [#if !post.topic.haveReply?contains(','+user.id+',')]
+          <div class="tpc_content f14">${post.hideContent}</div>
+          [#else]
+          <div class="tpc_content f14">${post.contentHtml}</div>
+          [/#if][/#if][#else]
+          <div class="tpc_content f14">${post.hideContent}</div>
+          [/#if][#else]
+          <div class="tpc_content f14">${post.contentHtml}</div>
+          [/#if]
+          [/#if]
+		  [#if post.grade?? && post.grade?size gt 0] 
+		  <div id="mark_tpc" class="tips tal" style="margin:0 15px 10px 15px;word-break:keep-all;word-wrap:no-wrap;line-height:25px;">
+			<div class="tal s3">本帖最近评分记录：</div>
+			[#list post.grade as grade]
+			<div class="tal f12">
+			<li>
+			${grade.grader.username} &nbsp;&nbsp; ${grade.gradeTime?string("yyyy-MM-dd")}&nbsp;&nbsp; 人气 &nbsp;&nbsp; [#if grade.score gt 0]+${grade.score}[#else]${grade.score}[/#if] &nbsp;&nbsp; ${grade.reason!}
+			</li>
+			</div>
+			[/#list]
+		  </div>
+		  [/#if]
+		  </th>
+        </tr>
+        <tr class="tr1 r_one">
+          <th style="border-top-width: 0pt; padding-right: 0px; padding-left: 0px; border-left-width: 0pt; border-bottom-width: 0pt; padding-bottom: 0px; vertical-align: bottom; padding-top: 30px; border-right-width: 0pt">
+          <div class="c" id="w_tpc"></div>
+          <div class="sigline"></div>
+          <div class="signature" style="overflow: hidden; height: auto; max-height: 100px">
+          <table width="100%">
+            <tbody>
+              <tr>
+                <td>${creater.signed!}</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+          <div class="tipad black">
+          <span class="fr gray">
+          	[#if post_index==0]
+          	<div id="magicUL" onmouseout="hideMagicUL()" style="display: none;">
+          	<ul onmousemove="showMagicUL()"> 
+          		<li>提升卡</li>
+          		<li>千斤顶</li>
+          		<li>置顶卡</li>
+          		<li><a href="${base}/magic/usemagic.jspx?height=300&width=300&pid=${post.topic.id}&mid=open" title="使用道具" class='thickbox'">喧嚣卡</a></li>
+          		<li>沉默卡</li>
+          		<li>抢沙发</li>
+          		<li>变色卡</li>
+          		<li>照妖镜</li>
+          		<li>匿名卡</li>
+          		<li>悔悟卡</li>
+          	</ul>
+          	</div>
+          	<a href="#" onmouseover="showMagicUL()">使用道具</a> 
+          	[/#if]
+          	&nbsp;&nbsp; <a href="javascript:scroll(0,0)">顶端</a> </span>
+          <div class="fl readbot">
+          [#if user??]
+          [#if moderators||user.id==creater.id]
+          <a href="${base}/post/v_edit${post.id!}.jspx">编辑</a>
+          [/#if]
+          [#if moderators]
+          [#if !post.shield]<a href="${base}/post/v_shield${post.id!}_${-1}.jspx">屏蔽[#else]<a href="${base}/post/v_shield${post.id!}_${0}.jspx">取消屏蔽[/#if]</a> 
+          [/#if][/#if]
+          [#if user??]
+          <a class="r-reply" title="引用此楼" href="${base}/post/v_quote${post.id!}.jspx">引用</a> 
+          <a class="r-reply" title="回复此楼" href="${base}/post/v_reply${post.id!}.jspx">回复</a>
+          [#if user.id!=creater.id]
+          <a class="r-reply" title="评分此楼" href="${base}/post/v_grade${post.id!}.jspx">评分</a>
+          [/#if]
+          [/#if]
+          </div>
+          <div class="c"></div>
+          </div>
+          </th>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+[/#list]
+[#include "../tag/topic.html"/] 
+<div class="t3">
+[#if user??]
+<span class="fr" style="margin-left: 0.5em">
+    <a href="${base}/topic/v_add${forum.id!}.jspx">
+    <img alt="发帖" src="/${res}/bbs_forum/img/post.png" /></a></span>
+	<span class="fr"><a href="${base}/post/v_add${topic.id!}.jspx">
+	<img alt="回复" src="/${res}/bbs_forum/img/reply.png" /></a></span>
+	<span class="fl"></span>
+	[/#if]
+    <div class="c"></div>
+    </div>
+	
+[#if user??]
+<form id="jvForm" action="${base}/post/o_save.jspx" method="post" enctype="multipart/form-data" validate="true" onsubmit="return checkContent();">
+      <div class="t" style="margin-top: 5px">
+      <table cellspacing="0" cellpadding="0" width="100%" align="center">
+        <tbody>
+          <tr style="color: rgb(102,102,102); line-height: 23px; height: 23px">
+            <td class="h"><b>快速回复</b></td>
+            <td class="h">&nbsp;</td>
+            <td class="h" style="text-align: right"><a href="javascript:scroll(0,0)">顶端</a></td>
+          </tr>
+          <tr class="tr2">
+            <td colspan="100" style="border-bottom-width: 0pt"></td>
+          </tr>
+          <tr>
+            <td class="f_one" valign="top" width="20%" style="padding-right: 7px; padding-left: 7px; padding-bottom: 7px; padding-top: 7px"><b>内容</b><br />
+            HTML 代码不可用 <br />
+            <input type="checkbox" checked="checked" name="atc_usesign" value="1" /> 使用签名 <br />
+            <input type="checkbox" checked="checked" name="atc_convert" value="1" /> Code自动转换 <br />
+            <input disabled="disabled" type="checkbox" name="atc_anonymous" value="1" /> 匿名帖 <br />
+            <input disabled="disabled" type="checkbox" name="atc_hide" value="1" /> 隐藏此帖 <br />
+            <input disabled="disabled" type="checkbox" name="atc_hideatt" value="1" /> 隐藏附件</td>
+            <td class="f_one" valign="top" width="60%" style="padding-right: 7px; padding-left: 7px; padding-bottom: 7px; padding-top: 7px">
+            <input name="postTypeId" value="${postTypeId!}" type="hidden"/>
+            <textarea id="atc_content" rows="8" style="width: 96%" name="content"></textarea>
+            <div class="fr gray" id="atc_content_warn" style="padding-right: 15px; padding-left: 15px; padding-bottom: 0px; padding-top: 0px">限 50,000 字符</div>
+            <div style="margin: 5px 0pt"><input type="hidden" name="topicId" value="${topic.id}" /> <input class="btn fl b" type="submit" style="padding-right: 1em; padding-left: 1em; padding-bottom: 0pt; padding-top: 0pt; height: 30px" name="Submit" value=" 提 交 " /></div>
+            </td>
+            <td class="f_one" width="20%"></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </form>
+[/#if]

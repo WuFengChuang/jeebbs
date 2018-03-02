@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+function getTableForm() {
+	return document.getElementById('tableForm');
+}
+function optExport() {
+	var f = getTableForm();
+	f.action="forumCountExport.do";
+	f.submit();
+}
+</script>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos"><@s.m "global.position"/>:数据中心 - <@s.m "global.list"/></div>
+	<form class="ropt">
+		<input name="begin" <#if begin??>value="${begin?string('yyyy-MM-dd')}"</#if> style="width:140px" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate" />
+		<input name="end" <#if end??>value="${end?string('yyyy-MM-dd')}"</#if> style="width:140px" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate" />
+		<input type="submit" value="<@s.m "global.query"/>" onclick="this.form.action='forumstatistic.do';"/>
+	</form>
+	<div class="clear"></div>
+</div>
+<form id="tableForm" method="post">
+<input type="hidden" name="pageNo" value="${pageNo!}"/>
+<input type="hidden" name="begin" <#if begin??>value="${begin?string('yyyy-MM-dd')}"</#if> />
+<input type="hidden" name="end" <#if end??>value="${end?string('yyyy-MM-dd')}"</#if>/>
+<@p.table value=pagination listAction="forumstatistic.do";forumCount,i,has_next><#rt/>
+	<@p.column title="板块"><a href="singleforumstatistic.do?forumId=${forumCount[0]!}">${forumCount[1]!}</a></@p.column><#t/>
+	<@p.column title="贴子数">${forumCount[2]!}</@p.column><#t/>
+	<@p.column title="回复数">${forumCount[3]!}</@p.column><#t/>
+	<@p.column title="访问量">${forumCount[4]!}</@p.column><#t/>
+</@p.table>
+<div><input type="button" value="导出表格" onclick="optExport();"/></div>
+</form>
+</div>
+<#include "/common/alert_message.html"/>
+</body>
+</html>

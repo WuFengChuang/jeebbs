@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.jeecms.bbs.entity">
+	<class name="BbsForumExt" table="bbs_forum_ext">
+		<meta attribute="sync-DAO">false</meta>
+		<cache usage="read-write"/>
+		<id name="id" type="java.lang.Integer" column="forum_id">
+			<generator class="foreign"><param name="property">forum</param></generator>
+		</id>
+		<property
+			name="tplForum"
+			column="tpl_forum"
+			type="string"
+			not-null="false"
+			length="100"
+		/>
+		<property
+			name="tplTopic"
+			column="tpl_topic"
+			type="string"
+			not-null="false"
+			length="100"
+		/>
+		<property
+			name="tplMobileForum"
+			column="tpl_mobile_forum"
+			type="string"
+			not-null="false"
+			length="100"
+		/>
+		<property
+			name="tplMobileTopic"
+			column="tpl_mobile_topic"
+			type="string"
+			not-null="false"
+			length="100"
+		/>
+		<one-to-one name="forum" class="BbsForum" constrained="true"/>
+	</class>
+</hibernate-mapping>

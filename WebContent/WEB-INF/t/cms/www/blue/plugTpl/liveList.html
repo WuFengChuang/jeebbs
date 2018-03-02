@@ -1,0 +1,121 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<link href="${base}/res/common/css/jquery.validate.css" rel="stylesheet" type="text/css"/>
+<link href="${base}/res/common/css/jquery.treeview.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/base.css" />
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/l-member.css" />
+<script src="${base}/res/common/js/jquery.js" type="text/javascript"></script>
+<script src="${base}/res/common/js/jquery.ext.js" type="text/javascript"></script>
+<script src="${base}/res/common/js/pony.js" type="text/javascript"></script>
+<script src="${base}/res/plug/clipboard/clipboard.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+function getTableForm() {
+	return document.getElementById('tableForm');
+}
+function optDelete() {
+	if(Pn.checkedCount('ids')<=0) {
+		alert("删除异常");
+		return;
+	}
+	if(!confirm("是否删除？")) {
+		return;
+	}
+	doDelete();
+}
+function doDelete(){
+	var f = getTableForm();
+	f.action="delete.jspx";
+	f.submit();
+}
+function optPriority() {
+	var f = getTableForm();
+	f.action="priority.jspx";
+	f.submit();
+}
+</script>
+<script type="text/javascript">
+$(function() {
+	$("#tableForm").validate();
+	$("a.copy").each(function(){
+		var id=$(this).prop("id").split("copy_")[1];
+		var clipboard1 = new Clipboard('#'+$(this).prop("id"));   
+	    clipboard1.on('success', function(e) {  
+	       console.log(e);  
+	       alert("已复制到剪切板！")  
+	    });  
+	    clipboard1.on('error', function(e) {  
+	       console.log(e);  
+	       alert("复制失败！请手动复制")  
+	    });  
+	});
+});
+</script>
+<style>
+.zb_add{border-bottom:1px solid #dde7ed; margin:20px 30px 0 30px; padding-bottom:20px;}
+.zb_add .btn-primary{}
+</style>
+</head>
+<body style="background: #fff;">
+	 <div class="zb_add"><a href="add.jspx?cid=${cid!}" class="btn-primary">添加</a></div> 
+<form id="jvForm" action="list.jspx" method="post">
+	<ul class="bbs-content-card">	  
+		[#list pagination.list as live]
+						<li class="zb-list clearfix">
+							<div class="pull-left" style="width: 80%;">
+									<div class="zb-title" style="width: 100%;">
+									<a href="${base}/live/front/get.jspx?id=${live.id}" target="_blank">${live.title}</a>
+								</div>
+								<div class="zb-list-info">
+									门票：${live.beginPrice!}   &nbsp;
+									 人气：${live.joinUserNum!}  &nbsp;
+									 限制人数：${live.limitUserNum!}   &nbsp; 
+									 创建时间：${live.createTime?string("yyyy-MM-dd HH:mm")}    &nbsp;
+									 开始时间：${live.beginTime?string("yyyy-MM-dd HH:mm")} &nbsp;																
+								</div>
+							</div>
+							<div class="pull-right" style="width: 20%">									
+					<div style="height: 56px; line-height: 56px; text-align: right;font-size: 12px;" >
+								 		[#if !live.hasOver&&live.checkStatus==1]
+											<a  class="copy" id="copy_${live.id}" 
+												data-clipboard-text="${pushUrlMap[live.id?string]!}"
+												style="color: #f7891e;margin-left: 20px;"
+												>复制推流URL</a>
+									        [/#if]	
+									        [#if live.checkStatus!=1]
+								 			<a href="edit.jspx?id=${live.id}${params!}" class="edit"
+								 					style="color: #188ae2;margin-left: 20px;"
+								 				>修改</a>
+								 		<a href="delete.jspx?ids=${live.id}${params!}" class="del" onclick="if(!confirm('确定要删除吗？')) {return false;}"
+								 				style="color: #e21818;margin-left: 20px;"
+								 			>删除</a>
+								[/#if]							 		
+								 	</div>
+				<div style="font-size: 12px; text-align: right;">
+			              [#if live.checkStatus==2]<a href="viewReason.jspx?id=${live.id}${params!}" >拒绝原因</a> [/#if]
+			              [#if live.checkStatus==1]
+			              <span class="zb-pass" style="color: #48be12;">审核通过</span>
+			              [/#if]
+			              [#if live.checkStatus==2]
+			            	<span class="notpass" style="color: #f3431a;">未通过</span>
+			              [/#if]
+			                   [#if live.checkStatus==3]
+			              <span class="zb-stop" style="color: #999;">关停</span>
+			              [/#if] 	
+			              </div>
+								 </div>
+					</div>
+							
+						
+						</li>	
+						[/#list]
+					</ul>
+		
+</form>
+
+
+
+</body>
+</html>

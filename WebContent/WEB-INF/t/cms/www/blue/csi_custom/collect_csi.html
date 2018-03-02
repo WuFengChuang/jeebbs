@@ -1,0 +1,17 @@
+<span id="cancelSpan" style="display:none; cursor: pointer;">取消收藏</span>
+<span id="comfirmSpan" style="display:none;cursor: pointer;">收藏</span>
+[#if user??]
+<script type="text/javascript">
+$(function() {
+       Cms.collectexist("${base}","${collectCsi!}","cancelSpan","comfirmSpan");
+       $("#comfirmSpan").click(function(){
+    	   var collectCount=$("#collectCountSpan").html();
+    	   Cms.collect("${base}","${topicId!}",1,collectCount,"collectCountSpan","cancelSpan","comfirmSpan");
+       });
+       $("#cancelSpan").click(function(){
+    	   var collectCount=$("#collectCountSpan").html();
+    	   Cms.collect("${base}","${topicId!}",4,collectCount,"collectCountSpan","cancelSpan","comfirmSpan");
+       });
+});
+</script>
+[/#if]

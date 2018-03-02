@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>会员中心 - ${site.name} - Powered by JEECMS</title>
+<script src="${resSys}/jquery.js" type="text/javascript"></script>
+<script src="${resSys}/front.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_forum/css/base.css" />
+<link rel="stylesheet" type="text/css" href="/${res}/bbs_member/css/l-member.css" />
+<script type="text/javascript" src="/${res}/bbs_forum/js/base.js"></script>
+    <script type="text/javascript">
+    $(function() {
+    	$("#jvForm").validate();
+    	selectPlat();
+    });
+    </script>
+</head>
+
+<body>
+[#include "../include/页头.html"/]
+[#include "../include/论坛信息.html"/]
+<div class="bbs-main clearfix">
+    <!--左侧 include-->
+			<div class="left-main">
+				<!--版块-->
+				[#include "会员中心页_导航.html"/]
+				
+			</div>
+    <!--右侧内容-->
+    <div class="right-main clearfix" style="min-height: 592px;">
+				<div class="right-panel">
+					<div class="main-header clearfix">
+						<div class="channl-name">
+							<span style="vertical-align: middle;">提现</span>
+						</div>
+					</div>
+					<div class="warpbox">
+						<div class="yu-e">
+							<span>账户余额</span>
+							<span class="money">${userAccount.noPayAmount!}</span>
+						</div>
+						<div class="shouru txje">
+							<form id="jvForm" action="draw.jspx" method="post">
+								<span>提现金额:</span> &nbsp;
+							 	<input type="text" name="drawAmout" vld="{required:true,number:true,min:${minDrawAmount!},max:${maxDrawAmount!}}"  maxlength="100" class="input" onpaste="return false"/>
+                                                                <input type="hidden" name="nextUrl" value="draw.jspx"/>
+								<input type="submit" value="提交" class="btn-chaxun"/>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="right-panel clearfix" style="margin-top: 20px;">
+					<div style="padding: 0 30px;">
+						<ul class="change-card clearfix">
+							<li class="active">
+								<a>申请列表</a>
+							</li>
+							
+						</ul>
+						[#if tag_pagination??]
+                                              [#if tag_pagination.list?size gt 0]
+						<table border="0" cellspacing="0" cellpadding="0" class="table">
+							<thead>
+								<tr>
+									<th width="160">申请金额</th>
+									<th >申请时间</th>
+									<th >状态</th>
+									<th >操作</th>
+								</tr>
+							</thead>
+							<tbody>
+                                                                [#list tag_pagination.list as c]
+								<tr>
+									<td>${c.applyAmount!}</td>
+									<td>${c.applyTime?string('yyyy-MM-dd HH:mm:ss')}</td>
+									<td>[#if c.applyStatus==0]申请中[#elseif c.applyStatus==1]申请成功等待支付[#elseif c.applyStatus==2]申请失败[#elseif c.applyStatus==3]提现成功[/#if]</td>
+									<td>[#if c.applyStatus==0||c.applyStatus==2]<a href="${base}/member/draw_del.jspx?ids=${c.id}&nextUrl=${base}/member/draw_list.jspx"><span class="tabel-del">删除</span></a>[/#if]</td>
+								</tr>
+								[/#list]
+							</tbody>
+                                              
+						</table>
+         [#include "../tag/topic.html"/] 
+<script type="text/javascript">
+            function _gotoPage(pageNo) {
+                try{
+                    var tableForm = document.getElementById("tableForm");
+                    $("input[name=pageNo]").val(pageNo);
+                    tableForm.action="${base}/member/draw_list.jspx";
+                    tableForm.onsubmit=null;
+                    tableForm.submit();
+                } catch(e) {
+                    alert('_gotoPage(pageNo)方法出错');
+                }
+            }
+            </script>
+            [#else]
+                <div class="zwnr">暂无申请</div>
+            [/#if]
+[#else]
+	<div class="zwnr">暂无申请</div>
+[/#if]
+					</div>
+				</div>
+			</div>
+</div>
+[#include "../include/页脚.html"/]
+</body>
+</html>

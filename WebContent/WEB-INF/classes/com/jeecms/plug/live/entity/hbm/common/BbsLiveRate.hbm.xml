@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.jeecms.plug.live.entity">
+	<class
+		name="BbsLiveRate"
+		table="bbs_live_rate"
+	>
+		<meta attribute="sync-DAO">false</meta>
+		<cache usage="read-write"/>
+		<id
+			name="id"
+			type="integer"
+			column="id"
+		>
+			<generator class="identity"/>
+		</id>
+
+		<property
+			name="userNum"
+			column="user_num"
+			type="integer"
+			not-null="true"
+			length="10"
+		/>
+		<property
+			name="rate"
+			column="rate"
+			type="java.lang.Double"
+			not-null="true"
+			length="5"
+		/>
+
+
+	</class>	
+</hibernate-mapping>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.1.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd"
+	
+default-lazy-init="true">
+	<bean id="imageUploadAct" class="com.jeecms.bbs.action.ImageUploadAct"/>
+	<bean id="welcomeAct" class="com.jeecms.bbs.action.WelcomeAct"/>
+	<bean id="bbsCategoryAct" class="com.jeecms.bbs.action.BbsCategoryAct"/>
+	<bean id="bbsForumAct" class="com.jeecms.bbs.action.BbsForumAct"/>
+	<bean id="bbsUserGroupAct" class="com.jeecms.bbs.action.BbsUserGroupAct"/>
+	<bean id="resourceAct" class="com.jeecms.bbs.action.template.ResourceAct"/>
+	<bean id="frameAct" class="com.jeecms.bbs.action.FrameAct">
+		<property name="menus" value="#{propertyUtils.getMap('plug.menu.')}"></property>
+		<property name="tops" value="#{propertyUtils.getMap('plug.top.')}"></property>
+	</bean>
+	<bean id="bbsUserAct" class="com.jeecms.bbs.action.BbsUserAct"/>
+	<bean id="cmsSiteConfigAct" class="com.jeecms.bbs.action.CmsSiteConfigAct"/>
+	<bean id="cmsLoginAct" class="com.jeecms.bbs.action.login.CmsLoginAct"/>
+	<bean id="personalAct" class="com.jeecms.bbs.action.PersonalAct"/>
+	<bean id="cmsSensitivtyAct" class="com.jeecms.bbs.action.CmsSensitivityAct"/>
+	<bean id="cmsFriendlinkCtgAct" class="com.jeecms.bbs.action.CmsFriendlinkCtgAct"/>
+	<bean id="cmsFriendlinkAct" class="com.jeecms.bbs.action.CmsFriendlinkAct"/>
+	<bean id="bbsPostTypeAct" class="com.jeecms.bbs.action.BbsPostTypeAct"/>
+	<bean id="bbsCommonMagicAct" class="com.jeecms.bbs.action.BbsCommonMagicAct"/>
+	<bean id="templateAct" class="com.jeecms.bbs.action.template.TemplateAct">
+		<property name="tplManager" ref="tplManager"/>
+	</bean>
+	<bean id="bbsReportAct" class="com.jeecms.bbs.action.BbsReportAct"/>
+	<bean id="bbsLimitAct" class="com.jeecms.bbs.action.BbsLimitAct"/>
+	<bean id="bbsThirdAccountAct" class="com.jeecms.bbs.action.BbsThirdAccountAct"/>
+	<bean id="bbsMessageAct" class="com.jeecms.bbs.action.BbsMessageAct"/>
+	<bean id="bbsUserActiveLevelAct" class="com.jeecms.bbs.action.BbsUserActiveLevelAct"/>
+	<bean id="bbsWebserviceAct" class="com.jeecms.bbs.action.BbsWebserviceAct"/>
+	<bean id="bbsWebserviceAuthAct" class="com.jeecms.bbs.action.BbsWebserviceAuthAct"/>
+	<bean id="bbsWebserviceCallRecordAct" class="com.jeecms.bbs.action.BbsWebserviceCallRecordAct"/>
+	
+	<bean id="bbsTopicTypeAct" class="com.jeecms.bbs.action.BbsTopicTypeAct"/>
+	<bean id="bbsAccountDrawAct" class="com.jeecms.bbs.action.BbsAccountDrawAct"/>
+	<bean id="bbsAccountPayAct" class="com.jeecms.bbs.action.BbsAccountPayAct"/>
+	<bean id="bbsConfigChargeAct" class="com.jeecms.bbs.action.BbsConfigChargeAct"/>
+	<bean id="bbsOrderAct" class="com.jeecms.bbs.action.BbsOrderAct"/>
+	
+	<bean id="bbsAdvertisingSpaceAct" class="com.jeecms.bbs.action.BbsAdvertisingSpaceAct"/>
+	<bean id="bbsAdvertisingAct" class="com.jeecms.bbs.action.BbsAdvertisingAct"/>
+	<bean id="apiAccountAct" class="com.jeecms.bbs.action.ApiAccountAct"/>
+	<bean id="apiInfoAct" class="com.jeecms.bbs.action.ApiInfoAct"/>
+	<bean id="apiRecordAct" class="com.jeecms.bbs.action.ApiRecordAct"/>
+	<bean id="apiUserLoginAct" class="com.jeecms.bbs.action.ApiUserLoginAct"/>
+	<bean id="bbsGiftAct" class="com.jeecms.bbs.action.BbsGiftAct"/>
+	<bean id="bbsGiftUserAct" class="com.jeecms.bbs.action.BbsGiftUserAct"/>
+	<bean id="plugAct" class="com.jeecms.bbs.action.PlugAct"/>
+	<bean id="incomeStatisticAct" class="com.jeecms.bbs.action.BbsIncomeStatisticAct"/>
+	<bean id="forumCountAct" class="com.jeecms.bbs.action.BbsForumCountAct"/>
+	<bean id="roleAct" class="com.jeecms.bbs.action.CmsRoleAct">
+		<property name="menutops" value="#{propertyUtils.getMap('plug.top.')}"></property>
+		<property name="menus" value="#{propertyUtils.getMap('plug.menu.')}"></property>
+		<property name="menuChilds" value="#{propertyUtils.getMap('plug.perms.')}"></property>
+	</bean>
+	<bean id="bbsAdminAct" class="com.jeecms.bbs.action.BbsAdminAct"/>
+	<bean id="uploadAct" class="com.jeecms.bbs.action.UploadAct"/>
+</beans>

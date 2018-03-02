@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+function getTableForm() {
+	return document.getElementById('tableForm');
+}
+function optDelete() {
+	if(Pn.checkedCount('ids')<=0) {
+		alert("<@s.m 'error.checkRecord'/>");
+		return;
+	}
+	if(!confirm("<@s.m 'global.confirm.delete'/>")) {
+		return;
+	}
+	var f = getTableForm();
+	f.action="o_delete.do";
+	f.submit();
+}
+function query(){
+	$("#queryForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos"><@s.m "global.position"/>: <@s.m "bbsLive.function"/> - <@s.m "global.list"/></div>
+	<form class="ropt" id="queryForm" method="post" action="v_list.do">
+		<select name="qstatus" onchange="query()">
+			<option value="0" <#if qstatus??><#if qstatus==0>selected="selected"</#if></#if>>待审核</option>
+			<option value="1" <#if qstatus??><#if qstatus==1>selected="selected"</#if></#if>>未开始</option>
+			<option value="2" <#if qstatus??><#if qstatus==2>selected="selected"</#if></#if>>进行中</option>
+			<option value="3" <#if qstatus??><#if qstatus==3>selected="selected"</#if></#if>>已结束</option>
+			<option value="4" <#if qstatus??><#if qstatus==4>selected="selected"</#if></#if>>已拒绝</option>
+			<option value="5" <#if qstatus??><#if qstatus==5>selected="selected"</#if></#if>>已关闭</option>
+		</select>
+	    用户名:<input type="text" name="qusername" value="${qusername!}" size="10"/>
+	   标题:<input type="text" name="qtitle" value="${qtitle!}" size="10"/>
+	    <select name="qorderBy"">
+	    <option value="1" <#if qorderBy??><#if qorderBy==1>selected="selected"</#if></#if> >开始时间降序</option>
+	    <option value="2" <#if qorderBy??><#if qorderBy==2>selected="selected"</#if></#if> >门票收益降序</option>
+	    <option value="3" <#if qorderBy??><#if qorderBy==3>selected="selected"</#if></#if> >ID降序</option>
+	    <option value="4" <#if qorderBy??><#if qorderBy==4>selected="selected"</#if></#if> >门票数降序</option>
+	    <option value="5" <#if qorderBy??><#if qorderBy==5>selected="selected"</#if></#if> >限制人数降序</option>
+	    <option value="6" <#if qorderBy??><#if qorderBy==6>selected="selected"</#if></#if> >开始时间升序</option>
+	    <option value="7" <#if qorderBy??><#if qorderBy==7>selected="selected"</#if></#if> >门票收益升序</option>
+	    <option value="8" <#if qorderBy??><#if qorderBy==8>selected="selected"</#if></#if> >ID升序</option>
+	    <option value="9" <#if qorderBy??><#if qorderBy==9>selected="selected"</#if></#if> >门票数升序</option>
+	    <option value="10" <#if qorderBy??><#if qorderBy==10>selected="selected"</#if></#if> >限制人数升序</option>
+		</select>
+	    <input type="submit" value="查询" onclick="this.form.action='v_list.do';"/>
+	</form>
+	<div class="clear"></div>
+</div>
+<form id="tableForm" method="post">
+<input type="hidden" name="pageNo" value="${pageNo!}"/>
+<input type="hidden" name="qtitle" value="${qtitle!}"/>
+<input type="hidden" name="qusername" value="${qusername!}"/>
+<input type="hidden" name="qstatus" value="${qstatus!}"/>
+<input type="hidden" name="qtimeBegin" <#if qtimeBegin??>value="${qtimeBegin!?string('yyyy-MM-dd HH:mm:ss')}"</#if>/>
+<input type="hidden" name="qtimeEnd" <#if qtimeEnd??>value="${qtimeEnd!?string('yyyy-MM-dd HH:mm:ss')}"</#if>/>
+ <#assign params>&pageNo=${pageNo!}&cid=${cid!}&qtitle=${qtitle!}&qusername=${qusername!}&qstatus=${qstatus!}<#if qtimeBegin??>&qtimeBegin=${qtimeBegin!?string('yyyy-MM-dd HH:mm:ss')}"</#if><#if qtimeEnd??>&qtimeEnd=${qtimeEnd!?string('yyyy-MM-dd HH:mm:ss')}"</#if></#assign>
+<@p.table  value=pagination;live,i,has_next><#rt/>
+	<@p.column title="<input type='checkbox' onclick='Pn.checkbox(\"ids\",this.checked)'/>" width="25" align="center">
+		<input type='checkbox' name='ids' value='${live.id}'/><#t/>
+	</@p.column><#t/>
+	<@p.column title="ID" align="center">${live.id}</@p.column><#t/>
+	<@p.column code="live.title" align="center">${live.title!}</@p.column><#t/>
+	<@p.column code="live.host" align="center">${live.user.realname!live.user.username!}</@p.column><#t/>
+	<@p.column code="live.beginPrice" align="center">${live.beginPrice!}</@p.column><#t/>
+	<@p.column code="live.limitUserNum" align="center">${live.limitUserNum!}</@p.column><#t/>
+	<@p.column code="live.beginTime" align="center">${live.beginTime?string("yyyy-MM-dd HH:mm")}</@p.column><#t/>
+	<@p.column code="live.endTime" align="center">${live.endTime?string("yyyy-MM-dd HH:mm")}</@p.column><#t/>
+	<@p.column title="礼物数" align="center">${live.giftNum!}</@p.column><#t/>
+	<@p.column code="global.operate" align="center">
+		<a href="o_delete.do?ids=${live.id}${params!}" class="pn-opt" onclick="if(!confirm('<@s.m "global.confirm.delete"/>')) {return false;}"><@s.m "global.delete"/></a><#t/>
+	</@p.column><#t/>
+</@p.table>
+<div>
+<input type="button" value="<@s.m "global.delete"/>" onclick="optDelete();"/>
+</div>
+</form>
+</div>
+<#include "/common/alert_message.html"/>
+</body>
+</html>

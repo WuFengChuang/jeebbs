@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<#include "/jeebbs_sys/head.html"/>
+<script type="text/javascript">
+$(function() {
+	changeOrderType();
+});
+function changeOrderType(){
+	var selectType=$("input[name='dataType']:checked").val();
+	if(selectType==1){
+		$("#dataId").attr("disabled","");
+		$("#dataId").show();
+	}else{
+		$("#dataId").attr("disabled","disabled");
+		$("#dataId").hide();
+	}
+}
+function getTableForm() {
+	return document.getElementById('tableForm');
+}
+</script>
+</head>
+<body>
+<div class="body-box">
+<div class="rhead">
+	<div class="rpos"><@s.m "global.position"/>: <@s.m "topic.order.record.function"/> > <@s.m "global.list"/></div>
+	<div class="clear"></div>
+</div>
+<form action="user_order_list.do" method="post">
+<div style="padding-top:5px; padding-bottom:5px; text-indent:10px; border-bottom:1px solid #fff; border-top:1px solid #fff;">
+<@s.m "topic.order.orderNumber"/>:<input name="orderNum" value="${orderNum!}" type="text"/>
+<@s.m "topic.order.buyUser"/>:<input name="buyusername" value="${buyusername!}" type="text" size="10"/>
+<@s.m "topic.order.authorUser"/>:<input name="authorusername" value="${authorusername!}" type="text" size="10"/>
+<@s.m "topic.order.payType"/>:<@p.radio name="payMode" value="${payMode!}" list={"0":"global.all","1":"configCharge.model.1","2":"configCharge.model.2"} required="true"/>
+<@s.m "topic.order.dataType"/>:<@p.radio name="dataType" value="${dataType!}" list={"-1":"global.all","0":"order.oderType.0","1":"order.oderType.1"} required="true" onclick="changeOrderType()"/>
+<@p.select id="dataId" name="dataId" value=dataId list=magicList listKey="id" listValue="name" headerKey="" headerValue="global.all"/>
+<input class="query" type="submit" value="<@s.m "global.query"/>"/>
+</div>
+</form>
+<form id="tableForm" method="post">
+<input type="hidden" name="pageNo" value="${pageNo!}"/>
+<input type="hidden" name="orderNum" value="${orderNum!}"/>
+<input type="hidden" name="buyusername" value="${buyusername!}"/>
+<input type="hidden" name="authorusername" value="${authorusername!}"/>
+<input type="hidden" name="payMode" value="${payMode!}"/>
+<@p.table value=pagination listAction="user_order_list.do";order,i,has_next><#rt/>
+	<@p.column title="<input type='checkbox' onclick='Pn.checkbox(\"ids\",this.checked)'/>" width="20">
+		<input type='checkbox' name='ids' value='${order.id}'/><#t/>
+	</@p.column><#t/>
+	<@p.column code="order.title">
+		<#if order.dataType==0>
+			<#if topicMap??><a href="${topicMap[order.dataId?string].url!}" title="${topicMap[order.dataId?string].title?html}" target="_blank"><@text_cut s=topicMap[order.dataId?string].title?html len=15 append="..."/></a></#if>
+		<#else>
+			<#if magicMap??>${magicMap[order.dataId?string].name!}</#if>
+		</#if>
+	</@p.column><#t/>
+	<@p.column code="topic.order.buyUser"><#if order.buyUser??>${order.buyUser.realname!order.buyUser.username!}<#else><@s.m "user.anonymity"/></#if></@p.column><#t/>
+	<@p.column code="topic.order.authorUser"><#if order.authorUser??>${order.authorUser.realname!order.authorUser.username!}</#if></@p.column><#t/>
+	<@p.column code="topic.order.chargeAmount">${order.chargeAmount!}</@p.column><#t/>
+	<@p.column code="topic.order.authorAmount">${order.authorAmount!}</@p.column><#t/>
+	<@p.column code="topic.order.platAmount">${order.platAmount!}</@p.column><#t/>
+	<@p.column code="topic.order.buyTime">${order.buyTime?string("yyyy-MM-dd HH:mm:ss")}</@p.column><#t/>
+	<@p.column code="topic.order.payMode"><#if order.orderNumWeixin??><@s.m "topic.order.payMode.weixin"/><#elseif order.orderNumAlipay??><@s.m "topic.order.payMode.alipay"/><#else><@s.m "topic.order.payMode.other"/></#if></@p.column><#t/>
+	<@p.column code="topic.order.payType"><#if order.chargeReward==1><@s.m "topic.order.payType.charge"/><#else><@s.m "topic.order.payType.reward"/></#if></@p.column><#t/>
+	<@p.column code="topic.order.orderNumInternet">
+		${order.orderNumber!}<br/>${order.orderNumWeixin!order.orderNumAlipay!}
+	</@p.column><#t/>
+</@p.table>
+</form>
+</div>
+<#include "/common/alert_message.html"/>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>${site.name} - Powered by JEEBBS</title>
+<script src="${resSys}/jquery.js" type="text/javascript"></script>
+<script src="${resSys}/front.js" type="text/javascript"></script>
+
+<script  type="text/javascript">
+$(function() {
+	$("#wcode").load("${base}/order/liveSelectPay.jspx?liveId=${live.id!}&orderNumber=${orderNumber!}&payMethod=1&self=${self!}&num=${num!}");
+	$("#acode").load("${base}/order/liveSelectPay.jspx?liveId=${live.id!}&orderNumber=${orderNumber!}&payMethod=4&self=${self!}&num=${num!}");
+});
+function changeAmountSubmit(value){
+	$("#rewardAmount").val(value);
+	$("#jvForm").submit();
+}
+</script>
+<style>
+.reward-btn{float:left; box-sizing:boder-box; cursor:pointer; width:50%; background-color:#e7e7e7; color:#000; line-height:44px; margin-top:30px; font-size:18px;}
+.br{border-right:8px solid #fff;}
+.bl{border-left:8px solid #fff;}
+.reward-btn:hover{background-color:#38afe7; color:#ffffff;}
+.reward-payBtn{width:100%; cursor:pointer; background-color:#38afe7; color:#ffffff; -webkit-box-sizing:boder-box; line-height:44px; margin-top:30px; font-size:16px;}
+
+.reward-paylist >div{
+text-align: center;
+display:inline-block;
+}	  		.reward-paylist{
+    		width: 385px;
+    		overflow: hidden;
+         text-align: center;
+    	}
+  	.reward-pay,.reward-money
+    	{
+    		width: 385px;
+    text-align: center;
+    margin-bottom: 10px;
+    	}
+.login-header{
+height: 37px;
+    padding-right: 16px;
+    line-height: 37px;
+background:#fff;
+}
+</style>
+<head>
+<body style="background-color:#f7f7f7;">
+<div class="register-box" style="height:366px;">
+  <div style="width:100%; ">
+<div class="login-header">
+				<a href="javascript:void(0)" class="iconfont icon-Delete pull-right" title="关闭"  onclick="closeModel()"></a>
+			</div>
+	  <div class="reward-money">金额： <span>${needAmount!}</span></div>
+	  <div class="reward-pay">支付方式</div>
+	  <div class="reward-paylist"><div><span id="wcode"></span>
+   <p>微信扫码支付</p> </div><div><span id="acode"></span>
+<p>支付宝扫码支付</p>
+</div></div>
+  </div>
+</div>
+</body>
+</html>

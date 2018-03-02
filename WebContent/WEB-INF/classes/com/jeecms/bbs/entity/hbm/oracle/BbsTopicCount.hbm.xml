@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.jeecms.bbs.entity">
+	<class
+		name="BbsTopicCount"
+		table="bbs_topic_count"
+	>
+		<meta attribute="sync-DAO">false</meta>
+		<cache usage="read-write"/>
+		<id
+			name="id"
+			type="java.lang.Integer"
+			column="topic_id"
+		>
+			<generator class="foreign">
+				<param name="property">topic</param>
+			</generator>
+		</id>
+
+		<property
+			name="ups"
+			column="ups"
+			type="integer"
+			not-null="true"
+			length="10"
+		/>
+		<property
+			name="collections"
+			column="collections"
+			type="integer"
+			not-null="true"
+			length="10"
+		/>
+		<property
+			name="rewards"
+			column="rewards"
+			type="integer"
+			not-null="true"
+			length="10"
+		/>
+		<property
+			name="attentions"
+			column="attentions"
+			type="integer"
+			not-null="true"
+			length="10"
+		/>
+		<one-to-one
+			name="topic"
+			class="BbsTopic"
+			constrained="true"
+			cascade="all"
+		/>
+
+
+	</class>	
+</hibernate-mapping>
